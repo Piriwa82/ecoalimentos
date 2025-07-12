@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/logo.png">
+    <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+    <title>EcoAlimentos</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Sans+MS&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+</head>
+<body>
+
+    
+    
+    <header>
+        <img id="header-imagen" src="img/logo.png" alt="">
+        <h1 id="header-titulo">EcoAlimentos</h1>
+    </header>
+    <a id="carrito-fijo">
+        <i class="fa-solid fa-cart-shopping"></i>
+    </a>
+    
+
+
+    
+    <nav>
+            <ul id="menu">
+              <li id="nav-siempre"><a href="index.html">Inicio</a></li>
+
+              <li class="nav-opciones" id="nav-siempre">
+                <a href="#">Productos</a>
+                <ul class="submenu">
+                  <li id="nav-opcional"><a href="catalogo-personal.html">Catálogo Personal</a></li>
+                  <li id="nav-opcional"><a href="catalogo-mayorista.html">Catálogo Mayorista</a></li>
+                  <li id="nav-opcional"><a href="catalogo-distribuidor.html">Catalogo Distribuidor</a></li>
+                </ul>
+              </li>
+              
+              <li id="nav-siempre"><a href="nosotros.html" >Nosotros</a></li>
+            </ul>
+    </nav> 
+
+
+    <main class="inicio-prinicipal">
+        <img id="inicio-imagen" src="img/logo-sin-borde.png" alt="">
+        <h1 id="inicio-titulo">EcoAlimentos</h1>
+        <h1 id="inicio-subtitulo">Desde 2018 cuidando tu salud..</h1>
+        <a id="inicio-boton" href="catalogo-personal.html">Accede a todos nuestros catalogos aqui
+        </a>
+    </main>
+
+    <a href="https://api.whatsapp.com/send?phone=543517612075&text=Hola%20EcoAlimentos!%20Estaba%20viendo%20tu%20sitio%20web%20y%20me%20surgi%C3%B3%20una%20consulta" class="wpp-contenedor" target="_blank"><i class="fa-brands fa-whatsapp wpp" style="color: #63E6BE;"></i></a>
+
+    <footer>   
+        <div class="footer-contenido">
+         <div class="footer-columna">
+            <h4>Redes EcoAlimentos:</h4>
+            <a href="https://www.instagram.com/ecoalimentos.distribuidora/" target="_blank"><i class="fa-brands fa-instagram" class="subelementos"></i> Instagram</a><br>
+            <a href=" https://api.whatsapp.com/send?phone=543517612075&text=Hola%20EcoAlimentos!%20Quiero%20informaci%C3%B3n%20de%20tus%20productos" target="_blank" class="subelementos"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+        </div>
+        <div class="footer-columna">
+            <h4>Diseñado por: </h4>
+            <h4 class="subelementos">&copy; PatagonianSites</h4>
+            <a href="" target="_blank">Clickea aca para conocernos</a>
+        </div>
+        </div>
+        <div class="footer-abajo">
+            <p>&copy; 2025 EcoAlimentos. Todos los derechos reservados.</p>
+        </div>
+        </footer>     
+        
+    <div id="carrito-menu" class="oculto">
+        <h3>Carrito de compras</h3>
+        <div id="carrito-items"></div>
+        <button id="cerrar-carrito">Cerrar</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
