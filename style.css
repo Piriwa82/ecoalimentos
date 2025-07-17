@@ -185,7 +185,7 @@ li {
   border: 1.7px solid rgb(171, 214, 171); 
 }
 .nosotros {
-  font-size: clamp(1em, 2vw, 2.5em);
+  font-size: clamp(1em, 2vw, 1.6em);
 }
 
 #header-imagen {
@@ -535,6 +535,21 @@ footer {
   transform: scale(1.1);
 }
 
+#ubicacion-entrega {
+  width: 43%;
+  margin-top: 0.3em;
+  border: 1px solid black;
+  font-size: 1em;
+  padding: 0.4em;
+  font-family: "Lato";
+  color: black;
+  background-color: white;
+}
+
+#ubicacion-entrega::placeholder {
+  color: black;
+}
+
 
 @media screen and (max-width: 480px) {
   .catalogo {
@@ -642,7 +657,7 @@ footer {
   .foto1, .foto2, .foto3, .foto4 {
     width: 20em;
     height:11em;
-    margin-top: 0em;
+    margin-top: 1em;
   }
 
   .nosotros-intro, .nosotros-diferencia, .nosotros-llegamos, .nosotros-mision, .nosotros-pedido {
@@ -664,6 +679,12 @@ footer {
     font-size: 2.5em;
     right: 0.28em;
     padding: 0.2em;
+  }
+
+  #ubicacion-entrega {
+    font-size: 0.8em;
+    margin-top: 0.4em;
+    width: 48%;
   }
 
 }
