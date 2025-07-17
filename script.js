@@ -1,4 +1,5 @@
 const carrito = [];
+let yaSeMostroCarrito = false;
 
 const carritoMenu = document.getElementById("carrito-menu");
 const carritoItems = document.getElementById("carrito-items");
@@ -38,7 +39,10 @@ document.querySelectorAll(".boton-agregar").forEach((boton) => {
     actualizarCarrito();
     cantidadInput.value = "1";
 
-    carritoMenu.classList.remove("oculto");
+    if (!yaSeMostroCarrito) {
+      carritoMenu.classList.remove("oculto");
+      yaSeMostroCarrito = true;
+    }
   });
 });
 
@@ -98,8 +102,9 @@ botonEnviarWhatsapp.addEventListener("click", () => {
 
   const total = calcularTotalConDescuento();
   const ahorro = calcularAhorro();
+  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+  mensaje += `%0A🧾 Total: $${total.toLocaleString()} | Descuento aplicado por ${totalUnidades} unidad(es)%0A`;
 
-  mensaje += `%0A🧾 Total: $${total.toLocaleString()} (Ahorro: $${ahorro.toLocaleString()})%0A`;
   mensaje += `%0A📍 Entrega en: ${encodeURIComponent(ubicacion)}%0A`;
   mensaje += `%0A¡Gracias!`;
 
@@ -177,19 +182,19 @@ function actualizarCarrito() {
   let mensajeDescuento = "";
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 10) mensajeDescuento = "Descuento aplicado por 10 unidades";
-    else if (totalUnidades >= 5) mensajeDescuento = "Descuento aplicado por 5 unidades";
+    if (totalUnidades >= 10) mensajeDescuento = "Descuento por 10 unidades";
+    else if (totalUnidades >= 5) mensajeDescuento = "Descuento por 5 unidades";
   }
 
   if (tipoCatalogo === "distribuidor") {
-    if (totalUnidades >= 100) mensajeDescuento = "Descuento aplicado por 100 unidades";
-    else if (totalUnidades >= 50) mensajeDescuento = "Descuento aplicado por 50 unidades";
+    if (totalUnidades >= 100) mensajeDescuento = "Descuento por 100 unidades";
+    else if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
   }
 
   if (tipoCatalogo === "mayorista") {
-    if (totalUnidades >= 10) mensajeDescuento = "Descuento aplicado por 10 unidades";
-    if (totalUnidades >= 30) mensajeDescuento = "Descuento aplicado por 30 unidades";
-    if (totalUnidades >= 50) mensajeDescuento = "Descuento aplicado por 50 unidades";
+    if (totalUnidades >= 10) mensajeDescuento = "Descuento por 10 unidades";
+    if (totalUnidades >= 30) mensajeDescuento = "Descuento por 30 unidades";
+    if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
   }
 
   totalPedidoSpan.textContent = `🧾 Total: $${total.toLocaleString()} ${mensajeDescuento ? "| " + mensajeDescuento : ""}`;
