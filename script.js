@@ -111,7 +111,9 @@ botonEnviarWhatsapp.addEventListener("click", () => {
     const descuentoTotal = descuentoUnidad * item.cantidad;
     const precioFinal = precioOriginalTotal - descuentoTotal;
 
-    mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidad(es) | ($${item.precioBase.toLocaleString()} x ${item.cantidad}un) | $${precioFinal.toLocaleString()}`;
+   const precioUnitarioConDesc = item.precioBase - descuentoUnidad;
+mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidad(es) | ($${precioUnitarioConDesc.toLocaleString()} x ${item.cantidad}un) | $${precioFinal.toLocaleString()}`;
+
 
     
     mensaje += `%0A`;
