@@ -103,27 +103,48 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   }
 
   let mensaje = "Hola EcoAlimentos! Quiero hacer el siguiente pedido:%0A";
+
+  const descuentoUnidad = calcularDescuentoPorUnidad();
+
   carrito.forEach(item => {
-    mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidad(es)%0A`;
+    const precioOriginalTotal = item.precioBase * item.cantidad;
+    const descuentoTotal = descuentoUnidad * item.cantidad;
+    const precioFinal = precioOriginalTotal - descuentoTotal;
+
+    mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidad(es) | ($${item.precioBase.toLocaleString()} x ${item.cantidad}un) | $${precioFinal.toLocaleString()}`;
+
+    
+    mensaje += `%0A`;
   });
 
   const total = calcularTotalConDescuento();
-  const ahorro = calcularAhorro();
   const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-  const descuentoUnidad = calcularDescuentoPorUnidad();
 
-  if (descuentoUnidad > 0) {
-    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | Descuento aplicado por ${totalUnidades} unidad(es)%0A`;
-  } else {
-    mensaje += `%0A🧾 Total: $${total.toLocaleString()}%0A`;
+ if (descuentoUnidad > 0) {
+  let umbral = "";
+
+  if (tipoCatalogo === "personal") {
+    if (totalUnidades >= 10) umbral = "10 unidades";
+    else if (totalUnidades >= 5) umbral = "5 unidades";
+  } else if (tipoCatalogo === "distribuidor") {
+    if (totalUnidades >= 20) umbral = "20 unidades";
+  } else if (tipoCatalogo === "mayorista") {
+    if (totalUnidades >= 50) umbral = "50 unidades";
+    else if (totalUnidades >= 30) umbral = "30 unidades";
+    else if (totalUnidades >= 10) umbral = "10 unidades";
   }
+
+  mensaje += `%0A🧾 Total: $${total.toLocaleString()} | Descuento aplicado por ${umbral}%0A`;
+} else {
+  mensaje += `%0A🧾 Total: $${total.toLocaleString()}%0A`;
+}
+
 
   mensaje += `%0A📍 Entrega en: ${encodeURIComponent(ubicacion)}%0A`;
   mensaje += `%0A¡Gracias!`;
 
   const urlWhatsapp = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${mensaje}`;
 
-  // Disparar el enlace para evitar bloqueo de popup
   const link = document.createElement("a");
   link.href = urlWhatsapp;
   link.target = "_blank";
@@ -132,7 +153,6 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   link.click();
   document.body.removeChild(link);
 });
-
 
 // Descuentos adaptados a cada tipo de catálogo
 function calcularDescuentoPorUnidad() {
