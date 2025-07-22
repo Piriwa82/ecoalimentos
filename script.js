@@ -102,7 +102,7 @@ botonEnviarWhatsapp.addEventListener("click", () => {
     return;
   }
 
-  let mensaje = "Hola EcoAlimentos! Quiero hacer el siguiente pedido:%0A";
+  let mensaje = "🏷️  Solicitud de Pedido:%0A";
 
   const descuentoUnidad = calcularDescuentoPorUnidad();
 
