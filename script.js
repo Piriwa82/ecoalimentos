@@ -59,6 +59,7 @@ inputUbicacion.placeholder = "📍 Direccion de entrega";
 inputUbicacion.id = "ubicacion-entrega";
 carritoMenu.appendChild(inputUbicacion);
 
+// Total
 const totalPedidoSpan = document.createElement("span");
 totalPedidoSpan.id = "total-pedido";
 totalPedidoSpan.style.display = "block";
@@ -66,6 +67,11 @@ totalPedidoSpan.style.marginTop = "0.3em";
 totalPedidoSpan.style.fontWeight = "bold";
 totalPedidoSpan.style.fontSize = "1.1em";
 carritoMenu.appendChild(totalPedidoSpan);
+
+const cantidadItemsSpan = document.createElement("span");
+cantidadItemsSpan.id = "cantidad-items";
+cantidadItemsSpan.style.display = "block";
+carritoMenu.appendChild(cantidadItemsSpan);
 
 // Enviar por WhatsApp
 botonEnviarWhatsapp.addEventListener("click", () => {
@@ -103,50 +109,49 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   }
 
   let mensaje = "🏷️  Solicitud de Pedido:%0A";
-
   const descuentoUnidad = calcularDescuentoPorUnidad();
 
   carrito.forEach(item => {
     const precioOriginalTotal = item.precioBase * item.cantidad;
     const descuentoTotal = descuentoUnidad * item.cantidad;
     const precioFinal = precioOriginalTotal - descuentoTotal;
+    const precioUnitarioConDesc = item.precioBase - descuentoUnidad;
 
-   const precioUnitarioConDesc = item.precioBase - descuentoUnidad;
-mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidad(es) | ($${precioUnitarioConDesc.toLocaleString()} x ${item.cantidad}un) | $${precioFinal.toLocaleString()}`;
+    if (item.cantidad === 1) {
+      mensaje += `- ${encodeURIComponent(item.nombre)}: $${precioFinal.toLocaleString()}`;
+    } else {
+      mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidades | ($${precioUnitarioConDesc.toLocaleString()} x ${item.cantidad}un) | $${precioFinal.toLocaleString()}`;
+    }
 
-
-    
     mensaje += `%0A`;
   });
 
   const total = calcularTotalConDescuento();
   const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
- if (descuentoUnidad > 0) {
-  let umbral = "";
+  if (descuentoUnidad > 0) {
+    let umbral = "";
 
-  if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 10) umbral = "10 unidades";
-    else if (totalUnidades >= 5) umbral = "5 unidades";
-  } else if (tipoCatalogo === "distribuidor") {
-    if (totalUnidades >= 20) umbral = "20 unidades";
-  } else if (tipoCatalogo === "mayorista") {
-    if (totalUnidades >= 50) umbral = "50 unidades";
-    else if (totalUnidades >= 30) umbral = "30 unidades";
-    else if (totalUnidades >= 10) umbral = "10 unidades";
+    if (tipoCatalogo === "personal") {
+      if (totalUnidades >= 10) umbral = "10 unidades";
+      else if (totalUnidades >= 5) umbral = "5 unidades";
+    } else if (tipoCatalogo === "distribuidor") {
+      if (totalUnidades >= 20) umbral = "20 unidades";
+    } else if (tipoCatalogo === "mayorista") {
+      if (totalUnidades >= 50) umbral = "50 unidades";
+      else if (totalUnidades >= 30) umbral = "30 unidades";
+      else if (totalUnidades >= 10) umbral = "10 unidades";
+    }
+
+    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | Descuento aplicado por ${umbral}%0A`;
+  } else {
+    mensaje += `%0A🧾 Total: $${total.toLocaleString()}%0A`;
   }
-
-  mensaje += `%0A🧾 Total: $${total.toLocaleString()} | Descuento aplicado por ${umbral}%0A`;
-} else {
-  mensaje += `%0A🧾 Total: $${total.toLocaleString()}%0A`;
-}
-
 
   mensaje += `%0A📍 Entrega en: ${encodeURIComponent(ubicacion)}%0A`;
   mensaje += `%0A¡Gracias!`;
 
   const urlWhatsapp = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${mensaje}`;
-
   const link = document.createElement("a");
   link.href = urlWhatsapp;
   link.target = "_blank";
@@ -156,7 +161,7 @@ mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidad(es) | 
   document.body.removeChild(link);
 });
 
-// Descuentos adaptados a cada tipo de catálogo
+// Descuentos por catálogo
 function calcularDescuentoPorUnidad() {
   const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
@@ -198,6 +203,7 @@ function actualizarCarrito() {
   if (carrito.length === 0) {
     carritoItems.innerHTML = '<p class="carrito-vacio">Tu carrito está vacío.</p>';
     totalPedidoSpan.textContent = "";
+    cantidadItemsSpan.textContent = ""; 
     return;
   }
 
@@ -242,6 +248,7 @@ function actualizarCarrito() {
   }
 
   totalPedidoSpan.textContent = `🧾 Total: $${total.toLocaleString()} ${mensajeDescuento ? "| " + mensajeDescuento : ""}`;
+  cantidadItemsSpan.textContent = `${totalUnidades}un seleccionadas`; 
 
   agregarEventosBotonesCantidad();
 }
