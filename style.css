@@ -403,6 +403,13 @@ li {
   text-align: center;
 }
 
+#cantidad-items {
+  color: black;
+  background-color: white;
+  text-align: center;
+  font-size:  1em;
+}
+
 .mensaje-descuento, .carrito-info {
   background-color: white;
 
