@@ -143,11 +143,12 @@ botonEnviarWhatsapp.addEventListener("click", () => {
       else if (totalUnidades >= 10) umbral = "10 unidades";
     }
 
-    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | Descuento aplicado por ${umbral}%0A`;
+    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas | Descuento aplicado por ${umbral}%0A`;
   } else {
     mensaje += `%0A🧾 Total: $${total.toLocaleString()}%0A`;
   }
-
+  
+  mensaje += ``;
   mensaje += `%0A📍 Entrega en: ${encodeURIComponent(ubicacion)}%0A`;
   mensaje += `%0A¡Gracias!`;
 
