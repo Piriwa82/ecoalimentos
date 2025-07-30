@@ -172,11 +172,6 @@ function calcularDescuentoPorUnidad() {
     return 0;
   }
 
-  if (tipoCatalogo === "distribuidor") {
-    if (totalUnidades >= 20) return 250;
-    return 0;
-  }
-
   if (tipoCatalogo === "mayorista") {
     if (totalUnidades >= 50) return 460;
     if (totalUnidades >= 30) return 310;
