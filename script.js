@@ -145,7 +145,7 @@ botonEnviarWhatsapp.addEventListener("click", () => {
 
     mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas | Descuento aplicado por ${umbral}%0A`;
   } else {
-    mensaje += `%0A🧾 Total: $${total.toLocaleString()}%0A`;
+    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas %0A` ;
   }
   
   mensaje += ``;
