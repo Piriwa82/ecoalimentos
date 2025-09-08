@@ -1,34 +1,33 @@
 <!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" href="img/logo.png">
-        <link rel="stylesheet" href="style.css">
-        
-        <title>EcoAlimentos</title>
-            <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
-
-        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Comic+Sans+MS&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/logo.png">
+    <link rel="stylesheet" href="style.css">
     
-    </head>
-<body>
+    <title>EcoAlimentos</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Sans+MS&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 
-  <a href="https://api.whatsapp.com/send?phone=543517612075&text=Hola%20EcoAlimentos!%20Estaba%20viendo%20tu%20sitio%20web%20y%20me%20surgi%C3%B3%20una%20consulta
-" class="wpp-contenedor" target="_blank"><i class="fa-brands fa-whatsapp wpp" style="color: #63E6BE;"></i></a>
 
-  <header>
-    <img id="header-imagen" src="img/logo.png" alt="EcoAlimentos" />
-    <h1 id="header-titulo">EcoAlimentos</h1>
-    <a id="carrito-fijo" href="#">
-      <i class="fa-solid fa-cart-shopping"></i>
+</head>
+<body data-catalogo="personal">
+
+    
+    <header>
+        <img id="header-imagen" src="img/logo.png" alt="">
+        <h1 id="header-titulo">EcoAlimentos</h1>
+    </header>
+    <a id="carrito-fijo">
+        <i class="fa-solid fa-cart-shopping"></i>
     </a>
-  </header>
-
-
-      <nav>
+    
+    
+    <nav>
             <ul id="menu">
               <li id="nav-siempre"><a href="index.html">Inicio</a></li>
 
@@ -45,55 +44,969 @@
             </ul>
     </nav> 
 
-  
-  <main>
-    <section class="nosotros">
+          <h1 id="main-titulo">Catalogo Personal</h1>
+        <h2 id="main-subtitulo">Minimo de compra 4 unidades. Descuentos a partir de 5 unidades, con mayores descuentos a partir de 10.</h1>
+        <h3 id="aclaracion">Fraccionados en 1 kg, excepto en los casos indicados en el listado por otra cantidad.</h3>
+        <h1 id="main-titulo">Especialidades</h1>
 
-      <h2>Sobre nosotros</h2>
-      <br>
-      <div class="nosotros-intro">
-        
-        <div class="texto">
-          
-          
-          <p>EcoAlimentos, desde Córdoba, distribuye en todo el país alimentos saludables y naturales sin conservantes: Mix's, Granolas, Frutos Secos, Barritas, Semillas, Especias y más. Para hogares, comercios y distribuidores.</p>
-          <br>
+  <section class="catalogo">
+        <div class="producto">
+        <img src="img/catalogo/granola-crocante.png"/>
+        <h2>Granola Crocante (1kg)</h2>
+        <h3>(Avena, Pasas de uva, Mani, Copos
+            naturales, Arroz inflado)</h3>
+        <p>$4.050</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
         </div>
-        <img src="img/foto4.jpeg" class="foto1" />
-      </div>
+        </div>
 
-      <h2>Nuestra misión</h2>
-      <br>
-      <div class="nosotros-mision">
-        <img src="img/foto4.jpg" class="foto2" />
-        <div class="texto-mision">
-        
-        
-        <p>Ofrecer una solución integral para una alimentación saludable y accesible, comprometidos con la máxima calidad, el sabor excepcional y la frescura de nuestros productos naturales y nutritivos.</p>
+        <div class="producto">
+        <img src="img/catalogo/granola-proteica.png"/>
+        <h2>Granola Proteica (1kg)</h2>
+        <h3>(Avena, copos de maiz, soja texturizada, maní, pasas, canela)</h3>
+        <p>$5.400</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
         </div>
-      </div>
-      <h2 class="texto-llegamos">¿A quiénes llegamos?</h2>
-      <br>
-      <div class="nosotros-llegamos">
-        <div class="texto-llegamos">
-        
-        
-        <p>Estamos comprometidos con comercios locales y revendedores ofreciendo productos de alta calidad y contribuyendo a su crecimiento, al mismo tiempo que facilitamos las compras grupales o familiares de los hogares.</p>
-            
         </div>
-        <img src="img/argentina.png" class="foto4" />
-      </div>
-      <h2>¿Cómo hacer el pedido?</h2>
-      <div class="nosotros-pedido">
+
+
+        <div class="producto">
+        <img src="img/catalogo/granola-crocante-sin-pasas.png"/>
+        <h2>Granola Crocante Sin pasas (1kg)</h2>
+        <h3>(Arroz inflado, Avena, Mani y Copos
+        naturales)</h3>
+        <p>$3,750</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/mix-clasico.png"/>
+        <h2>Mix de Frutos secos Clásico (1kg)</h2>
+        <h3>(Almendras, Maní, Caju, Nueces, Pasas de uva)
+        </h3>
+        <p>$7,700</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/mix-tropical.png"/>
+        <h2>Mix Tropical (1kg)</h2>
+        <h3>(Nueces, Mani sin sal, Bananas chips,
+        Anana en cubos, Pasas sin semillas
+        negras y rubias)
+        </h3>
+        <p>$7,300</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/mix-azteca.jpg"/>
+        <h2>Mix Azteca (1kg)</h2>
+        <h3>(Garbanzo tostado,Semillas de Zapallo,
+        Maní saborizado, Maiz frito saborizado y Mani con sal)
+        </h3>
+        <p>$5,600</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/barritas-frutos.png"/>
+        <h2>Barritas de frutos secos</h2>
+        <h3>(Nueces, Almendras, Mani, Girasol, Pasas, Castañas, coco) (14 unidades, 35-40gr cada una)
+        </h3>
+        <p>$8,100</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/barritas-tropicales.png"/>
+        <h2>Barritas Tropicales</h2>
+        <h3>(Nueces, Anana, Banana, Girasol, Mani,
+        Pasas y Semillas de chia)
+        (14 unidades, 35-40gr cada una)
+        </h3>
+        <p>$8,100</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+    
+    </section>
+
+    <h1 id="main-titulo">Frutos secos</h1>
+
+    <section class="catalogo">
         
-        <br>
-        <p>Seleccioná el tipo de compra (mayorista, personal o distribuidor), sumá los productos que quieras al carrito y tocá el botón "Realizar el pedido" para contactarte con nosotros.</p>
+        <div class="producto">
+        <img src="img/catalogo/nuez-maripoza.jpg"/>
+        <h2>Nuez Mariposa (1kg)</h2>
+        <p>$15,300</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/almendras.jpg"/>
+        <h2>Almendras (1kg)</h2>
+        <p>$16,700</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/castaña-caju.jpg"/>
+        <h2>Castañas de caju (1kg)</h2>
+        <p>$14,200</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/mani-sin-sal.jpg"/>
+        <h2>Mani sin sal (1kg)</h2>
+        <p>$2,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/mani-con-sal.jpg"/>
+        <h2>Mani con sal (1kg)</h2>
+        <p>$2,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/mani-saborizado.jpg"/>
+        <h2>Mani Saborizado (1kg)</h2>
+        <p>$3,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/mani-con-cascara.jpg"/>
+        <h2>Mani Con Cascara (1kg)</h2>
+        <p>$3,900</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/mani-crudo.jpg"/>
+        <h2>Mani Crudo (1kg)</h2>
+        <p>$3,450</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+    </section>
+
+    <h1 id="main-titulo">Cereales</h1>
+
+    <section class="catalogo">
         
+        <div class="producto">
+        <img src="img/catalogo/avena-instantanea.jpg"/>
+        <h2>Avena instantanea (1kg)</h2>
+        <p>$2,500</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/avena-tradicional.jpg"/>
+        <h2>Avena tradicional (1kg)</h2>
+        <p>$2,500</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/almohaditas-frutilla.jpg"/>
+        <h2>Almohaditas de frutilla (1kg)</h2>
+        <p>$6,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/almohaditas-limon.jpg"/>
+        <h2>Almohaditas de limon (1kg)</h2>
+        <p>$6,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/copos-azucarados.jpg"/>
+        <h2>Copos de maiz c/ azucar (1kg)</h2>
+        <p>$3,500</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/copos-naturales.jpg"/>
+        <h2>Copos de maiz naturales (1kg)</h2>
+        <p>$3,300</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/maiz-pisingallo.jpg"/>
+        <h2>Maiz Pisingallo (2,5kg)</h2>
+        <p>$2,700</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/yamani.jpg"/>
+        <h2>Arroz Yamani (2,5kg)</h2>
+        <p>$5,000</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+    </section>
+
+    <h1 id="main-titulo">Semillas</h1>
+
+    <section class="catalogo">
+        
+        <div class="producto">
+        <img src="img/catalogo/mix-semillas.jpg"/>
+        <h2>Mix Semillas (1kg)</h2>
+        <h3>(Chia, Lino, Sesamo y Girasol)
+        </h3>
+        <p>$3,400</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/semillas-girasol.jpg"/>
+        <h2>Semillas de girasol (1kg)</h2>
+        <p>$3,200</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/semillas-chia.jpg"/>
+        <h2>Semillas de chia (1kg)</h2>
+        <p>$4,900</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/semillas-lino.jpg"/>
+        <h2>Semillas de lino (1kg)</h2>
+        <p>$3,000</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/semillas-quinoa.jpg"/>
+        <h2>Semillas de Quinoa Blanca (1kg)</h2>
+        <p>$5,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
         </div>
 
     </section>
 
-    <footer>   
+    <div id="carrito-menu" class="oculto">
+        <h3>Carrito de compras</h3>
+        <div id="carrito-items"></div>
+        <button id="cerrar-carrito">Cerrar</button>
+
+    </div>
+    
+
+    <h1 id="main-titulo">Legumbres</h1>
+
+    <section class="catalogo">
+        
+        <div class="producto">
+        <img src="img/catalogo/garbanzos.jpg"/>
+        <h2>Garbanzo (2,5kg)</h2>
+        <p>$4,100</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/lenteja.jpg"/>
+        <h2>Lenteja (2,5kg)</h2>
+        <p>$6,600</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/poroto.jpg"/>
+        <h2>Poroto Alubia (2,5kg)</h2>
+        <p>$5700</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/soja-texturizada.jpg"/>
+        <h2>Soja texturizada (2,5kg)</h2>
+        <p>$3,700</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+    </section>
+
+    <h1 id="main-titulo">Regionales y otros</h1>
+
+    <section class="catalogo">
+        
+        <div class="producto">
+        <img src="img/catalogo/olivamedio..jpeg"/>
+        <h2>Aceite de oliva (1/2L)</h2>
+        <p>$3,550</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/oliva1l.jpg"/>
+        <h2>Aceite de oliva (1L)</h2>
+        <p>$5,200</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/aceitunas.jpg"/>
+        <h2>Aceitunas verdes Premiun 000 (1/2kg)</h2>
+        <p>$5,500</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/miel.jpg"/>
+        <h2>Miel Premium Agroecologica (1/2kg)</h2>
+        <p>$4,100</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/mielmediokg.jpeg"/>
+        <h2>Miel (1/2kg)</h2>
+        <p>$2,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/miel1kg.jpg"/>
+        <h2>Miel (1kg)</h2>
+        <p>$4,000</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/pasas-de-uva.jpg"/>
+        <h2>Pasas de Uva (1kg)</h2>
+        <p>$4,850</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/tutucas-azucaradas.jpg"/>
+        <h2>Tutucas c/Azucar (1kg)</h2>
+        <p>$4,300</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/tutucas-edulcorante.jpg"/>
+        <h2>Tutucas c/Edulcorante (1kg)</h2>
+        <p>$6,000</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/yerba.jpeg"/>
+        <h2>Yerba Tucangua (1kg)</h2>
+        <p>$4,400</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/fruta-escurrida-comun.jpg"/>
+        <h2>Fruta Escurrida Comun (1kg)</h2>
+        <p>$3,850</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/fruta-escurrida-especial.jpg"/>
+        <h2>Fruta Escurrida Especial (1kg)</h2>
+        <p>$4,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/pasta-de-mani.jpg"/>
+        <h2>Pasta de Mani (350gr)</h2>
+        <p>$3,350</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/colageno.jpg"/>
+        <h2>Colageno en Polvo (90gr)</h2>
+        <p>$1,650</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/maca-negra.jpg"/>
+        <h2>Maca Negra (150gr)</h2>
+        <p>$2,200</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/maca-blanca.jpg"/>
+        <h2>Maca Blanca (500gr)</h2>
+        <p>$2,400</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/ciruela-sin-carozo.jpg"/>
+        <h2>Ciruela sin Carozo (1kg)</h2>
+        <p>$6,600</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/aceite-de-coco.jpg"/>
+        <h2>Aceite de coco (200cc)</h2>
+        <p>$4,700</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/moringa.jpg"/>
+        <h2>Moringa (90gr)</h2>
+        <p>$1,650</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/chalitas.jpg"/>
+        <h2>Chalitas de Almendras (1kg)</h2>
+        <p>$9,000</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/salsa-de-soja.jpg"/>
+        <h2>Salsa de soja (500cc)</h2>
+        <p>$3,400</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+    </section>
+
+
+    <h1 id="main-titulo">Reposteria</h1>
+
+    <section class="catalogo">
+        
+        <div class="producto">
+        <img src="img/catalogo/coco-rallado.jpg"/>
+        <h2>Coco rallado (1kg)</h2>
+        <p>$7,900</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/bicarbonato.jpg"/>
+        <h2>Bicarbonato de sodio (1kg)</h2>
+        <p>$2,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/azucar-impalpable.jpg"/>
+        <h2>Azucar Impalpable (1kg)</h2>
+        <p>$3,300</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/azucar-mascabo.jpg"/>
+        <h2>Azucar Mascabo (1kg)</h2>
+        <p>$3,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/polvo-de-hornear.jpg"/>
+        <h2>Polvo de hornear (1kg)</h2>
+        <p>$5,400</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/cacao-amargo.jpg"/>
+        <h2>Cacao amargo (1kg)</h2>
+        <p>$11,300</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/harina-arroz.jpg"/>
+        <h2>Harina de arroz (1kg)</h2>
+        <p>$2,600</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/fecula-mandioca.jpg"/>
+        <h2>Fecula de mandioca (1kg)</h2>
+        <p>$2,700</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/harina-almendras.jpg"/>
+        <h2>Harina de almendras c/piel (1kg)</h2>
+        <p>$4,600</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/harina-avena.jpg"/>
+        <h2>Harina de avena (1kg)</h2>
+        <p>$2,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/harina-arroz.jpg"/>
+        <h2>Harina de arroz (1kg)</h2>
+        <p>$2,600</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/harina-integral.jpg"/>
+        <h2>Harina integral (2,5kg)</h2>
+        <p>$6,000</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+    </section>
+
+     <h1 id="main-titulo">Condimentos y especias</h1>
+
+    <section class="catalogo">
+        
+        <div class="producto">
+        <img src="img/catalogo/aji.jpg"/>
+        <h2>Aji molido (1kg)</h2>
+        <p>$5,000</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/ajo-en-polvo.jpg"/>
+        <h2>Ajo en polvo (1kg)</h2>
+        <p>$6,250</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/ajo-granulado.jpg"/>
+        <h2>Ajo granulado (nacional) (1kg)</h2>
+        <p>$11,300</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/cebolla.jpg"/>
+        <h2>Cebolla desecada (1kg)</h2>
+        <p>$11,300</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/chimichurri.jpg"/>
+        <h2>Chimichurri (1kg)</h2>
+        <p>$5,450</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/comino.jpg"/>
+        <h2>Comino molido (1kg)</h2>
+        <p>$4,950</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/condimento-pizza.jpg"/>
+        <h2>Condimento para pizza (1kg)</h2>
+        <p>$5,450</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/curcuma.jpg"/>
+        <h2>Curcuma molida (1kg)</h2>
+        <p>4,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/curry.jpg"/>
+        <h2>Curry molido (1kg)</h2>
+        <p>$8,400</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/jengibre.jpg"/>
+        <h2>Jengibre molido (1kg)</h2>
+        <p>$12,600</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/laurel.jpg"/>
+        <h2>Laurel en hojas (1kg)</h2>
+        <p>$13,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/nuez.jpg"/>
+        <h2>Nuez moscada molida (1kg)</h2>
+        <p>$17,600</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/oregano.jpg"/>
+        <h2>Oregano (1kg)</h2>
+        <p>$5,100</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/perejil.jpg"/>
+        <h2>Perejil (1kg)</h2>
+        <p>$9,900</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/pimienta-blanca.jpg"/>
+        <h2>Pimienta blanca molida (1kg)</h2>
+        <p>$14,900</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/pimienta-negra.jpg"/>
+        <h2>Pimienta negra molida (1kg)</h2>
+        <p>$13,500</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/semillas-girasol.jpg"/>
+        <h2>Pimenton dulce extra (1kg)</h2>
+        <p>$6,500</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+
+        <div class="producto">
+        <img src="img/catalogo/provenzal.jpg"/>
+        <h2>Provenzal (1kg)</h2>
+        <p>$5,550</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/albahaca.jpg"/>
+        <h2>Albahaca (1kg)</h2>
+        <p>$8,800</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/canela-molida.jpg"/>
+        <h2>Canela molida (1kg)</h2>
+        <p>$8,900</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+
+        <div class="producto">
+        <img src="img/catalogo/romero.jpg"/>
+        <h2>Romero (1kg)</h2>
+        <p>$9,000</p>
+        <div class="producto-acciones">
+            <input type="number" value="1" min="1" class="cantidad" />
+            <button class="boton-agregar">Agregar al carrito</button>
+        </div>
+        </div>
+    </section>
+
+        <footer>   
         <div class="footer-contenido">
          <div class="footer-columna">
             <h4>Redes EcoAlimentos:</h4>
@@ -103,19 +1016,16 @@
         <div class="footer-columna">
             <h4>Diseñado por: </h4>
             <h4 class="subelementos">&copy; PixelSimple</h4>
-            <a href="https://piriwa82.github.io/patagoniansites/" target="_blank">Clickea aca para conocernos</a>
+            <a href="" target="_blank">Clickea aca para conocernos</a>
         </div>
         </div>
         <div class="footer-abajo">
             <p>&copy; 2025 EcoAlimentos. Todos los derechos reservados.</p>
         </div>
         </footer>     
-  </main>
-  <div id="carrito-menu" class="oculto">
-        <h3>Carrito de compras</h3>
-        <div id="carrito-items"></div>
-        <button id="cerrar-carrito">Cerrar</button>
-    </div>
+
+
+
     <script src="script.js"></script>
 </body>
 </html>
