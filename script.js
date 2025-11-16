@@ -167,20 +167,21 @@ function calcularDescuentoPorUnidad() {
   const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 10) return 140;
-    if (totalUnidades >= 5) return 90;
+    if (totalUnidades >= 10) return 160;
+    if (totalUnidades >= 5) return 110;
     return 0;
   }
 
   if (tipoCatalogo === "mayorista") {
-    if (totalUnidades >= 50) return 460;
-    if (totalUnidades >= 30) return 310;
-    if (totalUnidades >= 10) return 160;
+    if (totalUnidades >= 50) return 340;
+    if (totalUnidades >= 30) return 240;
+    if (totalUnidades >= 10) return 180;
     return 0;
   }
 
   return 0;
 }
+
 
 function calcularAhorro() {
   const descuentoUnidad = calcularDescuentoPorUnidad();
