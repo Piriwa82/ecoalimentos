@@ -1,4 +1,5 @@
 const carrito = [];
+let yaSeMostroCarrito = false;
 
 const carritoMenu = document.getElementById("carrito-menu");
 const carritoItems = document.getElementById("carrito-items");
@@ -38,7 +39,10 @@ document.querySelectorAll(".boton-agregar").forEach((boton) => {
     actualizarCarrito();
     cantidadInput.value = "1";
 
-    carritoMenu.classList.remove("oculto");
+    if (!yaSeMostroCarrito) {
+      carritoMenu.classList.remove("oculto");
+      yaSeMostroCarrito = true;
+    }
   });
 });
 
@@ -49,6 +53,13 @@ botonEnviarWhatsapp.textContent = "Enviar pedido por WhatsApp";
 botonEnviarWhatsapp.id = "btn-enviar-whatsapp";
 carritoMenu.appendChild(botonEnviarWhatsapp);
 
+const inputUbicacion = document.createElement("input");
+inputUbicacion.type = "text";
+inputUbicacion.placeholder = "📍 Direccion de entrega";
+inputUbicacion.id = "ubicacion-entrega";
+carritoMenu.appendChild(inputUbicacion);
+
+// Total
 const totalPedidoSpan = document.createElement("span");
 totalPedidoSpan.id = "total-pedido";
 totalPedidoSpan.style.display = "block";
@@ -56,6 +67,11 @@ totalPedidoSpan.style.marginTop = "0.3em";
 totalPedidoSpan.style.fontWeight = "bold";
 totalPedidoSpan.style.fontSize = "1.1em";
 carritoMenu.appendChild(totalPedidoSpan);
+
+const cantidadItemsSpan = document.createElement("span");
+cantidadItemsSpan.id = "cantidad-items";
+cantidadItemsSpan.style.display = "block";
+carritoMenu.appendChild(cantidadItemsSpan);
 
 // Enviar por WhatsApp
 botonEnviarWhatsapp.addEventListener("click", () => {
@@ -85,40 +101,74 @@ botonEnviarWhatsapp.addEventListener("click", () => {
     return;
   }
 
-  const ubicacion = prompt("Por favor, ingresa tu dirección o zona de entrega:");
-  if (!ubicacion || ubicacion.trim() === "") {
+  const ubicacion = inputUbicacion.value.trim();
+  if (!ubicacion) {
     alert("Debes ingresar una ubicación válida para enviar el pedido.");
+    inputUbicacion.focus();
     return;
   }
 
-  let mensaje = "Hola EcoAlimentos! Quiero hacer el siguiente pedido:%0A";
+  let mensaje = "🏷️  Solicitud de Pedido:%0A";
+  const descuentoUnidad = calcularDescuentoPorUnidad();
+
   carrito.forEach(item => {
-    mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidad(es)%0A`;
+    const precioOriginalTotal = item.precioBase * item.cantidad;
+    const descuentoTotal = descuentoUnidad * item.cantidad;
+    const precioFinal = precioOriginalTotal - descuentoTotal;
+    const precioUnitarioConDesc = item.precioBase - descuentoUnidad;
+
+    if (item.cantidad === 1) {
+      mensaje += `- ${encodeURIComponent(item.nombre)}: $${precioFinal.toLocaleString()}`;
+    } else {
+      mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidades | ($${precioUnitarioConDesc.toLocaleString()} x ${item.cantidad}un) | $${precioFinal.toLocaleString()}`;
+    }
+
+    mensaje += `%0A`;
   });
 
   const total = calcularTotalConDescuento();
-  const ahorro = calcularAhorro();
+  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
-  mensaje += `%0A🧾 Total: $${total.toLocaleString()} (Ahorro: $${ahorro.toLocaleString()})%0A`;
+  if (descuentoUnidad > 0) {
+    let umbral = "";
+
+    if (tipoCatalogo === "personal") {
+      if (totalUnidades >= 10) umbral = "10 unidades";
+      else if (totalUnidades >= 5) umbral = "5 unidades";
+    } else if (tipoCatalogo === "distribuidor") {
+      if (totalUnidades >= 20) umbral = "20 unidades";
+    } else if (tipoCatalogo === "mayorista") {
+      if (totalUnidades >= 50) umbral = "50 unidades";
+      else if (totalUnidades >= 30) umbral = "30 unidades";
+      else if (totalUnidades >= 10) umbral = "10 unidades";
+    }
+
+    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas | Descuento aplicado por ${umbral}%0A`;
+  } else {
+    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas %0A` ;
+  }
+
+  mensaje += ``;
   mensaje += `%0A📍 Entrega en: ${encodeURIComponent(ubicacion)}%0A`;
   mensaje += `%0A¡Gracias!`;
 
   const urlWhatsapp = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${mensaje}`;
-  window.open(urlWhatsapp, "_blank");
+  const link = document.createElement("a");
+  link.href = urlWhatsapp;
+  link.target = "_blank";
+  link.rel = "noopener";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 });
 
-// Descuentos adaptados a cada tipo de catálogo
+// Descuentos por catálogo
 function calcularDescuentoPorUnidad() {
   const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
   if (tipoCatalogo === "personal") {
     if (totalUnidades >= 10) return 140;
     if (totalUnidades >= 5) return 90;
-    return 0;
-  }
-
-  if (tipoCatalogo === "distribuidor") {
-    if (totalUnidades >= 20) return 250;
     return 0;
   }
 
@@ -131,6 +181,7 @@ function calcularDescuentoPorUnidad() {
 
   return 0;
 }
+
 
 function calcularAhorro() {
   const descuentoUnidad = calcularDescuentoPorUnidad();
@@ -149,6 +200,7 @@ function actualizarCarrito() {
   if (carrito.length === 0) {
     carritoItems.innerHTML = '<p class="carrito-vacio">Tu carrito está vacío.</p>';
     totalPedidoSpan.textContent = "";
+    cantidadItemsSpan.textContent = ""; 
     return;
   }
 
@@ -177,22 +229,23 @@ function actualizarCarrito() {
   let mensajeDescuento = "";
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 10) mensajeDescuento = "Descuento aplicado por 10 unidades";
-    else if (totalUnidades >= 5) mensajeDescuento = "Descuento aplicado por 5 unidades";
+    if (totalUnidades >= 10) mensajeDescuento = "Descuento por 10 unidades";
+    else if (totalUnidades >= 5) mensajeDescuento = "Descuento por 5 unidades";
   }
 
   if (tipoCatalogo === "distribuidor") {
-    if (totalUnidades >= 100) mensajeDescuento = "Descuento aplicado por 100 unidades";
-    else if (totalUnidades >= 50) mensajeDescuento = "Descuento aplicado por 50 unidades";
+    if (totalUnidades >= 100) mensajeDescuento = "Descuento por 100 unidades";
+    else if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
   }
 
   if (tipoCatalogo === "mayorista") {
-    if (totalUnidades >= 10) mensajeDescuento = "Descuento aplicado por 10 unidades";
-    if (totalUnidades >= 30) mensajeDescuento = "Descuento aplicado por 30 unidades";
-    if (totalUnidades >= 50) mensajeDescuento = "Descuento aplicado por 50 unidades";
+    if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
+    else if (totalUnidades >= 30) mensajeDescuento = "Descuento por 30 unidades";
+    else if (totalUnidades >= 10) mensajeDescuento = "Descuento por 10 unidades";
   }
 
   totalPedidoSpan.textContent = `🧾 Total: $${total.toLocaleString()} ${mensajeDescuento ? "| " + mensajeDescuento : ""}`;
+  cantidadItemsSpan.textContent = `${totalUnidades}un seleccionadas`; 
 
   agregarEventosBotonesCantidad();
 }
