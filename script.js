@@ -74,9 +74,9 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   if (totalPacks > 0) {
     minimoUnidades = 1;
   } else {
-    if (tipoCatalogo === "personal") minimoUnidades = 5;
+    if (tipoCatalogo === "personal") minimoUnidades = 4;
     else if (tipoCatalogo === "distribuidor") minimoUnidades = 20;
-    else if (tipoCatalogo === "mayorista") minimoUnidades = 10;
+    else if (tipoCatalogo === "mayorista") minimoUnidades = 8;
     else minimoUnidades = 1;
   }
 
