@@ -90,9 +90,9 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   if (totalPacks > 0) {
     minimoUnidades = 1;
   } else {
-    if (tipoCatalogo === "personal") minimoUnidades = 4;
+    if (tipoCatalogo === "personal") minimoUnidades = 5;
     else if (tipoCatalogo === "distribuidor") minimoUnidades = 20;
-    else if (tipoCatalogo === "mayorista") minimoUnidades = 8;
+    else if (tipoCatalogo === "mayorista") minimoUnidades = 10;
     else minimoUnidades = 1;
   }
 
@@ -133,14 +133,14 @@ botonEnviarWhatsapp.addEventListener("click", () => {
     let umbral = "";
 
     if (tipoCatalogo === "personal") {
-      if (totalUnidades >= 10) umbral = "10 unidades";
-      else if (totalUnidades >= 5) umbral = "5 unidades";
+      if (totalUnidades >= 12) umbral = "12 unidades";
+      else if (totalUnidades >= 7) umbral = "7 unidades";
     } else if (tipoCatalogo === "distribuidor") {
       if (totalUnidades >= 20) umbral = "20 unidades";
     } else if (tipoCatalogo === "mayorista") {
       if (totalUnidades >= 50) umbral = "50 unidades";
       else if (totalUnidades >= 30) umbral = "30 unidades";
-      else if (totalUnidades >= 10) umbral = "10 unidades";
+      else if (totalUnidades >= 12) umbral = "12 unidades";
     }
 
     mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas | Descuento aplicado por ${umbral}%0A`;
@@ -167,15 +167,15 @@ function calcularDescuentoPorUnidad() {
   const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 10) return 140;
-    if (totalUnidades >= 5) return 90;
+    if (totalUnidades >= 10) return 190;
+    if (totalUnidades >= 5) return 120;
     return 0;
   }
 
   if (tipoCatalogo === "mayorista") {
-    if (totalUnidades >= 50) return 460;
-    if (totalUnidades >= 30) return 310;
-    if (totalUnidades >= 10) return 160;
+    if (totalUnidades >= 50) return 340;
+    if (totalUnidades >= 30) return 280;
+    if (totalUnidades >= 10) return 210;
     return 0;
   }
 
@@ -229,8 +229,8 @@ function actualizarCarrito() {
   let mensajeDescuento = "";
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 10) mensajeDescuento = "Descuento por 10 unidades";
-    else if (totalUnidades >= 5) mensajeDescuento = "Descuento por 5 unidades";
+    if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
+    else if (totalUnidades >= 7) mensajeDescuento = "Descuento por 7 unidades";
   }
 
   if (tipoCatalogo === "distribuidor") {
@@ -241,7 +241,7 @@ function actualizarCarrito() {
   if (tipoCatalogo === "mayorista") {
     if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
     else if (totalUnidades >= 30) mensajeDescuento = "Descuento por 30 unidades";
-    else if (totalUnidades >= 10) mensajeDescuento = "Descuento por 10 unidades";
+    else if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
   }
 
   totalPedidoSpan.textContent = `🧾 Total: $${total.toLocaleString()} ${mensajeDescuento ? "| " + mensajeDescuento : ""}`;
@@ -272,4 +272,5 @@ function agregarEventosBotonesCantidad() {
     });
   });
 }
+
 
