@@ -167,8 +167,8 @@ function calcularDescuentoPorUnidad() {
   const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 10) return 190;
-    if (totalUnidades >= 5) return 120;
+    if (totalUnidades >= 12) return 190;
+    if (totalUnidades >= 7) return 120;
     return 0;
   }
 
