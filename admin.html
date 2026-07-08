@@ -44,7 +44,12 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow: hidden;
+        }
+
+        @media (min-width: 769px) {
+            body {
+                overflow: hidden;
+            }
         }
 
         /* Glassmorphism Header */
@@ -107,7 +112,12 @@
             grid-template-columns: 400px 1fr;
             flex: 1;
             position: relative;
-            height: calc(100vh - 70px);
+        }
+
+        @media (min-width: 769px) {
+            .main-container {
+                height: calc(100vh - 70px);
+            }
         }
 
         /* Sidebar & Drawer */
@@ -485,32 +495,37 @@
         @media (max-width: 768px) {
             .main-container {
                 grid-template-columns: 1fr;
-                height: calc(100vh - 70px);
+                height: auto;
+                display: flex;
+                flex-direction: column;
             }
 
             .sidebar {
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 320px;
-                height: 100%;
-                box-shadow: 8px 0 30px rgba(0, 0, 0, 0.7);
-                transition: var(--transition);
+                width: 100%;
+                height: auto;
+                overflow: visible;
+                border-right: none;
+                border-top: 1px solid var(--border-color);
+                padding: 1.2em;
             }
 
-            .sidebar.open {
-                left: 0;
+            .map-container {
+                height: 450px;
+                flex-shrink: 0;
+                order: -1; /* Mapa arriba */
             }
 
             .drawer-toggle-btn {
-                display: flex;
+                display: none !important;
             }
 
             .route-actions-bar {
-                width: 85%;
+                position: fixed;
+                width: 90%;
                 bottom: 15px;
                 padding: 10px 15px;
                 justify-content: center;
+                z-index: 2500;
             }
 
             .route-actions-bar .btn {
@@ -625,8 +640,8 @@
         let markers = [];
         let routeLine = null;
         let addresses = JSON.parse(localStorage.getItem('eco_addresses')) || [];
-        let originAddress = localStorage.getItem('eco_origin') || "Córdoba, Argentina";
-        let originCoords = JSON.parse(localStorage.getItem('eco_origin_coords')) || { lat: -31.4167, lon: -64.1833 };
+        let originAddress = localStorage.getItem('eco_origin') || "Ñuflo de Chávez 3810, Córdoba, Argentina";
+        let originCoords = JSON.parse(localStorage.getItem('eco_origin_coords')) || { lat: -31.4250, lon: -64.2444 };
         
         // URL de tu Apps Script de Google Sheets para leer pedidos automáticamente
         const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbwy-bIvLdDAr7YW2bWFGZSWG1KVldjqf9nRY2BQI712EdEGAYWkAKq3H-_-lVPeYWiLPQ/exec";
