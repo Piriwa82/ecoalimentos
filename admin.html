@@ -644,6 +644,15 @@
         let map;
         let markers = [];
         let routeLine = null;
+        // Limpieza automática al cambiar de día (a las 00:00)
+        const todayStr = new Date().toLocaleDateString('es-AR');
+        const lastActiveDate = localStorage.getItem('eco_last_active_date');
+        if (lastActiveDate && lastActiveDate !== todayStr) {
+            localStorage.removeItem('eco_addresses');
+            console.log("¡Nuevo día detectado! Se limpiaron los repartos del día anterior.");
+        }
+        localStorage.setItem('eco_last_active_date', todayStr);
+
         let addresses = JSON.parse(localStorage.getItem('eco_addresses')) || [];
         let originAddress = localStorage.getItem('eco_origin') || "Ñuflo de Chávez 3810, Córdoba, Argentina";
         let originCoords = JSON.parse(localStorage.getItem('eco_origin_coords')) || { lat: -31.4250, lon: -64.2444 };
@@ -1238,6 +1247,20 @@
                     toggleBtn.innerHTML = `<i class="fa-solid fa-bars"></i>`;
                 }
             });
+
+            // Verificar cambio de día cada 60 segundos por si dejan la pestaña abierta
+            setInterval(() => {
+                const checkToday = new Date().toLocaleDateString('es-AR');
+                const lastSaved = localStorage.getItem('eco_last_active_date');
+                if (lastSaved && lastSaved !== checkToday) {
+                    addresses = [];
+                    localStorage.removeItem('eco_addresses');
+                    localStorage.setItem('eco_last_active_date', checkToday);
+                    renderList();
+                    updateMapElements();
+                    console.log("¡Medianoche detectada! Se reinició la hoja de ruta automáticamente.");
+                }
+            }, 60000);
         };
 
         // Event listeners manual
