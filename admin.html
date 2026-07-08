@@ -519,16 +519,23 @@
 
             .route-actions-bar {
                 position: fixed;
-                width: 90%;
-                bottom: 15px;
-                padding: 10px 15px;
-                justify-content: center;
-                z-index: 2500;
+                width: 92%;
+                bottom: 20px;
+                left: 4%;
+                transform: none; /* Reseteamos el centrado por transform de PC */
+                padding: 10px;
+                box-sizing: border-box;
+                display: flex;
+                gap: 10px;
+                justify-content: space-between;
+                z-index: 3500; /* Aseguramos que quede sobre todo el contenido */
             }
 
             .route-actions-bar .btn {
-                padding: 10px 14px;
+                flex: 1; /* Hacemos que ocupen el mismo ancho */
+                padding: 12px 8px;
                 font-size: 0.8em;
+                white-space: nowrap;
             }
         }
     </style>
