@@ -48,7 +48,7 @@ document.querySelectorAll(".boton-agregar").forEach((boton) => {
 
 // WhatsApp y Total/Ahorro
 // URL de tu Apps Script de Google Sheets para registrar pedidos automáticamente
-const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbzb5SEMbyE1_mlaeSjVIfsFq8d8ulQIlNfp93iI9p4YUcTqMsSiIjhYWje6Ut4qbEDszQ/exec";
+const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbwy-bIvLdDAr7YW2bWFGZSWG1KVldjqf9nRY2BQI712EdEGAYWkAKq3H-_-lVPeYWiLPQ/exec";
 
 // WhatsApp y Total/Ahorro
 const numeroWhatsapp = "543517612075";
@@ -156,19 +156,18 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   mensaje += `%0A📍 Entrega en: ${encodeURIComponent(ubicacion)}%0A`;
   mensaje += `%0A¡Gracias!`;
 
-  // Enviar pedido a la planilla de Google Sheets en segundo plano
+  // Enviar pedido a la planilla de Google Sheets en segundo plano (usando url-encoded para evitar problemas de CORS)
   if (googleSheetsAppURL && googleSheetsAppURL !== "URL_DE_TU_APPS_SCRIPT") {
-    const pedidoData = {
-      direccion: ubicacion,
-      cliente: "Cliente Web",
-      pedido: carrito.map(item => `${item.nombre} x${item.cantidad}`).join(", "),
-      total: total
-    };
+    const formData = new URLSearchParams();
+    formData.append("direccion", ubicacion);
+    formData.append("cliente", "Cliente Web");
+    formData.append("pedido", carrito.map(item => `${item.nombre} x${item.cantidad}`).join(", "));
+    formData.append("total", total);
+
     fetch(googleSheetsAppURL, {
       method: "POST",
       mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(pedidoData)
+      body: formData
     }).catch(err => console.error("Error al registrar el pedido:", err));
   }
 
