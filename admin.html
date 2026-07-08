@@ -684,14 +684,38 @@
             }
 
             try {
-                let response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`);
+                // 1. Intentar buscar la dirección completa restringida estrictamente a Córdoba Capital (dentro de Circunvalación)
+                // Viewbox: left=-64.28, top=-31.35, right=-64.10, bottom=-31.48 (anillo)
+                let response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=-64.28,-31.35,-64.10,-31.48&bounded=1&limit=1`);
                 let data = await response.json();
+                
                 if (data && data.length > 0) {
                     return {
                         lat: parseFloat(data[0].lat),
                         lon: parseFloat(data[0].lon),
                         display_name: data[0].display_name
                     };
+                }
+
+                // 2. Si no se encuentra con la altura, intentar buscar solo la calle como aproximación
+                // Limpiamos removiendo el número al final (ej: "Estrada 223" -> "Estrada")
+                let cleanQuery = addressText.replace(/\d+$/, '').trim();
+                if (cleanQuery && cleanQuery !== addressText) {
+                    let fallbackQuery = cleanQuery;
+                    if (!fallbackQuery.toLowerCase().includes("córdoba") && !fallbackQuery.toLowerCase().includes("cordoba")) {
+                        fallbackQuery += ", Córdoba, Argentina";
+                    }
+                    
+                    let fbResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fallbackQuery)}&viewbox=-64.28,-31.35,-64.10,-31.48&bounded=1&limit=1`);
+                    let fbData = await fbResponse.json();
+                    
+                    if (fbData && fbData.length > 0) {
+                        return {
+                            lat: parseFloat(fbData[0].lat),
+                            lon: parseFloat(fbData[0].lon),
+                            display_name: fbData[0].display_name
+                        };
+                    }
                 }
             } catch (e) {
                 console.error("Error geocodificando: ", e);
