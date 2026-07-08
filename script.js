@@ -47,6 +47,10 @@ document.querySelectorAll(".boton-agregar").forEach((boton) => {
 });
 
 // WhatsApp y Total/Ahorro
+// URL de tu Apps Script de Google Sheets para registrar pedidos automáticamente
+const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbzb5SEMbyE1_mlaeSjVIfsFq8d8ulQIlNfp93iI9p4YUcTqMsSiIjhYWje6Ut4qbEDszQ/exec";
+
+// WhatsApp y Total/Ahorro
 const numeroWhatsapp = "543517612075";
 const botonEnviarWhatsapp = document.createElement("button");
 botonEnviarWhatsapp.textContent = "Enviar pedido por WhatsApp";
@@ -151,6 +155,22 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   mensaje += ``;
   mensaje += `%0A📍 Entrega en: ${encodeURIComponent(ubicacion)}%0A`;
   mensaje += `%0A¡Gracias!`;
+
+  // Enviar pedido a la planilla de Google Sheets en segundo plano
+  if (googleSheetsAppURL && googleSheetsAppURL !== "URL_DE_TU_APPS_SCRIPT") {
+    const pedidoData = {
+      direccion: ubicacion,
+      cliente: "Cliente Web",
+      pedido: carrito.map(item => `${item.nombre} x${item.cantidad}`).join(", "),
+      total: total
+    };
+    fetch(googleSheetsAppURL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(pedidoData)
+    }).catch(err => console.error("Error al registrar el pedido:", err));
+  }
 
   const urlWhatsapp = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${mensaje}`;
   const link = document.createElement("a");

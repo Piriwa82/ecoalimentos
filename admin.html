@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificador de Rutas - EcoAlimentos</title>
+    <link rel="icon" href="img/logo.png">
+    
+    <!-- Google Fonts: Outfit (modern, geometric, extremely premium) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1e1e1e;
+            --accent-primary: #49af75;
+            --accent-secondary: #bad798;
+            --accent-gradient: linear-gradient(135deg, #49af75 0%, #bad798 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #9f9f9f;
+            --border-color: #262626;
+            --danger: #ff4d4d;
+            --danger-gradient: linear-gradient(135deg, #ff4d4d 0%, #ff8080 100%);
+            --blue-gradient: linear-gradient(135deg, #2f80ed 0%, #56ccf2 100%);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism Header */
+        header {
+            background-color: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.8em 2em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 4000;
+            height: 70px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo img {
+            width: 42px;
+            height: 42px;
+            filter: drop-shadow(0 2px 8px rgba(73, 175, 117, 0.3));
+        }
+
+        .header-logo h1 {
+            font-size: 1.3em;
+            font-weight: 600;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .header-actions a {
+            color: var(--text-primary);
+            text-decoration: none;
+            background: var(--accent-gradient);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(73, 175, 117, 0.2);
+            transition: var(--transition);
+        }
+
+        .header-actions a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(73, 175, 117, 0.4);
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            flex: 1;
+            position: relative;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar & Drawer */
+        .sidebar {
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5em;
+            overflow-y: auto;
+            gap: 1.2em;
+            z-index: 3000;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 10px;
+        }
+
+        .section-title {
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            margin-bottom: 0.6em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .panel-card {
+            background-color: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 1.2em;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .panel-card:hover {
+            border-color: rgba(73, 175, 117, 0.2);
+        }
+
+        /* Form Controls */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .form-group label {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            position: relative;
+        }
+
+        .input-container {
+            position: relative;
+            flex: 1;
+        }
+
+        input[type="text"], textarea {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            width: 100%;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(73, 175, 117, 0.15);
+        }
+
+        /* Buttons styling */
+        .btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.9em;
+            box-shadow: 0 4px 10px rgba(73, 175, 117, 0.15);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(73, 175, 117, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-secondary);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            box-shadow: none;
+        }
+
+        .btn-danger:hover {
+            background: var(--danger-gradient);
+            color: white;
+        }
+
+        /* Google Maps Autocomplete Dropdown */
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 5000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            margin-top: 6px;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 12px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .suggestion-item:hover {
+            background-color: rgba(73, 175, 117, 0.12);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-icon {
+            color: var(--accent-primary);
+            font-size: 1.15em;
+            background-color: rgba(73, 175, 117, 0.1);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .suggestion-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .suggestion-title {
+            font-weight: 500;
+            font-size: 0.9em;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .suggestion-subtitle {
+            font-size: 0.75em;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Textarea quick import */
+        textarea {
+            height: 80px;
+            resize: none;
+            font-size: 0.85em;
+        }
+
+        /* Address List container */
+        .address-list-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 200px;
+        }
+
+        .address-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            max-height: 380px;
+            padding-right: 4px;
+        }
+
+        .address-item {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: grab;
+            transition: var(--transition);
+        }
+
+        .address-item:active {
+            cursor: grabbing;
+        }
+
+        .address-item.dragging {
+            opacity: 0.4;
+            border-color: var(--accent-primary);
+            transform: scale(0.98);
+        }
+
+        .address-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .address-index {
+            background: var(--accent-gradient);
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 600;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(73, 175, 117, 0.3);
+        }
+
+        .address-text {
+            font-size: 0.85em;
+            font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .action-icon {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .action-icon:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--accent-secondary);
+        }
+
+        .action-icon.delete-btn:hover {
+            color: var(--danger);
+            background-color: rgba(255, 77, 77, 0.1);
+        }
+
+        /* Map area */
+        .map-container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            background-color: var(--bg-primary);
+        }
+
+        /* Floating route bar */
+        .route-actions-bar {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background-color: rgba(20, 20, 20, 0.85);
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            display: flex;
+            gap: 12px;
+            border: 1px solid var(--accent-primary);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Floating drawer toggle for mobile */
+        .drawer-toggle-btn {
+            display: none;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 3500;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            font-size: 1.2em;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .drawer-toggle-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Mobile Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                height: calc(100vh - 70px);
+            }
+
+            .sidebar {
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 320px;
+                height: 100%;
+                box-shadow: 8px 0 30px rgba(0, 0, 0, 0.7);
+                transition: var(--transition);
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .drawer-toggle-btn {
+                display: flex;
+            }
+
+            .route-actions-bar {
+                width: 85%;
+                bottom: 15px;
+                padding: 10px 15px;
+                justify-content: center;
+            }
+
+            .route-actions-bar .btn {
+                padding: 10px 14px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Drawer Toggle Button (Visible only on Mobile) -->
+    <button class="drawer-toggle-btn" id="drawer-toggle" title="Abrir menú">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <header>
+        <div class="header-logo">
+            <img src="img/logo-sin-borde.png" alt="EcoAlimentos Logo">
+            <h1>EcoAlimentos - Planificador</h1>
+        </div>
+        <div class="header-actions">
+            <a href="index.html" target="_blank"><i class="fa-solid fa-store"></i> Ir a la Tienda</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar Planificador (Drawer on Mobile) -->
+        <div class="sidebar" id="sidebar">
+            <!-- Origen -->
+            <div class="panel-card">
+                <div class="section-title">
+                    <i class="fa-solid fa-house-chimney"></i>
+                    <span>Punto de Partida (Depósito)</span>
+                </div>
+                <div class="form-group">
+                    <div class="input-row">
+                        <div class="input-container">
+                            <input type="text" id="origen-input" value="Córdoba, Argentina" placeholder="Ej: Av. Colón 100, Córdoba">
+                        </div>
+                        <button class="btn" id="origen-save-btn" title="Guardar origen"><i class="fa-solid fa-floppy-disk"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carga de Direcciones -->
+            <div class="panel-card">
+                <div class="section-title">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Cargar Direcciones</span>
+                </div>
+                
+                <!-- Manual -->
+                <div class="form-group">
+                    <label>Buscar y agregar dirección (Córdoba y alrededores):</label>
+                    <div class="input-row">
+                        <div class="input-container">
+                            <input type="text" id="direccion-manual" placeholder="Escribe calle, altura o lugar...">
+                        </div>
+                        <button class="btn" id="add-manual-btn" title="Agregar dirección"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0 10px 0;">
+
+                <!-- WhatsApp Paste -->
+                <div class="form-group">
+                    <label>Importar rápido (pega texto de WhatsApp):</label>
+                    <textarea id="whatsapp-textarea" placeholder="Pega el mensaje del pedido aquí... Ej: 'Entrega en: Duarte Quiros 1200'"></textarea>
+                    <button class="btn btn-secondary" style="margin-top: 8px; width: 100%;" id="import-wa-btn">
+                        <i class="fa-solid fa-file-import"></i> Extraer Dirección
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lista de Direcciones -->
+            <div class="address-list-container">
+                <div class="section-title" style="margin-bottom: 0.5em;">
+                    <i class="fa-solid fa-list-ol"></i>
+                    <span>Hoja de Ruta</span>
+                </div>
+                <ul class="address-list" id="address-list">
+                    <!-- Dinámico -->
+                </ul>
+                <button class="btn btn-danger" style="margin-top: 15px; width: 100%;" id="clear-all-btn">
+                    <i class="fa-solid fa-trash-can"></i> Limpiar Lista
+                </button>
+            </div>
+        </div>
+
+        <!-- Map Area -->
+        <div class="map-container">
+            <div id="map"></div>
+
+            <!-- Botones de Acción Flotantes -->
+            <div class="route-actions-bar">
+                <button class="btn" id="optimize-btn">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Optimizar Ruta
+                </button>
+                <button class="btn btn-secondary" id="gmaps-btn" style="background: var(--blue-gradient); border: none; color: white;">
+                    <i class="fa-solid fa-map-location-dot"></i> Google Maps GPS
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        let map;
+        let markers = [];
+        let routeLine = null;
+        let addresses = JSON.parse(localStorage.getItem('eco_addresses')) || [];
+        let originAddress = localStorage.getItem('eco_origin') || "Córdoba, Argentina";
+        let originCoords = JSON.parse(localStorage.getItem('eco_origin_coords')) || { lat: -31.4167, lon: -64.1833 };
+        
+        // URL de tu Apps Script de Google Sheets para leer pedidos automáticamente
+        const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbzb5SEMbyE1_mlaeSjVIfsFq8d8ulQIlNfp93iI9p4YUcTqMsSiIjhYWje6Ut4qbEDszQ/exec";
+
+        document.getElementById('origen-input').value = originAddress;
+
+        // Inicializar Mapa
+        function initMap() {
+            map = L.map('map', { zoomControl: false }).setView([originCoords.lat, originCoords.lon], 13);
+            
+            // Añadir control de zoom en la esquina superior derecha (por encima de los botones flotantes)
+            L.control.zoom({ position: 'topright' }).addTo(map);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+            }).addTo(map);
+
+            updateMapElements();
+        }
+
+        // Distancia exacta Haversine
+        function getDistanceKm(lat1, lon1, lat2, lon2) {
+            let R = 6371; // km
+            let dLat = (lat2 - lat1) * Math.PI / 180;
+            let dLon = (lon2 - lon1) * Math.PI / 180;
+            let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+            let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Geocodificación usando Nominatim (gratuito)
+        async function geocodeAddress(addressText) {
+            let query = addressText;
+            if (!query.toLowerCase().includes("córdoba") && !query.toLowerCase().includes("cordoba")) {
+                query += ", Córdoba, Argentina";
+            } else if (!query.toLowerCase().includes("argentina")) {
+                query += ", Argentina";
+            }
+
+            try {
+                let response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`);
+                let data = await response.json();
+                if (data && data.length > 0) {
+                    return {
+                        lat: parseFloat(data[0].lat),
+                        lon: parseFloat(data[0].lon),
+                        display_name: data[0].display_name
+                    };
+                }
+            } catch (e) {
+                console.error("Error geocodificando: ", e);
+            }
+            return null;
+        }
+
+        // Cargar pedidos pendientes desde la planilla de Google Sheets de forma automática
+        async function loadOrdersFromGoogleSheets() {
+            if (!googleSheetsAppURL || googleSheetsAppURL === "URL_DE_TU_APPS_SCRIPT") return;
+            
+            try {
+                let response = await fetch(googleSheetsAppURL);
+                let data = await response.json();
+                if (data.status === "success" && data.orders) {
+                    // Filtrar pedidos que tengan el estado "Pendiente"
+                    let pendingOrders = data.orders.filter(order => order.estado && order.estado.toLowerCase() === "pendiente");
+                    
+                    if (pendingOrders.length > 0) {
+                        console.log(`Cargando ${pendingOrders.length} pedidos pendientes desde Google Sheets...`);
+                        
+                        for (let order of pendingOrders) {
+                            let cleanText = order.direccion.trim();
+                            // Evitar duplicados
+                            let exists = addresses.some(addr => addr.text.toLowerCase() === cleanText.toLowerCase());
+                            if (!exists) {
+                                let coords = await geocodeAddress(cleanText);
+                                if (coords) {
+                                    addresses.push({
+                                        text: cleanText,
+                                        lat: coords.lat,
+                                        lon: coords.lon,
+                                        rowindex: order.rowindex
+                                    });
+                                }
+                            }
+                        }
+                        saveAddresses();
+                        renderList();
+                        updateMapElements();
+                    }
+                }
+            } catch (e) {
+                console.error("Error al sincronizar con Google Sheets:", e);
+            }
+        }
+
+        // Autocompletado estilo Google Maps
+        function setupAutocomplete(inputId, dropdownId, onSelect) {
+            let input = document.getElementById(inputId);
+            let container = input.parentNode;
+            
+            let dropdown = document.getElementById(dropdownId);
+            if (!dropdown) {
+                dropdown = document.createElement('div');
+                dropdown.id = dropdownId;
+                dropdown.className = 'suggestions-dropdown';
+                container.appendChild(dropdown);
+            }
+
+            let debounceTimer;
+
+            input.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                let query = input.value.trim();
+                
+                if (query.length < 3) {
+                    dropdown.style.display = 'none';
+                    return;
+                }
+
+                debounceTimer = setTimeout(async function() {
+                    let url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=-31.4167&lon=-64.1833&limit=8&lang=es`;
+                    
+                    try {
+                        let response = await fetch(url);
+                        let data = await response.json();
+                        dropdown.innerHTML = '';
+
+                        if (data.features && data.features.length > 0) {
+                            data.features.forEach(f => {
+                                let props = f.properties;
+                                let coords = f.geometry.coordinates; // [lon, lat]
+                                
+                                let name = props.name || '';
+                                let street = props.street || '';
+                                let housenumber = props.housenumber || '';
+                                let city = props.city || '';
+                                let state = props.state || '';
+                                
+                                // Formatear para Google Maps Style
+                                let titleText = street ? (street + (housenumber ? ' ' + housenumber : '')) : name;
+                                let subtitleParts = [];
+                                if (city) subtitleParts.push(city);
+                                if (state) subtitleParts.push(state);
+                                let subtitleText = subtitleParts.join(', ');
+
+                                let displayText = titleText + (subtitleText ? ', ' + subtitleText : '');
+
+                                // Filtrado estricto a 30 km a la redonda de Córdoba Capital
+                                let distanceKm = getDistanceKm(coords[1], coords[0], -31.4167, -64.1833);
+
+                                if (distanceKm <= 30) {
+                                    let item = document.createElement('div');
+                                    item.className = 'suggestion-item';
+                                    
+                                    item.innerHTML = `
+                                        <div class="suggestion-icon">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                        </div>
+                                        <div class="suggestion-content">
+                                            <div class="suggestion-title">${titleText}</div>
+                                            <div class="suggestion-subtitle">${subtitleText || 'Córdoba, Argentina'}</div>
+                                        </div>
+                                    `;
+                                    
+                                    item.addEventListener('click', function() {
+                                        input.value = displayText;
+                                        dropdown.style.display = 'none';
+                                        onSelect({
+                                            text: displayText,
+                                            lat: coords[1],
+                                            lon: coords[0]
+                                        });
+                                    });
+                                    dropdown.appendChild(item);
+                                }
+                            });
+
+                            if (dropdown.children.length > 0) {
+                                dropdown.style.display = 'block';
+                            } else {
+                                dropdown.style.display = 'none';
+                            }
+                        } else {
+                            dropdown.style.display = 'none';
+                        }
+                    } catch (err) {
+                        console.error("Error cargando sugerencias: ", err);
+                    }
+                }, 250);
+            });
+
+            // Cerrar si hace click afuera
+            document.addEventListener('click', function(e) {
+                if (e.target !== input && e.target !== dropdown) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        // Actualizar mapa
+        function updateMapElements() {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+            if (routeLine) {
+                map.removeLayer(routeLine);
+                routeLine = null;
+            }
+
+            let pathPoints = [];
+
+            // 1. Origen
+            let originMarker = L.marker([originCoords.lat, originCoords.lon], {
+                icon: L.divIcon({
+                    html: `<i class="fa-solid fa-house-chimney" style="color: #bad798; font-size: 22px; text-shadow: 0 2px 5px rgba(0,0,0,0.5);"></i>`,
+                    className: 'custom-div-icon',
+                    iconSize: [22, 22],
+                    iconAnchor: [11, 11]
+                })
+            }).addTo(map).bindPopup(`<b>Depósito:</b><br>${originAddress}`);
+            markers.push(originMarker);
+            pathPoints.push([originCoords.lat, originCoords.lon]);
+
+            // 2. Paradas
+            addresses.forEach((addr, idx) => {
+                if (addr.lat && addr.lon) {
+                    let markerHtml = `<div class="address-index">${idx + 1}</div>`;
+                    
+                    let marker = L.marker([addr.lat, addr.lon], {
+                        draggable: true,
+                        icon: L.divIcon({
+                            html: markerHtml,
+                            className: 'custom-div-icon',
+                            iconSize: [26, 26],
+                            iconAnchor: [13, 13]
+                        })
+                    }).addTo(map);
+
+                    marker.on('dragend', function(event) {
+                        let position = event.target.getLatLng();
+                        addr.lat = position.lat;
+                        addr.lon = position.lon;
+                        saveAddresses();
+                        updateRouteLine();
+                    });
+
+                    marker.bindPopup(`<b>Envío #${idx + 1}:</b><br>${addr.text}<br><small style="color: var(--text-secondary)">Arrastra el marcador para corregir la posición</small>`);
+                    markers.push(marker);
+                    pathPoints.push([addr.lat, addr.lon]);
+                }
+            });
+
+            // Línea punteada
+            if (pathPoints.length > 1) {
+                routeLine = L.polyline(pathPoints, { color: '#bad798', weight: 4, opacity: 0.8, dashArray: '6, 12' }).addTo(map);
+                let group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.12));
+            }
+        }
+
+        function updateRouteLine() {
+            let pathPoints = [[originCoords.lat, originCoords.lon]];
+            addresses.forEach(addr => {
+                if (addr.lat && addr.lon) {
+                    pathPoints.push([addr.lat, addr.lon]);
+                }
+            });
+            if (routeLine) {
+                routeLine.setLatLngs(pathPoints);
+            } else if (pathPoints.length > 1) {
+                routeLine = L.polyline(pathPoints, { color: '#bad798', weight: 4, opacity: 0.8, dashArray: '6, 12' }).addTo(map);
+            }
+        }
+
+        // Renderizar Lista Sidebar
+        function renderList() {
+            let listContainer = document.getElementById('address-list');
+            listContainer.innerHTML = '';
+
+            addresses.forEach((addr, idx) => {
+                let li = document.createElement('li');
+                li.className = 'address-item';
+                li.setAttribute('draggable', 'true');
+                li.dataset.index = idx;
+
+                li.innerHTML = `
+                    <div class="address-details">
+                        <div class="address-index">${idx + 1}</div>
+                        <div class="address-text" title="${addr.text}">${addr.text}</div>
+                    </div>
+                    <div class="address-actions">
+                        <button class="action-icon edit-btn" onclick="editAddress(${idx})" title="Editar dirección"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="action-icon delete-btn" onclick="deleteAddress(${idx})" title="Eliminar"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+
+                li.addEventListener('dragstart', handleDragStart);
+                li.addEventListener('dragover', handleDragOver);
+                li.addEventListener('drop', handleDrop);
+                li.addEventListener('dragend', handleDragEnd);
+
+                listContainer.appendChild(li);
+            });
+        }
+
+        function saveAddresses() {
+            localStorage.setItem('eco_addresses', JSON.stringify(addresses));
+        }
+
+        // Agregar dirección escrita manual
+        async function addAddress(text) {
+            let cleanText = text.trim();
+            if (!cleanText) return;
+
+            let addBtn = document.getElementById('add-manual-btn');
+            let origHtml = addBtn.innerHTML;
+            addBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+            addBtn.disabled = true;
+
+            let coords = await geocodeAddress(cleanText);
+            
+            addBtn.innerHTML = origHtml;
+            addBtn.disabled = false;
+
+            if (coords) {
+                addresses.push({
+                    text: cleanText,
+                    lat: coords.lat,
+                    lon: coords.lon
+                });
+                saveAddresses();
+                renderList();
+                updateMapElements();
+            } else {
+                alert(`No se pudo encontrar la dirección: "${cleanText}". Intenta detallar calle, número y ciudad.`);
+            }
+        }
+
+        function deleteAddress(idx) {
+            addresses.splice(idx, 1);
+            saveAddresses();
+            renderList();
+            updateMapElements();
+        }
+
+        function editAddress(idx) {
+            let newText = prompt("Modificar dirección:", addresses[idx].text);
+            if (newText && newText.trim() !== "") {
+                addresses[idx].text = newText.trim();
+                geocodeAddress(addresses[idx].text).then(coords => {
+                    if (coords) {
+                        addresses[idx].lat = coords.lat;
+                        addresses[idx].lon = coords.lon;
+                        saveAddresses();
+                        renderList();
+                        updateMapElements();
+                    } else {
+                        alert("No pudimos ubicar la nueva dirección en el mapa. Puedes corregirla arrastrando el marcador.");
+                        saveAddresses();
+                        renderList();
+                    }
+                });
+            }
+        }
+
+        // Drag and drop list reordering
+        let dragSourceEl = null;
+
+        function handleDragStart(e) {
+            this.classList.add('dragging');
+            dragSourceEl = this;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            if (dragSourceEl !== this) {
+                let srcIdx = parseInt(dragSourceEl.dataset.index);
+                let destIdx = parseInt(this.dataset.index);
+
+                let temp = addresses[srcIdx];
+                addresses.splice(srcIdx, 1);
+                addresses.splice(destIdx, 0, temp);
+
+                saveAddresses();
+                renderList();
+                updateMapElements();
+            }
+            return false;
+        }
+
+        function handleDragEnd() {
+            this.classList.remove('dragging');
+        }
+
+        // Importar de WhatsApp
+        function importFromWhatsApp() {
+            let text = document.getElementById('whatsapp-textarea').value;
+            if (!text.trim()) {
+                alert("Pega un mensaje antes de importar.");
+                return;
+            }
+
+            let match = text.match(/(?:📍\s*Entrega en:|Entrega en:|Dirección:|Direccion:|Direccion de entrega:)\s*(.*)(?:\n|$)/i);
+            
+            if (match && match[1]) {
+                let address = match[1].trim();
+                address = address.split("¡Gracias!")[0].trim();
+                address = address.split("\n")[0].trim();
+                
+                document.getElementById('direccion-manual').value = '';
+                document.getElementById('whatsapp-textarea').value = '';
+                addAddress(address);
+            } else {
+                alert("No detectamos el patrón 'Entrega en: [dirección]' en el mensaje.");
+            }
+        }
+
+        // Cambiar Origen depósito
+        async function updateOrigin() {
+            let inputVal = document.getElementById('origen-input').value.trim();
+            if (!inputVal) return;
+
+            let btn = document.getElementById('origen-save-btn');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+            btn.disabled = true;
+
+            let coords = await geocodeAddress(inputVal);
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i>`;
+            btn.disabled = false;
+
+            if (coords) {
+                originAddress = inputVal;
+                originCoords = { lat: coords.lat, lon: coords.lon };
+                localStorage.setItem('eco_origin', originAddress);
+                localStorage.setItem('eco_origin_coords', JSON.stringify(originCoords));
+                updateMapElements();
+                map.setView([originCoords.lat, originCoords.lon], 13);
+            } else {
+                alert("No pudimos ubicar el depósito.");
+            }
+        }
+
+        // Algoritmo TSP (Vecino más cercano)
+        function optimizeRoute() {
+            if (addresses.length <= 1) {
+                alert("Necesitas al menos 2 direcciones cargadas para poder optimizar la ruta.");
+                return;
+            }
+
+            let unvisited = [...addresses];
+            let optimized = [];
+            let currentCoords = { lat: originCoords.lat, lon: originCoords.lon };
+
+            while (unvisited.length > 0) {
+                let closestIdx = -1;
+                let minDistance = Infinity;
+
+                for (let i = 0; i < unvisited.length; i++) {
+                    if (unvisited[i].lat && unvisited[i].lon) {
+                        let dist = getDistanceKm(currentCoords.lat, currentCoords.lon, unvisited[i].lat, unvisited[i].lon);
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            closestIdx = i;
+                        }
+                    }
+                }
+
+                if (closestIdx !== -1) {
+                    let nextStop = unvisited.splice(closestIdx, 1)[0];
+                    optimized.push(nextStop);
+                    currentCoords = { lat: nextStop.lat, lon: nextStop.lon };
+                } else {
+                    optimized.push(...unvisited);
+                    break;
+                }
+            }
+
+            addresses = optimized;
+            saveAddresses();
+            renderList();
+            updateMapElements();
+        }
+
+        // Abrir en Google Maps multiruta
+        function openGoogleMaps() {
+            if (addresses.length === 0) {
+                alert("No hay direcciones cargadas.");
+                return;
+            }
+
+            let origin = `${originCoords.lat},${originCoords.lon}`;
+            let stops = addresses
+                .filter(addr => addr.lat && addr.lon)
+                .map(addr => `${addr.lat},${addr.lon}`);
+
+            if (stops.length === 0) {
+                alert("Ninguna dirección cargada tiene coordenadas válidas.");
+                return;
+            }
+
+            let url = `https://www.google.com/maps/dir/${origin}/${stops.join('/')}`;
+            window.open(url, '_blank');
+        }
+
+        // Toggles y Autocomplete inicial
+        window.onload = () => {
+            initMap();
+            renderList();
+            loadOrdersFromGoogleSheets();
+
+            // Setup suggestions autocomplete
+            setupAutocomplete('direccion-manual', 'manual-suggestions', function(selected) {
+                addresses.push({
+                    text: selected.text,
+                    lat: selected.lat,
+                    lon: selected.lon
+                });
+                saveAddresses();
+                renderList();
+                updateMapElements();
+                document.getElementById('direccion-manual').value = '';
+            });
+
+            setupAutocomplete('origen-input', 'origen-suggestions', function(selected) {
+                originAddress = selected.text;
+                originCoords = { lat: selected.lat, lon: selected.lon };
+                localStorage.setItem('eco_origin', originAddress);
+                localStorage.setItem('eco_origin_coords', JSON.stringify(originCoords));
+                updateMapElements();
+                map.setView([originCoords.lat, originCoords.lon], 13);
+            });
+
+            // Toggle Mobile Sidebar Drawer
+            let toggleBtn = document.getElementById('drawer-toggle');
+            let sidebar = document.getElementById('sidebar');
+
+            toggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                sidebar.classList.toggle('open');
+                let isOpen = sidebar.classList.contains('open');
+                toggleBtn.innerHTML = isOpen ? `<i class="fa-solid fa-xmark"></i>` : `<i class="fa-solid fa-bars"></i>`;
+            });
+
+            // Close mobile sidebar when clicking on map
+            map.on('click', function() {
+                if (sidebar.classList.contains('open')) {
+                    sidebar.classList.remove('open');
+                    toggleBtn.innerHTML = `<i class="fa-solid fa-bars"></i>`;
+                }
+            });
+        };
+
+        // Event listeners manual
+        document.getElementById('add-manual-btn').addEventListener('click', () => {
+            let input = document.getElementById('direccion-manual');
+            addAddress(input.value);
+            input.value = '';
+        });
+
+        document.getElementById('direccion-manual').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                let input = document.getElementById('direccion-manual');
+                addAddress(input.value);
+                input.value = '';
+            }
+        });
+
+        document.getElementById('import-wa-btn').addEventListener('click', importFromWhatsApp);
+        document.getElementById('origen-save-btn').addEventListener('click', updateOrigin);
+        document.getElementById('optimize-btn').addEventListener('click', optimizeRoute);
+        document.getElementById('gmaps-btn').addEventListener('click', openGoogleMaps);
+        document.getElementById('clear-all-btn').addEventListener('click', () => {
+            if (confirm("¿Estás seguro de que quieres limpiar toda la lista de direcciones?")) {
+                addresses = [];
+                saveAddresses();
+                renderList();
+                updateMapElements();
+            }
+        });
+    </script>
+</body>
+</html>
