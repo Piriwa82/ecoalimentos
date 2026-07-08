@@ -794,10 +794,10 @@
 
                                 let displayText = titleText + (subtitleText ? ', ' + subtitleText : '');
 
-                                // Filtrado estricto a 30 km a la redonda de Córdoba Capital
+                                // Filtrar estrictamente a 8.5 km a la redonda de Córdoba Capital (dentro de la Av. de Circunvalación / anillo)
                                 let distanceKm = getDistanceKm(coords[1], coords[0], -31.4167, -64.1833);
 
-                                if (distanceKm <= 30) {
+                                if (distanceKm <= 8.5) {
                                     let item = document.createElement('div');
                                     item.className = 'suggestion-item';
                                     
