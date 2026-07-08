@@ -699,7 +699,10 @@
                         console.log(`Cargando ${pendingOrders.length} pedidos pendientes desde Google Sheets...`);
                         
                         for (let order of pendingOrders) {
-                            let cleanText = order.direccion.trim();
+                            let addressVal = order.direccion || order['dirección'];
+                            if (!addressVal) continue;
+                            
+                            let cleanText = addressVal.trim();
                             // Evitar duplicados
                             let exists = addresses.some(addr => addr.text.toLowerCase() === cleanText.toLowerCase());
                             if (!exists) {
