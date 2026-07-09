@@ -297,7 +297,7 @@ async function actualizarPreciosDesdeSheets() {
   if (!googleSheetsAppURL || googleSheetsAppURL === "URL_DE_TU_APPS_SCRIPT") return;
   
   try {
-    const response = await fetch(`${googleSheetsAppURL}?action=getPrices`);
+    const response = await fetch(`${googleSheetsAppURL}?action=getPrices&_=${Date.now()}`);
     const data = await response.json();
     if (data.status === "success" && data.prices) {
       

@@ -742,7 +742,7 @@
             if (!googleSheetsAppURL || googleSheetsAppURL === "URL_DE_TU_APPS_SCRIPT") return;
             
             try {
-                let response = await fetch(googleSheetsAppURL);
+                let response = await fetch(`${googleSheetsAppURL}?_=${Date.now()}`);
                 let data = await response.json();
                 if (data.status === "success" && data.orders) {
                     // Filtrar pedidos que tengan el estado "Pendiente"
