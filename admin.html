@@ -748,32 +748,49 @@
                     // Filtrar pedidos que tengan el estado "Pendiente"
                     let pendingOrders = data.orders.filter(order => order.estado && order.estado.toLowerCase() === "pendiente");
                     
-                    if (pendingOrders.length > 0) {
-                        console.log(`Cargando ${pendingOrders.length} pedidos pendientes desde Google Sheets...`);
+                    // Set de direcciones pendientes de Sheets para búsqueda rápida
+                    let pendingTexts = new Set(pendingOrders.map(order => {
+                        let val = order.direccion || order['dirección'];
+                        return val ? val.trim().toLowerCase() : "";
+                    }).filter(t => t !== ""));
+                    
+                    // 1. Filtrar la lista local: eliminar los que fueron importados de Sheets pero ya no figuran allí
+                    addresses = addresses.filter(addr => {
+                        if (addr.rowindex !== undefined) {
+                            return pendingTexts.has(addr.text.toLowerCase());
+                        }
+                        return true; // Conservar las manuales
+                    });
+                    
+                    // 2. Sincronizar rowindices de los existentes y agregar nuevos
+                    for (let order of pendingOrders) {
+                        let addressVal = order.direccion || order['dirección'];
+                        if (!addressVal) continue;
                         
-                        for (let order of pendingOrders) {
-                            let addressVal = order.direccion || order['dirección'];
-                            if (!addressVal) continue;
-                            
-                            let cleanText = addressVal.trim();
-                            // Evitar duplicados
-                            let exists = addresses.some(addr => addr.text.toLowerCase() === cleanText.toLowerCase());
-                            if (!exists) {
-                                let coords = await geocodeAddress(cleanText);
-                                if (coords) {
-                                    addresses.push({
-                                        text: cleanText,
-                                        lat: coords.lat,
-                                        lon: coords.lon,
-                                        rowindex: order.rowindex
-                                    });
-                                }
+                        let cleanText = addressVal.trim();
+                        let cleanLower = cleanText.toLowerCase();
+                        
+                        let existingIndex = addresses.findIndex(addr => addr.text.toLowerCase() === cleanLower);
+                        if (existingIndex !== -1) {
+                            // Actualizar rowindex por si cambió debido al reacomodo de filas en Sheets
+                            addresses[existingIndex].rowindex = order.rowindex;
+                        } else {
+                            // Si no existe localmente, lo geocodificamos y lo agregamos
+                            let coords = await geocodeAddress(cleanText);
+                            if (coords) {
+                                addresses.push({
+                                    text: cleanText,
+                                    lat: coords.lat,
+                                    lon: coords.lon,
+                                    rowindex: order.rowindex
+                                });
                             }
                         }
-                        saveAddresses();
-                        renderList();
-                        updateMapElements();
                     }
+                    
+                    saveAddresses();
+                    renderList();
+                    updateMapElements();
                 }
             } catch (e) {
                 console.error("Error al sincronizar con Google Sheets:", e);
