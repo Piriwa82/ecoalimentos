@@ -181,35 +181,37 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   document.body.removeChild(link);
 });
 
-// Descuentos por catálogo
+// Descuentos por catálogo (solo aplican a productos individuales, no a packs)
 function calcularDescuentoPorUnidad() {
-  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+  const totalUnidadesNormales = carrito.filter(item => item.tipo !== "pack").reduce((sum, item) => sum + item.cantidad, 0);
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 12) return 190;
-    if (totalUnidades >= 7) return 120;
+    if (totalUnidadesNormales >= 12) return 190;
+    if (totalUnidadesNormales >= 7) return 120;
     return 0;
   }
 
   if (tipoCatalogo === "mayorista") {
-    if (totalUnidades >= 50) return 340;
-    if (totalUnidades >= 30) return 280;
-    if (totalUnidades >= 10) return 210;
+    if (totalUnidadesNormales >= 50) return 340;
+    if (totalUnidadesNormales >= 30) return 280;
+    if (totalUnidadesNormales >= 12) return 210; // Corregido de 10 a 12 según las reglas del dueño
     return 0;
   }
 
   return 0;
 }
 
-
 function calcularAhorro() {
   const descuentoUnidad = calcularDescuentoPorUnidad();
-  return carrito.reduce((sum, item) => sum + descuentoUnidad * item.cantidad, 0);
+  return carrito.reduce((sum, item) => sum + (item.tipo === "pack" ? 0 : descuentoUnidad) * item.cantidad, 0);
 }
 
 function calcularTotalConDescuento() {
   const descuentoUnidad = calcularDescuentoPorUnidad();
-  return carrito.reduce((sum, item) => sum + (item.precioBase - descuentoUnidad) * item.cantidad, 0);
+  return carrito.reduce((sum, item) => {
+    const desc = item.tipo === "pack" ? 0 : descuentoUnidad;
+    return sum + (item.precioBase - desc) * item.cantidad;
+  }, 0);
 }
 
 // Actualizar HTML del carrito
@@ -227,7 +229,8 @@ function actualizarCarrito() {
     const item = document.createElement("div");
     item.classList.add("carrito-item");
 
-    const precioUnitario = producto.precioBase - calcularDescuentoPorUnidad();
+    const desc = producto.tipo === "pack" ? 0 : calcularDescuentoPorUnidad();
+    const precioUnitario = producto.precioBase - desc;
 
     item.innerHTML = `
       <span class="nombre">${producto.nombre}</span>
@@ -243,28 +246,31 @@ function actualizarCarrito() {
   });
 
   const total = calcularTotalConDescuento();
-  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+  const totalUnidadesNormales = carrito.filter(item => item.tipo !== "pack").reduce((sum, item) => sum + item.cantidad, 0);
 
   let mensajeDescuento = "";
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
-    else if (totalUnidades >= 7) mensajeDescuento = "Descuento por 7 unidades";
+    if (totalUnidadesNormales >= 12) mensajeDescuento = "Descuento por 12 unidades";
+    else if (totalUnidadesNormales >= 7) mensajeDescuento = "Descuento por 7 unidades";
   }
 
   if (tipoCatalogo === "distribuidor") {
+    const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
     if (totalUnidades >= 100) mensajeDescuento = "Descuento por 100 unidades";
     else if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
   }
 
   if (tipoCatalogo === "mayorista") {
-    if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
-    else if (totalUnidades >= 30) mensajeDescuento = "Descuento por 30 unidades";
-    else if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
+    if (totalUnidadesNormales >= 50) mensajeDescuento = "Descuento por 50 unidades";
+    else if (totalUnidadesNormales >= 30) mensajeDescuento = "Descuento por 30 unidades";
+    else if (totalUnidadesNormales >= 12) mensajeDescuento = "Descuento por 12 unidades"; // Corregido de 10 a 12
   }
 
   totalPedidoSpan.textContent = `🧾 Total: $${total.toLocaleString()} ${mensajeDescuento ? "| " + mensajeDescuento : ""}`;
-  cantidadItemsSpan.textContent = `${totalUnidades}un seleccionadas`; 
+  
+  const totalCant = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+  cantidadItemsSpan.textContent = `${totalCant}un seleccionadas`; 
 
   agregarEventosBotonesCantidad();
 }
