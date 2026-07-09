@@ -700,7 +700,7 @@
             try {
                 // 1. Intentar buscar la dirección completa restringida estrictamente a Córdoba Capital (dentro de Circunvalación)
                 // Viewbox: left=-64.28, top=-31.35, right=-64.10, bottom=-31.48 (anillo)
-                let response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=-64.28,-31.35,-64.10,-31.48&bounded=1&limit=1`);
+                let response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=-64.28,-31.35,-64.10,-31.48&bounded=1&limit=1&email=ecoalimentos.cba@gmail.com`);
                 let data = await response.json();
                 
                 if (data && data.length > 0) {
@@ -720,7 +720,7 @@
                         fallbackQuery += ", Córdoba, Argentina";
                     }
                     
-                    let fbResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fallbackQuery)}&viewbox=-64.28,-31.35,-64.10,-31.48&bounded=1&limit=1`);
+                    let fbResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fallbackQuery)}&viewbox=-64.28,-31.35,-64.10,-31.48&bounded=1&limit=1&email=ecoalimentos.cba@gmail.com`);
                     let fbData = await fbResponse.json();
                     
                     if (fbData && fbData.length > 0) {
@@ -736,6 +736,8 @@
             }
             return null;
         }
+
+        const sleep = ms => new Promise(res => setTimeout(res, ms));
 
         // Cargar pedidos pendientes desde la planilla de Google Sheets de forma automática
         async function loadOrdersFromGoogleSheets() {
@@ -775,6 +777,8 @@
                             // Actualizar rowindex por si cambió debido al reacomodo de filas en Sheets
                             addresses[existingIndex].rowindex = order.rowindex;
                         } else {
+                            // Esperar 1 segundo antes de geocodificar para cumplir con la política de Nominatim
+                            await sleep(1000);
                             // Si no existe localmente, lo geocodificamos y lo agregamos
                             let coords = await geocodeAddress(cleanText);
                             if (coords) {
