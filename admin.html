@@ -658,7 +658,7 @@
         let originCoords = JSON.parse(localStorage.getItem('eco_origin_coords')) || { lat: -31.4250, lon: -64.2444 };
         
         // URL de tu Apps Script de Google Sheets para leer pedidos automáticamente
-        const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbwy3iV05OFjbxmREupimesEkXogZoUOndBP3RqEVLPb5rVgM1abEga9OD1hJMK8Sk2anw/exec";
+        const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbzYlPNkKsE-pb4rk8RUrJIVd42hvkHXYNmWoi_6ro1lmiuLZyEjmKpibG668ESU2UwKYQ/exec";
 
         document.getElementById('origen-input').value = originAddress;
 
@@ -1022,7 +1022,28 @@
             }
         }
 
+        async function borrarFilasEnSheets(rowIndices) {
+            if (!googleSheetsAppURL || googleSheetsAppURL === "URL_DE_TU_APPS_SCRIPT") return;
+            try {
+                const formData = new URLSearchParams();
+                formData.append("action", "deleteRows");
+                formData.append("rowindices", rowIndices);
+
+                fetch(googleSheetsAppURL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: formData
+                });
+            } catch (e) {
+                console.error("Error al borrar filas en Google Sheets:", e);
+            }
+        }
+
         function deleteAddress(idx) {
+            let addr = addresses[idx];
+            if (addr && addr.rowindex) {
+                borrarFilasEnSheets(addr.rowindex);
+            }
             addresses.splice(idx, 1);
             saveAddresses();
             renderList();
@@ -1284,6 +1305,14 @@
         document.getElementById('gmaps-btn').addEventListener('click', openGoogleMaps);
         document.getElementById('clear-all-btn').addEventListener('click', () => {
             if (confirm("¿Estás seguro de que quieres limpiar toda la lista de direcciones?")) {
+                let rowIndicesToClear = addresses
+                    .filter(addr => addr.rowindex)
+                    .map(addr => addr.rowindex);
+                
+                if (rowIndicesToClear.length > 0) {
+                    borrarFilasEnSheets(rowIndicesToClear.join(","));
+                }
+
                 addresses = [];
                 saveAddresses();
                 renderList();

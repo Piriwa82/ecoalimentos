@@ -48,7 +48,7 @@ document.querySelectorAll(".boton-agregar").forEach((boton) => {
 
 // WhatsApp y Total/Ahorro
 // URL de tu Apps Script de Google Sheets para registrar pedidos automáticamente
-const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbwy3iV05OFjbxmREupimesEkXogZoUOndBP3RqEVLPb5rVgM1abEga9OD1hJMK8Sk2anw/exec";
+const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbzYlPNkKsE-pb4rk8RUrJIVd42hvkHXYNmWoi_6ro1lmiuLZyEjmKpibG668ESU2UwKYQ/exec";
 
 // WhatsApp y Total/Ahorro
 const numeroWhatsapp = "543517612075";
