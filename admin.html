@@ -109,7 +109,7 @@
 
         .main-container {
             display: grid;
-            grid-template-columns: 400px 1fr;
+            grid-template-columns: 440px 1fr;
             flex: 1;
             position: relative;
         }
@@ -342,8 +342,8 @@
         .address-list-container {
             display: flex;
             flex-direction: column;
-            flex: 1;
-            min-height: 200px;
+            min-height: auto;
+            overflow: visible;
         }
 
         .address-list {
@@ -352,6 +352,7 @@
             flex-direction: column;
             gap: 8px;
             padding-right: 4px;
+            overflow-y: visible;
         }
 
         .address-item {
@@ -448,9 +449,9 @@
 
         /* Floating route bar */
         .route-actions-bar {
-            position: absolute;
+            position: fixed;
             bottom: 40px;
-            left: 50%;
+            left: calc(50vw + 220px); /* Centrado respecto a la zona del mapa (pantalla - sidebar) */
             transform: translateX(-50%);
             z-index: 1000;
             background-color: rgba(20, 20, 20, 0.85);
@@ -489,50 +490,163 @@
             transform: scale(1.05);
         }
 
+        /* Importador Word / Estética de subida */
+        .file-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5em 1em;
+            border: 2px dashed #43815e;
+            border-radius: 12px;
+            background-color: rgba(67, 129, 94, 0.03);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-align: center;
+            margin: 10px auto;
+            width: 95%;
+            box-sizing: border-box;
+        }
+        .file-upload-container:hover {
+            border-color: #336644;
+            background-color: rgba(67, 129, 94, 0.08);
+            transform: translateY(-1px);
+        }
+        .file-upload-label {
+            font-size: 1em;
+            font-weight: 600;
+            color: #43815e;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: transparent;
+        }
+        .file-name-display {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            word-break: break-all;
+            font-style: italic;
+            background-color: transparent;
+        }
+        .failed-geocode-item {
+            border-left: 4px solid #e67e22 !important;
+            background-color: rgba(230, 126, 34, 0.05) !important;
+        }
+        .warning-badge {
+            margin-right: 5px;
+            cursor: help;
+        }
+
+        .clear-link-btn:hover {
+            background-color: rgba(231, 76, 60, 0.1) !important;
+            color: #ff5e4d !important;
+        }
+
+        /* Botones Sticky al fondo del Sidebar */
+        .sidebar-footer {
+            position: sticky;
+            bottom: -1.2em; /* Alineado con el padding de la barra lateral */
+            left: 0;
+            right: 0;
+            background-color: var(--bg-secondary);
+            padding: 15px 0 10px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .sidebar-footer .btn {
+            flex: 1;
+            padding: 12px 8px;
+            font-size: 0.85em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
         /* Mobile Responsive adjustments */
         @media (max-width: 768px) {
+            body {
+                overflow: hidden !important; /* Evitar scroll del body en móvil para mejor uso del menú */
+            }
+
             .main-container {
                 grid-template-columns: 1fr;
-                height: auto;
-                display: flex;
-                flex-direction: column;
+                height: calc(100vh - 70px);
+                position: relative;
+                overflow: hidden;
             }
 
             .sidebar {
-                width: 100%;
-                height: auto;
-                overflow: visible;
-                border-right: none;
-                border-top: 1px solid var(--border-color);
+                position: absolute;
+                top: 0;
+                left: 0;
+                transform: translateX(-100%);
+                width: 85%;
+                max-width: 350px;
+                height: 100%;
+                z-index: 3400;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+                border-right: 1px solid var(--border-color);
+                overflow-y: auto;
+                background-color: var(--bg-secondary);
                 padding: 1.2em;
+                display: flex;
+                flex-direction: column;
+                gap: 1.2em;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
             }
 
             .map-container {
-                height: 450px;
-                flex-shrink: 0;
-                order: -1; /* Mapa arriba */
+                height: 100%;
+                width: 100%;
+                flex-grow: 1;
             }
 
             .drawer-toggle-btn {
-                display: none !important;
+                display: flex !important;
+                background: var(--accent-gradient);
+                color: white;
+                border: none;
+                width: 42px;
+                height: 42px;
+                border-radius: 8px;
+                font-size: 1.1em;
+                cursor: pointer;
+                align-items: center;
+                justify-content: center;
+                transition: var(--transition);
+                margin-right: 12px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                position: static;
             }
 
             .route-actions-bar {
                 position: fixed;
-                width: 92%;
+                width: 90%;
                 bottom: 20px;
-                left: 4%;
-                transform: none; /* Reseteamos el centrado por transform de PC */
+                left: 5%;
+                transform: none;
                 padding: 10px;
                 box-sizing: border-box;
                 display: flex;
                 gap: 10px;
                 justify-content: space-between;
-                z-index: 3500; /* Aseguramos que quede sobre todo el contenido */
+                z-index: 3300;
             }
 
             .route-actions-bar .btn {
-                flex: 1; /* Hacemos que ocupen el mismo ancho */
+                flex: 1;
                 padding: 12px 8px;
                 font-size: 0.8em;
                 white-space: nowrap;
@@ -542,13 +656,12 @@
 </head>
 <body>
 
-    <!-- Drawer Toggle Button (Visible only on Mobile) -->
-    <button class="drawer-toggle-btn" id="drawer-toggle" title="Abrir menú">
-        <i class="fa-solid fa-bars"></i>
-    </button>
-
     <header>
         <div class="header-logo">
+            <!-- Drawer Toggle Button (Visible only on Mobile) -->
+            <button class="drawer-toggle-btn" id="drawer-toggle" title="Abrir menú">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             <img src="img/logo-sin-borde.png" alt="EcoAlimentos Logo">
             <h1>EcoAlimentos - Planificador</h1>
         </div>
@@ -569,7 +682,7 @@
                 <div class="form-group">
                     <div class="input-row">
                         <div class="input-container">
-                            <input type="text" id="origen-input" value="Córdoba, Argentina" placeholder="Ej: Av. Colón 100, Córdoba">
+                            <input type="text" id="origen-input" value="Ñuflo de Chávez 3810, Córdoba, Argentina" placeholder="Ej: Av. Colón 100, Córdoba">
                         </div>
                         <button class="btn" id="origen-save-btn" title="Guardar origen"><i class="fa-solid fa-floppy-disk"></i></button>
                     </div>
@@ -596,13 +709,24 @@
 
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0 10px 0;">
 
-                <!-- WhatsApp Paste -->
+                <!-- Importar desde Word / Texto del Día -->
                 <div class="form-group">
-                    <label>Importar rápido (pega texto de WhatsApp):</label>
-                    <textarea id="whatsapp-textarea" placeholder="Pega el mensaje del pedido aquí... Ej: 'Entrega en: Duarte Quiros 1200'"></textarea>
-                    <button class="btn btn-secondary" style="margin-top: 8px; width: 100%;" id="import-wa-btn">
-                        <i class="fa-solid fa-file-import"></i> Extraer Dirección
-                    </button>
+                    <label style="font-weight: bold; color: var(--primary-color); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <i class="fa-solid fa-file-word"></i> Importar Pedidos del Día (Word / Texto):
+                    </label>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div class="file-upload-container" onclick="document.getElementById('file-word-input').click()">
+                            <label class="file-upload-label">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Seleccionar Word o TXT
+                            </label>
+                            <input type="file" id="file-word-input" accept=".docx,.txt" style="display: none;">
+                            <span id="file-name-display" class="file-name-display">Ningún archivo seleccionado</span>
+                        </div>
+                        <textarea id="text-word-input" placeholder="O pega el texto del Word aquí...&#10;Ej: Jimena R (x8) Humahuaca 216" style="height: 120px; font-size: 0.95em; width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; box-sizing: border-box; resize: vertical; outline: none; background-color: rgba(255, 255, 255, 0.02); color: var(--text-primary);"></textarea>
+                        <button class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" id="btn-procesar-texto">
+                            <i class="fa-solid fa-circle-play"></i> Cargar Pedidos del Día
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -615,7 +739,11 @@
                 <ul class="address-list" id="address-list">
                     <!-- Dinámico -->
                 </ul>
-                <button class="btn btn-danger" style="margin-top: 15px; width: 100%;" id="clear-all-btn">
+            </div>
+
+            <!-- Botones de Acción de Ruta Pestaña (Siempre Abajo/Sticky) -->
+            <div class="sidebar-footer">
+                <button class="btn btn-danger" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" id="clear-all-btn">
                     <i class="fa-solid fa-trash-can"></i> Limpiar Lista
                 </button>
             </div>
@@ -655,7 +783,14 @@
 
         let addresses = JSON.parse(localStorage.getItem('eco_addresses')) || [];
         let originAddress = localStorage.getItem('eco_origin') || "Ñuflo de Chávez 3810, Córdoba, Argentina";
-        let originCoords = JSON.parse(localStorage.getItem('eco_origin_coords')) || { lat: -31.4250, lon: -64.2444 };
+        if (originAddress === "Córdoba, Argentina" || 
+            originAddress === "Cordoba, Argentina" || 
+            originAddress.includes("3356")) {
+            originAddress = "Ñuflo de Chávez 3810, Córdoba, Argentina";
+            localStorage.setItem('eco_origin', originAddress);
+            localStorage.setItem('eco_origin_coords', JSON.stringify({ lat: -31.4255339, lon: -64.2388813 }));
+        }
+        let originCoords = JSON.parse(localStorage.getItem('eco_origin_coords')) || { lat: -31.4255339, lon: -64.2388813 };
         
         // URL de tu Apps Script de Google Sheets para leer pedidos automáticamente
         const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbw4S6DTNTGSk9QWRCpISerEvoVgMaUSLnDYzOxOtRiGGXAWd4Ohm22xflcT07Qy7JxTOw/exec";
@@ -738,6 +873,224 @@
         }
 
         const sleep = ms => new Promise(res => setTimeout(res, ms));
+
+        // Cargar Mammoth.js de forma dinámica para leer archivos Word (.docx)
+        function loadMammoth(callback) {
+            if (typeof mammoth !== 'undefined') {
+                callback();
+                return;
+            }
+            let script = document.createElement("script");
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js";
+            script.onload = callback;
+            document.head.appendChild(script);
+        }
+
+        // Separar la dirección de la lista de productos buscando la transición de dígito a mayúscula o minúscula a mayúscula
+        function separarDireccionDeProductos(texto) {
+            let original = texto.trim();
+            
+            // 1. Si el dueño usó el guion (-) como separador de la dirección
+            if (original.includes(' -')) {
+                let parts = original.split(' -');
+                if (parts[0].trim()) {
+                    return parts[0].trim();
+                }
+            }
+            if (original.includes('-')) {
+                let parts = original.split('-');
+                let potentialAddress = parts[0].trim();
+                // Si la parte antes del guion es corta (típico de una calle, max 6 palabras), la tomamos
+                if (potentialAddress && potentialAddress.split(/\s+/).length < 7) {
+                    return potentialAddress;
+                }
+            }
+
+            // Pre-procesar para separar números pegados a letras (ej: 2377Mix -> 2377 Mix)
+            original = original.replace(/(\d+)([a-zA-ZáéíóúñÁÉÍÓÚÑ]+)/g, '$1 $2');
+            
+            // 2. Si la dirección tiene un número de puerta (altura), la dirección termina en ese número
+            // Buscamos un número de 1 a 5 dígitos (puede tener barra para números compuestos, ej: 948/950)
+            let matchNumber = original.match(/^(.*?\b\d+(?:\/\d+)?\b)/);
+            if (matchNumber) {
+                return matchNumber[1].trim();
+            }
+            
+            // 3. Si no tiene número de puerta, usamos división por palabras clave de productos
+            const productKeywords = [
+                "mix", "granola", "nuez", "almendras", "almendra", "castañas", "castaña", 
+                "maní", "mani", "semillas", "semilla", "almohaditas", "almohadita", 
+                "aceite", "aceitunas", "aceituna", "maca", "colágeno", "colageno", 
+                "pasta", "azúcar", "azucar", "bicarbonato", "cacao", "harina", 
+                "fécula", "fecula", "cúrcuma", "curcuma", "copos", "copo", "arroz", 
+                "avena", "chalitas", "chalita", "pepas", "pepa", "lenteja", "poroto", 
+                "tutucas", "tutuca", "miel", "arándanos", "arandanos", "ciruela", 
+                "salsa", "yerba", "condimento", "laurel", "orégano", "oregano", 
+                "pimienta", "pimentón", "pimenton", "barritas", "barrita", "maíz", 
+                "maiz", "garbanzo", "garbanzos", "lentejas", "porotos", "dulce", 
+                "leche", "queso", "chocolate", "chocolates", "alfajor", "alfajores"
+            ];
+            
+            let words = original.split(/\s+/);
+            for (let i = 0; i < words.length; i++) {
+                let cleanWord = words[i].toLowerCase().replace(/[^a-záéíóúñ]/g, '');
+                if (productKeywords.includes(cleanWord)) {
+                    let address = words.slice(0, i).join(' ').trim();
+                    if (address) {
+                        return address;
+                    }
+                }
+            }
+            
+            // 4. Fallback: Transición de dígito a mayúscula o minúscula a mayúscula sin espacios
+            let matchDigitUpper = original.search(/\d[A-ZÁÉÍÓÚÑ]/);
+            if (matchDigitUpper !== -1) {
+                return original.substring(0, matchDigitUpper + 1).trim();
+            }
+            
+            let matchLowerUpper = original.search(/[a-záéíóúñ][A-ZÁÉÍÓÚÑ]/);
+            if (matchLowerUpper !== -1) {
+                return original.substring(0, matchLowerUpper + 1).trim();
+            }
+            
+            return original;
+        }
+
+        // Extraer direcciones del texto según el formato del dueño
+        function procesarTextoPedidos(text) {
+            let lines = text.split(/\r?\n/);
+            let extractedAddresses = [];
+            
+            for (let line of lines) {
+                line = line.trim();
+                if (!line) continue;
+                
+                // Regex para buscar cantidad entre paréntesis (ej: "(x8)", "(x12)", "(5)")
+                let match = line.match(/\(x?\s*\d+\)/i);
+                if (match) {
+                    let parts = line.split(')');
+                    if (parts.length > 1) {
+                        let addressAndProducts = parts.slice(1).join(')').trim();
+                        
+                        // Separar la dirección de la lista de productos
+                        let address = separarDireccionDeProductos(addressAndProducts);
+                        
+                        // Omitir barras para números compuestos y limpiar (ej: 948/950 -> 948)
+                        address = address.split('/')[0].trim();
+                        
+                        let addrLower = address.toLowerCase();
+                        if (addrLower && 
+                            !addrLower.includes("tengo ubi") && 
+                            !addrLower.includes("depósito") && 
+                            !addrLower.includes("deposito") && 
+                            !addrLower.includes("retiro")) {
+                            
+                            if (!extractedAddresses.includes(address)) {
+                                extractedAddresses.push(address);
+                            }
+                        }
+                    }
+                }
+            }
+            return extractedAddresses;
+        }
+
+        // Geocodificar en lote las direcciones del texto respetando el rate-limit
+        async function cargarDireccionesDesdeTexto() {
+            let text = document.getElementById('text-word-input').value;
+            if (!text.trim()) {
+                alert("Por favor, escribe o carga un archivo con las direcciones primero.");
+                return;
+            }
+            
+            let targetBtn = document.getElementById('btn-procesar-texto');
+            targetBtn.disabled = true;
+            
+            let addressesList = procesarTextoPedidos(text);
+            
+            if (addressesList.length === 0) {
+                alert("No se encontraron direcciones válidas en el texto. Asegúrate de que las líneas tengan el formato: Nombre (xCantidad) Dirección.");
+                targetBtn.disabled = false;
+                return;
+            }
+            
+            // Mostrar overlay de progreso flotante
+            let progressOverlay = document.createElement('div');
+            progressOverlay.style.position = 'fixed';
+            progressOverlay.style.top = '0';
+            progressOverlay.style.left = '0';
+            progressOverlay.style.width = '100vw';
+            progressOverlay.style.height = '100vh';
+            progressOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            progressOverlay.style.zIndex = '9999';
+            progressOverlay.style.display = 'flex';
+            progressOverlay.style.alignItems = 'center';
+            progressOverlay.style.justifyContent = 'center';
+            progressOverlay.innerHTML = `
+                <div style="background: rgba(20, 20, 20, 0.95); border: 1px solid var(--border-color); backdrop-filter: blur(10px); padding: 2em; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); text-align: center; max-width: 400px; width: 85%; font-family: inherit;">
+                    <h3 style="margin-top: 0; color: var(--primary-color); font-family: inherit; font-weight: 600; letter-spacing: 0.5px;">Cargando Direcciones</h3>
+                    <p id="progress-status-text" style="color: var(--text-secondary); font-size: 0.95em; word-break: break-all; margin: 15px 0; font-family: inherit;">Iniciando geolocalización...</p>
+                    <div style="width: 100%; background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div id="progress-bar-fill" style="width: 0%; height: 100%; background: var(--accent-gradient); transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(progressOverlay);
+            
+            let addedCount = 0;
+            let failedList = [];
+            
+            for (let i = 0; i < addressesList.length; i++) {
+                let addrText = addressesList[i];
+                
+                // Actualizar progreso en la UI
+                let progressPercent = Math.round(((i + 1) / addressesList.length) * 100);
+                document.getElementById('progress-bar-fill').style.width = `${progressPercent}%`;
+                document.getElementById('progress-status-text').textContent = `Buscando (${i + 1}/${addressesList.length}): ${addrText}`;
+                
+                // Evitar duplicados locales en la lista addresses
+                let exists = addresses.some(addr => addr.text.toLowerCase() === addrText.toLowerCase());
+                if (!exists) {
+                    // Delay obligatorio de 1 segundo para Nominatim
+                    await sleep(1000);
+                    
+                    let coords = await geocodeAddress(addrText);
+                    if (coords) {
+                        addresses.push({
+                            text: addrText,
+                            lat: coords.lat,
+                            lon: coords.lon
+                        });
+                        addedCount++;
+                    } else {
+                        // Si falla, se agrega igual a la ruta posicionándolo en el depósito de origen
+                        addresses.push({
+                            text: addrText,
+                            lat: originCoords.lat,
+                            lon: originCoords.lon,
+                            failedGeocode: true
+                        });
+                        failedList.push(addrText);
+                        addedCount++;
+                    }
+                }
+            }
+            
+            document.body.removeChild(progressOverlay);
+            targetBtn.disabled = false;
+            
+            saveAddresses();
+            renderList();
+            updateMapElements();
+            
+            document.getElementById('file-word-input').value = '';
+            
+            if (failedList.length > 0) {
+                alert(`¡Listo! Se procesaron ${addedCount} direcciones.\n\nAtención: ${failedList.length} direcciones no se pudieron ubicar de forma automática y se posicionaron temporalmente en el depósito (resaltadas en naranja).\n\nPuedes arrastrar sus pines en el mapa para colocarlas en el lugar correcto.`);
+            } else {
+                alert(`¡Listo! Se agregaron con éxito las ${addedCount} direcciones del día.`);
+            }
+        }
 
         // Cargar pedidos pendientes desde la planilla de Google Sheets de forma automática
         async function loadOrdersFromGoogleSheets() {
@@ -931,7 +1284,8 @@
             // 2. Paradas
             addresses.forEach((addr, idx) => {
                 if (addr.lat && addr.lon) {
-                    let markerHtml = `<div class="address-index">${idx + 1}</div>`;
+                    let pinBgColor = addr.failedGeocode ? '#e67e22' : '#43815e';
+                    let markerHtml = `<div class="address-index" style="background-color: ${pinBgColor} !important;">${idx + 1}</div>`;
                     
                     let marker = L.marker([addr.lat, addr.lon], {
                         draggable: true,
@@ -947,6 +1301,10 @@
                         let position = event.target.getLatLng();
                         addr.lat = position.lat;
                         addr.lon = position.lon;
+                        if (addr.failedGeocode) {
+                            addr.failedGeocode = false;
+                            renderList();
+                        }
                         saveAddresses();
                         updateRouteLine();
                     });
@@ -987,13 +1345,19 @@
             addresses.forEach((addr, idx) => {
                 let li = document.createElement('li');
                 li.className = 'address-item';
+                if (addr.failedGeocode) {
+                    li.className += ' failed-geocode-item';
+                }
                 li.setAttribute('draggable', 'true');
                 li.dataset.index = idx;
 
+                let warningIcon = addr.failedGeocode ? `<span class="warning-badge" title="No se pudo ubicar automáticamente. Haz clic y arrastra el pin naranja en el mapa.">⚠️ </span>` : '';
+                let indexBgStyle = addr.failedGeocode ? 'style="background-color: #e67e22 !important;"' : '';
+
                 li.innerHTML = `
                     <div class="address-details">
-                        <div class="address-index">${idx + 1}</div>
-                        <div class="address-text" title="${addr.text}">${addr.text}</div>
+                        <div class="address-index" ${indexBgStyle}>${idx + 1}</div>
+                        <div class="address-text" title="${addr.text}">${warningIcon}${addr.text}</div>
                     </div>
                     <div class="address-actions">
                         <button class="action-icon edit-btn" onclick="editAddress(${idx})" title="Editar dirección"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -1245,9 +1609,10 @@
 
         // Toggles y Autocomplete inicial
         window.onload = () => {
+            document.getElementById('origen-input').value = originAddress;
             initMap();
             renderList();
-            loadOrdersFromGoogleSheets();
+            // loadOrdersFromGoogleSheets(); // Desactivado por solicitud: ahora el dueño carga las direcciones manualmente con el Word del día
 
             // Setup suggestions autocomplete
             setupAutocomplete('direccion-manual', 'manual-suggestions', function(selected) {
@@ -1320,7 +1685,41 @@
             }
         });
 
-        document.getElementById('import-wa-btn').addEventListener('click', importFromWhatsApp);
+        // Lector de archivo de Word/Texto
+        document.getElementById('file-word-input').addEventListener('change', function(e) {
+            let file = e.target.files[0];
+            let nameDisplay = document.getElementById('file-name-display');
+            if (!file) {
+                if (nameDisplay) nameDisplay.textContent = "Ningún archivo seleccionado";
+                return;
+            }
+            if (nameDisplay) nameDisplay.textContent = file.name;
+            
+            let reader = new FileReader();
+            
+            if (file.name.endsWith('.docx')) {
+                loadMammoth(function() {
+                    reader.onload = function(event) {
+                        let arrayBuffer = event.target.result;
+                        mammoth.extractRawText({arrayBuffer: arrayBuffer})
+                            .then(function(result) {
+                                document.getElementById('text-word-input').value = result.value;
+                            })
+                            .catch(function(err) {
+                                alert("Error al leer el archivo Word: " + err);
+                            });
+                    };
+                    reader.readAsArrayBuffer(file);
+                });
+            } else {
+                reader.onload = function(event) {
+                    document.getElementById('text-word-input').value = event.target.result;
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.getElementById('btn-procesar-texto').addEventListener('click', cargarDireccionesDesdeTexto);
         document.getElementById('origen-save-btn').addEventListener('click', updateOrigin);
         document.getElementById('optimize-btn').addEventListener('click', optimizeRoute);
         document.getElementById('gmaps-btn').addEventListener('click', openGoogleMaps);
@@ -1340,6 +1739,46 @@
                 updateMapElements();
             }
         });
+
+        // Gestos de deslizamiento táctil para abrir/cerrar el menú lateral en dispositivos móviles
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // Registrar gestos en el documento, el mapa y el sidebar para evitar intercepciones de Leaflet
+        const elementsToTrack = [document, document.getElementById('map'), document.getElementById('sidebar')];
+        elementsToTrack.forEach(el => {
+            if (!el) return;
+            el.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            el.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+        });
+
+        function handleSwipe() {
+            let swipeDistance = touchEndX - touchStartX;
+            let sidebar = document.getElementById('sidebar');
+            let toggleBtn = document.getElementById('drawer-toggle');
+            if (!sidebar || !toggleBtn) return;
+
+            // Deslizar desde la izquierda hacia la derecha para abrir (umbral amplio para facilitar uso)
+            if (swipeDistance > 60 && touchStartX < 120) {
+                if (!sidebar.classList.contains('open')) {
+                    sidebar.classList.add('open');
+                    toggleBtn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+                }
+            }
+            // Deslizar de derecha a izquierda para cerrar
+            if (swipeDistance < -60) {
+                if (sidebar.classList.contains('open')) {
+                    sidebar.classList.remove('open');
+                    toggleBtn.innerHTML = `<i class="fa-solid fa-bars"></i>`;
+                }
+            }
+        }
     </script>
 </body>
 </html>
