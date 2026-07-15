@@ -130,17 +130,31 @@
             overflow-y: auto;
             gap: 1.2em;
             z-index: 3000;
-            scrollbar-width: thin;
-            scrollbar-color: var(--border-color) transparent;
+            scrollbar-width: auto;
+            scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.05);
+            max-height: calc(100vh - 70px);
+            height: calc(100vh - 70px);
+            box-sizing: border-box;
         }
 
         .sidebar::-webkit-scrollbar {
-            width: 6px;
+            width: 10px;
+            display: block !important;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background-color: var(--border-color);
+            background: var(--primary-color);
             border-radius: 10px;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #336644;
         }
 
         .section-title {
@@ -544,6 +558,178 @@
             color: #ff5e4d !important;
         }
 
+        /* Options dropdown menu */
+        .options-menu-popup {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 5000;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 5px;
+            padding: 8px 0;
+        }
+
+        .options-menu-header {
+            padding: 8px 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .options-menu-item {
+            padding: 10px 15px;
+            font-size: 0.9em;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .options-menu-item:hover {
+            background-color: rgba(73, 175, 117, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .options-menu-item.raw-fallback {
+            border-top: 1px dashed var(--border-color);
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .options-menu-item.raw-fallback:hover {
+            color: var(--danger);
+            background-color: rgba(255, 77, 77, 0.05);
+        }
+
+        /* Modal Ver Pedido Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
+            width: 90%;
+            max-width: 450px;
+            padding: 1.5em;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            transform: scale(0.9);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .modal-header h3 {
+            color: var(--primary-color);
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close-btn:hover {
+            color: var(--danger);
+        }
+
+        .modal-body {
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+        
+        .modal-info-row {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        
+        .modal-info-label {
+            font-weight: 600;
+            color: var(--accent-secondary);
+        }
+        
+        .modal-products-list {
+            margin-top: 15px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        
+        .modal-product-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .modal-product-item span {
+            color: var(--text-primary);
+        }
+        
+        .modal-product-item:last-child {
+            border-bottom: none;
+        }
+
         /* Botones Sticky al fondo del Sidebar */
         .sidebar-footer {
             position: sticky;
@@ -742,8 +928,11 @@
             </div>
 
             <!-- Botones de Acción de Ruta Pestaña (Siempre Abajo/Sticky) -->
-            <div class="sidebar-footer">
-                <button class="btn btn-danger" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" id="clear-all-btn">
+            <div class="sidebar-footer" style="display: flex; gap: 10px;">
+                <button class="btn" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--accent-gradient); border: none; color: white;" id="agregar-manual-footer-btn" onclick="abrirModalAgregar()">
+                    <i class="fa-solid fa-plus"></i> Agregar Direc.
+                </button>
+                <button class="btn btn-danger" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;" id="clear-all-btn">
                     <i class="fa-solid fa-trash-can"></i> Limpiar Lista
                 </button>
             </div>
@@ -762,6 +951,60 @@
                     <i class="fa-solid fa-map-location-dot"></i> Google Maps GPS
                 </button>
             </div>
+    </div>
+
+    <!-- Modal Ver Pedido -->
+    <div id="modal-pedido" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-receipt"></i> Detalle del Pedido</h3>
+                <button class="modal-close-btn" onclick="cerrarModalPedido()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="modal-pedido-body">
+                <!-- Dinámico -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Dirección con Autocompletado -->
+    <div id="modal-editar-direccion" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-pen-to-square"></i> Editar Dirección</h3>
+                <button class="modal-close-btn" onclick="cerrarModalEditar()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" style="position: relative; text-align: left;">
+                <div class="form-group" style="position: relative; text-align: left; margin-bottom: 0;">
+                    <label style="color: var(--accent-secondary); font-weight: 500; margin-bottom: 8px; display: block;">Modificar dirección:</label>
+                    <input type="text" id="input-editar-direccion" style="width: 100%; padding: 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-family: inherit; font-size: 0.95em;" placeholder="Escribe la dirección correcta...">
+                    <div id="editar-suggestions" class="suggestions-dropdown" style="display: none; position: absolute; left: 0; right: 0; z-index: 10000; max-height: 200px; overflow-y: auto; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; margin-top: 5px;"></div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="cerrarModalEditar()" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-secondary);">Cancelar</button>
+                    <button class="btn" id="btn-guardar-editar" style="flex: 1; background: var(--accent-gradient); border: none; color: white;">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Agregar Dirección Manual -->
+    <div id="modal-agregar-direccion" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-location-dot"></i> Agregar Dirección Manual</h3>
+                <button class="modal-close-btn" onclick="cerrarModalAgregar()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" style="position: relative; text-align: left;">
+                <div class="form-group" style="position: relative; text-align: left; margin-bottom: 0;">
+                    <label style="color: var(--accent-secondary); font-weight: 500; margin-bottom: 8px; display: block;">Buscar y agregar dirección (Córdoba y alrededores):</label>
+                    <input type="text" id="input-agregar-direccion" style="width: 100%; padding: 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-family: inherit; font-size: 0.95em;" placeholder="Escribe calle, altura o lugar...">
+                    <div id="agregar-suggestions" class="suggestions-dropdown" style="display: none; position: absolute; left: 0; right: 0; z-index: 10000; max-height: 200px; overflow-y: auto; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; margin-top: 5px;"></div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="cerrarModalAgregar()" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-secondary);">Cancelar</button>
+                    <button class="btn" id="btn-guardar-agregar" style="flex: 1; background: var(--accent-gradient); border: none; color: white;">Agregar</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -772,6 +1015,7 @@
         let map;
         let markers = [];
         let routeLine = null;
+
         // Limpieza automática al cambiar de día (a las 00:00)
         const todayStr = new Date().toLocaleDateString('es-AR');
         const lastActiveDate = localStorage.getItem('eco_last_active_date');
@@ -783,13 +1027,6 @@
 
         let addresses = JSON.parse(localStorage.getItem('eco_addresses')) || [];
         let originAddress = localStorage.getItem('eco_origin') || "Ñuflo de Chávez 3810, Córdoba, Argentina";
-        if (originAddress === "Córdoba, Argentina" || 
-            originAddress === "Cordoba, Argentina" || 
-            originAddress.includes("3356")) {
-            originAddress = "Ñuflo de Chávez 3810, Córdoba, Argentina";
-            localStorage.setItem('eco_origin', originAddress);
-            localStorage.setItem('eco_origin_coords', JSON.stringify({ lat: -31.4255339, lon: -64.2388813 }));
-        }
         let originCoords = JSON.parse(localStorage.getItem('eco_origin_coords')) || { lat: -31.4255339, lon: -64.2388813 };
         
         // URL de tu Apps Script de Google Sheets para leer pedidos automáticamente
@@ -824,30 +1061,99 @@
         }
 
         // Geocodificación usando Nominatim (gratuito)
+        // Normalizar nombres de calles comunes con errores ortográficos en Córdoba Capital
+        function normalizarOrtografiaCalle(calle) {
+            let res = calle.trim();
+            let lower = res.toLowerCase();
+            
+            // Reemplazar errores ortográficos comunes en Córdoba
+            if (lower.includes("velez sarfield") || lower.includes("vélez sarfield")) {
+                res = res.replace(/velez\s+sarfield/i, "Vélez Sársfield").replace(/vélez\s+sarfield/i, "Vélez Sársfield");
+            } else if (lower.includes("sarfield")) {
+                res = res.replace(/sarfield/i, "Sársfield");
+            }
+            
+            if (lower.includes("sabatini") && !lower.includes("sabattini")) {
+                res = res.replace(/sabatini/i, "Sabattini");
+            }
+            if (lower.includes("valparaiso")) {
+                res = res.replace(/valparaiso/i, "Valparaíso");
+            }
+            if (lower.includes("nuñez") && !lower.includes("núñez")) {
+                res = res.replace(/nuñez/i, "Núñez");
+            }
+            if (lower.includes("ohiggins") || lower.includes("o higgins")) {
+                res = res.replace(/ohiggins/i, "O'Higgins").replace(/o\s+higgins/i, "O'Higgins");
+            }
+            if (lower.includes("fuerza aerea") || lower.includes("fuerza aérea")) {
+                res = res.replace(/fuerza\s+aerea/i, "Fuerza Aérea");
+            }
+            if (lower.includes("colon") && !lower.includes("colón")) {
+                res = res.replace(/colon/i, "Colón");
+            }
+            
+            return res;
+        }
+
+        // Geocodificación usando ArcGIS (prioritario) o Nominatim como fallback
         async function geocodeAddress(addressText) {
-            let query = addressText;
+            let query = normalizarOrtografiaCalle(addressText);
             if (!query.toLowerCase().includes("córdoba") && !query.toLowerCase().includes("cordoba")) {
                 query += ", Córdoba, Argentina";
             } else if (!query.toLowerCase().includes("argentina")) {
                 query += ", Argentina";
             }
 
+            // Córdoba Capital Centroid Coords
+            const cbaLat = -31.4167;
+            const cbaLon = -64.1833;
+            const maxRadiusKm = 15; // Límite estricto del anillo y alrededores cercanos
+
+            // Helper para validar si un resultado está en la zona permitida
+            function estaEnZonaPermitida(lat, lon) {
+                if (!lat || !lon) return false;
+                let dist = getDistanceKm(lat, lon, cbaLat, cbaLon);
+                return dist <= maxRadiusKm;
+            }
+
+            // 1. Prioridad 1: ArcGIS (Esri) Geocoder (priorizado cerca de Córdoba)
             try {
-                // 1. Intentar buscar la dirección completa restringida estrictamente a Córdoba Capital (dentro de Circunvalación)
-                // Viewbox: left=-64.28, top=-31.35, right=-64.10, bottom=-31.48 (anillo)
+                let arcgisUrl = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&singleLine=${encodeURIComponent(query)}&location=${cbaLon},${cbaLat}&distance=15000&maxLocations=1&outFields=*`;
+                let response = await fetch(arcgisUrl);
+                let data = await response.json();
+                if (data.candidates && data.candidates.length > 0) {
+                    let candidate = data.candidates[0];
+                    if (candidate.score >= 80 && estaEnZonaPermitida(candidate.location.y, candidate.location.x)) {
+                        return {
+                            lat: candidate.location.y,
+                            lon: candidate.location.x,
+                            display_name: candidate.address
+                        };
+                    }
+                }
+            } catch (e) {
+                console.error("Error geocodificando con ArcGIS: ", e);
+            }
+
+            // 2. Prioridad 2: Nominatim (OpenStreetMap)
+            try {
+                // Intentar buscar la dirección completa restringida estrictamente a Córdoba Capital (dentro de Circunvalación)
                 let response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=-64.28,-31.35,-64.10,-31.48&bounded=1&limit=1&email=ecoalimentos.cba@gmail.com`);
                 let data = await response.json();
                 
                 if (data && data.length > 0) {
-                    return {
-                        lat: parseFloat(data[0].lat),
-                        lon: parseFloat(data[0].lon),
-                        display_name: data[0].display_name
-                    };
+                    let lat = parseFloat(data[0].lat);
+                    let lon = parseFloat(data[0].lon);
+                    if (estaEnZonaPermitida(lat, lon)) {
+                        return {
+                            lat: lat,
+                            lon: lon,
+                            display_name: data[0].display_name
+                        };
+                    }
                 }
 
-                // 2. Si no se encuentra con la altura, intentar buscar solo la calle como aproximación
-                // Limpiamos removiendo el número al final (ej: "Estrada 223" -> "Estrada")
+                // 3. Si no se encuentra, intentar buscar solo la calle como aproximación
                 let cleanQuery = addressText.replace(/\d+$/, '').trim();
                 if (cleanQuery && cleanQuery !== addressText) {
                     let fallbackQuery = cleanQuery;
@@ -859,15 +1165,19 @@
                     let fbData = await fbResponse.json();
                     
                     if (fbData && fbData.length > 0) {
-                        return {
-                            lat: parseFloat(fbData[0].lat),
-                            lon: parseFloat(fbData[0].lon),
-                            display_name: fbData[0].display_name
-                        };
+                        let lat = parseFloat(fbData[0].lat);
+                        let lon = parseFloat(fbData[0].lon);
+                        if (estaEnZonaPermitida(lat, lon)) {
+                            return {
+                                lat: lat,
+                                lon: lon,
+                                display_name: fbData[0].display_name
+                            };
+                        }
                     }
                 }
             } catch (e) {
-                console.error("Error geocodificando: ", e);
+                console.error("Error geocodificando con Nominatim: ", e);
             }
             return null;
         }
@@ -956,13 +1266,13 @@
             return original;
         }
 
-        // Extraer direcciones del texto según el formato del dueño
+        // Extraer direcciones del texto según el formato del dueño, capturando datos del pedido
         function procesarTextoPedidos(text) {
             let lines = text.split(/\r?\n/);
             let extractedAddresses = [];
             
-            for (let line of lines) {
-                line = line.trim();
+            for (let idx = 0; idx < lines.length; idx++) {
+                let line = lines[idx].trim();
                 if (!line) continue;
                 
                 // Regex para buscar cantidad entre paréntesis (ej: "(x8)", "(x12)", "(5)")
@@ -970,13 +1280,96 @@
                 if (match) {
                     let parts = line.split(')');
                     if (parts.length > 1) {
-                        let addressAndProducts = parts.slice(1).join(')').trim();
+                        let addressPart = parts.slice(1).join(')').trim();
                         
-                        // Separar la dirección de la lista de productos
-                        let address = separarDireccionDeProductos(addressAndProducts);
+                        // Nombre del cliente
+                        let clientName = line.split('(')[0].trim();
+                        
+                        // Cantidad
+                        let qty = match[0].trim();
+                        
+                        // Separar la dirección y los posibles productos en la misma línea
+                        let address = "";
+                        let productsText = "";
+                        
+                        let originalAddressPart = addressPart.trim();
+                        
+                        // Intentar separar por " -" o "- " primero
+                        if (originalAddressPart.includes(' -')) {
+                            let splitParts = originalAddressPart.split(' -');
+                            let potentialAddress = splitParts[0].trim();
+                            let potentialProducts = splitParts.slice(1).join(' -').trim();
+                            
+                            let isActuallyProducts = potentialProducts.includes('|') || 
+                                /almendra|chala|pepa|mix|fruto|seco|granola|mani|avena|aceite|miel|pasa|uva|semilla|tutuca|azucar|harina|coco|arroz|casta/i.test(potentialProducts);
+                            
+                            if (isActuallyProducts) {
+                                address = potentialAddress;
+                                productsText = potentialProducts;
+                            } else {
+                                address = originalAddressPart;
+                            }
+                        } else if (originalAddressPart.includes('- ')) {
+                            let splitParts = originalAddressPart.split('- ');
+                            let potentialAddress = splitParts[0].trim();
+                            let potentialProducts = splitParts.slice(1).join('- ').trim();
+                            
+                            let isActuallyProducts = potentialProducts.includes('|') || 
+                                /almendra|chala|pepa|mix|fruto|seco|granola|mani|avena|aceite|miel|pasa|uva|semilla|tutuca|azucar|harina|coco|arroz|casta/i.test(potentialProducts);
+                            
+                            if (isActuallyProducts) {
+                                address = potentialAddress;
+                                productsText = potentialProducts;
+                            } else {
+                                address = originalAddressPart;
+                            }
+                        } else if (originalAddressPart.includes('-')) {
+                            // Encontrar la posición del último guión (para casos pegados como Depto. C-Almendras)
+                            let lastDashIndex = originalAddressPart.lastIndexOf('-');
+                            let potentialAddress = originalAddressPart.substring(0, lastDashIndex).trim();
+                            let potentialProducts = originalAddressPart.substring(lastDashIndex + 1).trim();
+                            
+                            let isActuallyProducts = potentialProducts.includes('|') || 
+                                /almendra|chala|pepa|mix|fruto|seco|granola|mani|avena|aceite|miel|pasa|uva|semilla|tutuca|azucar|harina|coco|arroz|casta/i.test(potentialProducts);
+                            
+                            if (isActuallyProducts) {
+                                address = potentialAddress;
+                                productsText = potentialProducts;
+                            } else {
+                                address = originalAddressPart;
+                            }
+                        } else {
+                            address = separarDireccionDeProductos(originalAddressPart);
+                        }
                         
                         // Omitir barras para números compuestos y limpiar (ej: 948/950 -> 948)
                         address = address.split('/')[0].trim();
+                        address = address.replace(/\s*-\s*$/, '').trim();
+                        
+                        // Buscar productos en las siguientes líneas (incluso si ya encontramos algo en la misma línea)
+                        let nextIdx = idx + 1;
+                        let collectedProducts = [];
+                        if (productsText) {
+                            collectedProducts.push(productsText);
+                        }
+                        
+                        while (nextIdx < lines.length) {
+                            let nextLine = lines[nextIdx].trim();
+                            if (nextLine) {
+                                // Si contiene un nuevo cliente (que tiene cantidad entre paréntesis) o un separador de sección, paramos
+                                if (nextLine.match(/\(x?\s*\d+\)/i) || nextLine.includes('───') || nextLine.includes('===')) {
+                                    break;
+                                }
+                                // De lo contrario, es una línea de productos
+                                collectedProducts.push(nextLine);
+                            }
+                            nextIdx++; // Si estaba en blanco, seguimos buscando abajo
+                        }
+                        
+                        if (collectedProducts.length > 0) {
+                            productsText = collectedProducts.join(' | ');
+                            idx = nextIdx - 1; // Avanzar el cursor del bucle principal
+                        }
                         
                         let addrLower = address.toLowerCase();
                         if (addrLower && 
@@ -985,8 +1378,15 @@
                             !addrLower.includes("deposito") && 
                             !addrLower.includes("retiro")) {
                             
-                            if (!extractedAddresses.includes(address)) {
-                                extractedAddresses.push(address);
+                            // Evitar duplicar en la extracción inicial
+                            let exists = extractedAddresses.some(item => item.text.toLowerCase() === address.toLowerCase());
+                            if (!exists) {
+                                extractedAddresses.push({
+                                    text: address,
+                                    client: clientName,
+                                    quantity: qty,
+                                    products: productsText
+                                });
                             }
                         }
                     }
@@ -1040,41 +1440,145 @@
             let addedCount = 0;
             let failedList = [];
             
-            for (let i = 0; i < addressesList.length; i++) {
-                let addrText = addressesList[i];
-                
-                // Actualizar progreso en la UI
-                let progressPercent = Math.round(((i + 1) / addressesList.length) * 100);
-                document.getElementById('progress-bar-fill').style.width = `${progressPercent}%`;
-                document.getElementById('progress-status-text').textContent = `Buscando (${i + 1}/${addressesList.length}): ${addrText}`;
-                
-                // Evitar duplicados locales en la lista addresses
-                let exists = addresses.some(addr => addr.text.toLowerCase() === addrText.toLowerCase());
-                if (!exists) {
-                    // Delay obligatorio de 1 segundo para Nominatim
-                    await sleep(1000);
-                    
-                    let coords = await geocodeAddress(addrText);
-                    if (coords) {
-                        addresses.push({
-                            text: addrText,
-                            lat: coords.lat,
-                            lon: coords.lon
-                        });
-                        addedCount++;
-                    } else {
-                        // Si falla, se agrega igual a la ruta posicionándolo en el depósito de origen
-                        addresses.push({
-                            text: addrText,
-                            lat: originCoords.lat,
-                            lon: originCoords.lon,
-                            failedGeocode: true
-                        });
-                        failedList.push(addrText);
-                        addedCount++;
-                    }
-                }
+            // Córdoba Capital Centroid Coords
+            const cbaLat = -31.4167;
+            const cbaLon = -64.1833;
+            const maxRadiusKm = 15;
+
+            function estaEnZonaPermitida(lat, lon) {
+                if (!lat || !lon) return false;
+                let dist = getDistanceKm(lat, lon, cbaLat, cbaLon);
+                return dist <= maxRadiusKm;
             }
+
+            // Filtrar duplicados locales antes de procesar
+            let uniqueAddressesList = [];
+            addressesList.forEach(item => {
+                let exists = addresses.some(addr => addr.text.toLowerCase() === item.text.toLowerCase());
+                let alreadyAdded = uniqueAddressesList.some(addr => addr.text.toLowerCase() === item.text.toLowerCase());
+                if (!exists && !alreadyAdded) {
+                    uniqueAddressesList.push(item);
+                }
+            });
+
+            if (uniqueAddressesList.length === 0) {
+                document.body.removeChild(progressOverlay);
+                targetBtn.disabled = false;
+                alert("Todas las direcciones del texto ya se encuentran cargadas en la Hoja de Ruta.");
+                return;
+            }
+
+            document.getElementById('progress-status-text').textContent = "Buscando direcciones...";
+            document.getElementById('progress-bar-fill').style.width = "50%";
+
+            // Geolocalización en paralelo súper rápida con ArcGIS y Photon
+            let geocodePromises = uniqueAddressesList.map(async (item) => {
+                let query = normalizarOrtografiaCalle(item.text);
+                if (!query.toLowerCase().includes("córdoba") && !query.toLowerCase().includes("cordoba")) {
+                    query += ", Córdoba, Argentina";
+                } else if (!query.toLowerCase().includes("argentina")) {
+                    query += ", Argentina";
+                }
+                
+                // 1. Intentar con ArcGIS
+                try {
+                    let arcgisUrl = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&singleLine=${encodeURIComponent(query)}&location=${cbaLon},${cbaLat}&distance=15000&maxLocations=1&outFields=*`;
+                    let response = await fetch(arcgisUrl);
+                    let data = await response.json();
+                    if (data.candidates && data.candidates.length > 0) {
+                        let candidate = data.candidates[0];
+                        if (candidate.score >= 80 && estaEnZonaPermitida(candidate.location.y, candidate.location.x)) {
+                            return {
+                                item: item,
+                                lat: candidate.location.y,
+                                lon: candidate.location.x
+                            };
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error geocodificando con ArcGIS:", e);
+                }
+
+                // 2. Fallback: Intentar con Photon (OSM de alta velocidad) en paralelo
+                try {
+                    let photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=${cbaLat}&lon=${cbaLon}&limit=1`;
+                    let response = await fetch(photonUrl);
+                    let data = await response.json();
+                    if (data.features && data.features.length > 0) {
+                        let f = data.features[0];
+                        let coords = f.geometry.coordinates; // [lon, lat]
+                        if (estaEnZonaPermitida(coords[1], coords[0])) {
+                            return {
+                                item: item,
+                                lat: coords[1],
+                                lon: coords[0]
+                            };
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error geocodificando con Photon:", e);
+                }
+
+                // 3. Fallback 2: Intentar con Photon quitando números (por si es calle sola)
+                try {
+                    let cleanQuery = item.text.replace(/\d+$/, '').trim();
+                    if (cleanQuery && cleanQuery !== item.text) {
+                        let fallbackQuery = cleanQuery;
+                        if (!fallbackQuery.toLowerCase().includes("córdoba") && !fallbackQuery.toLowerCase().includes("cordoba")) {
+                            fallbackQuery += ", Córdoba, Argentina";
+                        }
+                        let photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(fallbackQuery)}&lat=${cbaLat}&lon=${cbaLon}&limit=1`;
+                        let response = await fetch(photonUrl);
+                        let data = await response.json();
+                        if (data.features && data.features.length > 0) {
+                            let f = data.features[0];
+                            let coords = f.geometry.coordinates; // [lon, lat]
+                            if (estaEnZonaPermitida(coords[1], coords[0])) {
+                                return {
+                                    item: item,
+                                    lat: coords[1],
+                                    lon: coords[0]
+                                };
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error geocodificando en fallback de Photon:", e);
+                }
+
+                return { item: item, lat: null, lon: null };
+            });
+
+            let results = await Promise.all(geocodePromises);
+            
+            document.getElementById('progress-bar-fill').style.width = "100%";
+            
+            // Procesar resultados
+            results.forEach(res => {
+                if (res.lat && res.lon) {
+                    addresses.push({
+                        text: res.item.text,
+                        client: res.item.client,
+                        quantity: res.item.quantity,
+                        products: res.item.products,
+                        lat: res.lat,
+                        lon: res.lon
+                    });
+                    addedCount++;
+                } else {
+                    addresses.push({
+                        text: res.item.text,
+                        client: res.item.client,
+                        quantity: res.item.quantity,
+                        products: res.item.products,
+                        lat: null,
+                        lon: null,
+                        failedGeocode: true
+                    });
+                    failedList.push(res.item.text);
+                    addedCount++;
+                }
+            });
             
             document.body.removeChild(progressOverlay);
             targetBtn.disabled = false;
@@ -1086,7 +1590,7 @@
             document.getElementById('file-word-input').value = '';
             
             if (failedList.length > 0) {
-                alert(`¡Listo! Se procesaron ${addedCount} direcciones.\n\nAtención: ${failedList.length} direcciones no se pudieron ubicar de forma automática y se posicionaron temporalmente en el depósito (resaltadas en naranja).\n\nPuedes arrastrar sus pines en el mapa para colocarlas en el lugar correcto.`);
+                alert(`¡Listo! Se procesaron ${addedCount} direcciones.\n\nAtención: ${failedList.length} direcciones no se pudieron ubicar de forma automática (marcadas con icono ⚠️ en la barra lateral).\n\nPuedes hacer clic en el lápiz para editarlas y agregar detalles.`);
             } else {
                 alert(`¡Listo! Se agregaron con éxito las ${addedCount} direcciones del día.`);
             }
@@ -1129,6 +1633,12 @@
                         if (existingIndex !== -1) {
                             // Actualizar rowindex por si cambió debido al reacomodo de filas en Sheets
                             addresses[existingIndex].rowindex = order.rowindex;
+                            if (!addresses[existingIndex].client && order.cliente) {
+                                addresses[existingIndex].client = order.cliente;
+                            }
+                            if (!addresses[existingIndex].products && order.pedido) {
+                                addresses[existingIndex].products = order.pedido;
+                            }
                         } else {
                             // Esperar 1 segundo antes de geocodificar para cumplir con la política de Nominatim
                             await sleep(1000);
@@ -1137,6 +1647,8 @@
                             if (coords) {
                                 addresses.push({
                                     text: cleanText,
+                                    client: order.cliente || 'Manual',
+                                    products: order.pedido || '',
                                     lat: coords.lat,
                                     lon: coords.lon,
                                     rowindex: order.rowindex
@@ -1179,7 +1691,7 @@
                 }
 
                 debounceTimer = setTimeout(async function() {
-                    let url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=-31.4167&lon=-64.1833&limit=8&lang=es`;
+                    let url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=-31.4167&lon=-64.1833&limit=8`;
                     
                     try {
                         let response = await fetch(url);
@@ -1206,10 +1718,10 @@
 
                                 let displayText = titleText + (subtitleText ? ', ' + subtitleText : '');
 
-                                // Filtrar estrictamente a 8.5 km a la redonda de Córdoba Capital (dentro de la Av. de Circunvalación / anillo)
+                                // Filtrar a 15 km a la redonda de Córdoba Capital (anillo y alrededores cercanos)
                                 let distanceKm = getDistanceKm(coords[1], coords[0], -31.4167, -64.1833);
 
-                                if (distanceKm <= 8.5) {
+                                if (distanceKm <= 15) {
                                     let item = document.createElement('div');
                                     item.className = 'suggestion-item';
                                     
@@ -1252,7 +1764,7 @@
 
             // Cerrar si hace click afuera
             document.addEventListener('click', function(e) {
-                if (e.target !== input && e.target !== dropdown) {
+                if (e.target !== input && e.target !== dropdown && !dropdown.contains(e.target)) {
                     dropdown.style.display = 'none';
                 }
             });
@@ -1283,12 +1795,11 @@
 
             // 2. Paradas
             addresses.forEach((addr, idx) => {
-                if (addr.lat && addr.lon) {
-                    let pinBgColor = addr.failedGeocode ? '#e67e22' : '#43815e';
+                if (addr.lat && addr.lon && !addr.failedGeocode) {
+                    let pinBgColor = '#43815e';
                     let markerHtml = `<div class="address-index" style="background-color: ${pinBgColor} !important;">${idx + 1}</div>`;
                     
                     let marker = L.marker([addr.lat, addr.lon], {
-                        draggable: true,
                         icon: L.divIcon({
                             html: markerHtml,
                             className: 'custom-div-icon',
@@ -1297,19 +1808,18 @@
                         })
                     }).addTo(map);
 
-                    marker.on('dragend', function(event) {
-                        let position = event.target.getLatLng();
-                        addr.lat = position.lat;
-                        addr.lon = position.lon;
-                        if (addr.failedGeocode) {
-                            addr.failedGeocode = false;
-                            renderList();
-                        }
-                        saveAddresses();
-                        updateRouteLine();
-                    });
-
-                    marker.bindPopup(`<b>Envío #${idx + 1}:</b><br>${addr.text}<br><small style="color: var(--text-secondary)">Arrastra el marcador para corregir la posición</small>`);
+                    let popupHtml = `
+                        <div style="font-family: 'Outfit', sans-serif; color: var(--text-primary); min-width: 160px; text-align: left;">
+                            <b style="color: var(--accent-primary); font-size: 1.05em; display: flex; align-items: center; gap: 4px; margin-bottom: 4px;">
+                                <i class="fa-solid fa-truck-ramp-box"></i> Envío #${idx + 1}
+                            </b>
+                            <div style="font-size: 0.95em; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.3;">${addr.text}</div>
+                            <button class="btn btn-secondary" onclick="mostrarModalPedido(${idx})" style="padding: 6px 10px; font-size: 0.85em; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; background: var(--accent-gradient); border: none; color: white; border-radius: 6px; cursor: pointer; font-family: inherit; font-weight: 500; transition: var(--transition);">
+                                <i class="fa-solid fa-receipt"></i> Ver pedido
+                            </button>
+                        </div>
+                    `;
+                    marker.bindPopup(popupHtml);
                     markers.push(marker);
                     pathPoints.push([addr.lat, addr.lon]);
                 }
@@ -1322,6 +1832,72 @@
                 map.fitBounds(group.getBounds().pad(0.12));
             }
         }
+
+        // Funciones del Modal de Pedido
+        function mostrarModalPedido(idx) {
+            let addr = addresses[idx];
+            if (!addr) return;
+            
+            let modal = document.getElementById('modal-pedido');
+            let body = document.getElementById('modal-pedido-body');
+            
+            let productsHtml = "";
+            if (addr.products) {
+                let itemsList = addr.products.split(/[|,]/).map(p => p.trim()).filter(p => p !== "");
+                productsHtml = `<div class="modal-products-list">`;
+                itemsList.forEach(item => {
+                    productsHtml += `
+                        <div class="modal-product-item">
+                            <i class="fa-solid fa-circle-check" style="color: var(--accent-primary); font-size: 0.85em; margin-top: 4px;"></i>
+                            <span>${item}</span>
+                        </div>
+                    `;
+                });
+                productsHtml += `</div>`;
+            } else {
+                productsHtml = `
+                    <div style="text-align: center; color: var(--text-secondary); margin-top: 15px; padding: 15px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 10px; font-style: italic;">
+                        No hay detalles de productos para este envío.
+                    </div>
+                `;
+            }
+            
+            body.innerHTML = `
+                <div class="modal-info-row">
+                    <span class="modal-info-label">Cliente:</span>
+                    <span>${addr.client || 'Manual'} ${addr.quantity || ''}</span>
+                </div>
+                <div class="modal-info-row">
+                    <span class="modal-info-label">Dirección:</span>
+                    <span>${addr.text}</span>
+                </div>
+                <div class="modal-info-row" style="margin-top: 15px;">
+                    <span class="modal-info-label" style="font-size: 1.05em;"><i class="fa-solid fa-basket-shopping"></i> Lista de Pedidos:</span>
+                </div>
+                ${productsHtml}
+            `;
+            
+            modal.style.display = 'flex';
+            // Forzar reflujo
+            modal.offsetHeight;
+            modal.classList.add('open');
+        }
+        
+        function cerrarModalPedido() {
+            let modal = document.getElementById('modal-pedido');
+            modal.classList.remove('open');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 250);
+        }
+        
+        // Cerrar modal al hacer clic fuera del contenido
+        window.addEventListener('click', function(e) {
+            let modal = document.getElementById('modal-pedido');
+            if (e.target === modal) {
+                cerrarModalPedido();
+            }
+        });
 
         function updateRouteLine() {
             let pathPoints = [[originCoords.lat, originCoords.lon]];
@@ -1354,10 +1930,20 @@
                 let warningIcon = addr.failedGeocode ? `<span class="warning-badge" title="No se pudo ubicar automáticamente. Haz clic y arrastra el pin naranja en el mapa.">⚠️ </span>` : '';
                 let indexBgStyle = addr.failedGeocode ? 'style="background-color: #e67e22 !important;"' : '';
 
+                // Formatear información para el tooltip (hover)
+                let tooltipText = `Dirección: ${addr.text}`;
+                if (addr.client) {
+                    tooltipText = `Cliente: ${addr.client} ${addr.quantity || ''}\n${tooltipText}`;
+                }
+                if (addr.products) {
+                    let formattedProducts = addr.products.split(/[|,]/).map(p => `- ${p.trim()}`).filter(p => p !== "- ").join('\n');
+                    tooltipText += `\n\nPedido:\n${formattedProducts}`;
+                }
+
                 li.innerHTML = `
-                    <div class="address-details">
+                    <div class="address-details" title="${tooltipText.replace(/"/g, '&quot;')}">
                         <div class="address-index" ${indexBgStyle}>${idx + 1}</div>
-                        <div class="address-text" title="${addr.text}">${warningIcon}${addr.text}</div>
+                        <div class="address-text">${warningIcon}${addr.text}</div>
                     </div>
                     <div class="address-actions">
                         <button class="action-icon edit-btn" onclick="editAddress(${idx})" title="Editar dirección"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -1378,33 +1964,181 @@
             localStorage.setItem('eco_addresses', JSON.stringify(addresses));
         }
 
-        // Agregar dirección escrita manual
+        // Agregar dirección escrita manual (buscando primero sugerencias de calles similares)
         async function addAddress(text) {
+            await buscarOpcionesYAgregar(text);
+        }
+
+        // Buscar opciones de calles similares en Photon y abrir menú
+        async function buscarOpcionesYAgregar(text) {
             let cleanText = text.trim();
             if (!cleanText) return;
+
+            // Omitir duplicados locales antes de buscar
+            let exists = addresses.some(addr => addr.text.toLowerCase() === cleanText.toLowerCase());
+            if (exists) {
+                alert("Esta dirección ya está en la lista.");
+                return;
+            }
 
             let addBtn = document.getElementById('add-manual-btn');
             let origHtml = addBtn.innerHTML;
             addBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
             addBtn.disabled = true;
 
-            let coords = await geocodeAddress(cleanText);
-            
-            addBtn.innerHTML = origHtml;
-            addBtn.disabled = false;
-
-            if (coords) {
-                addresses.push({
-                    text: cleanText,
-                    lat: coords.lat,
-                    lon: coords.lon
-                });
-                saveAddresses();
-                renderList();
-                updateMapElements();
-            } else {
-                alert(`No se pudo encontrar la dirección: "${cleanText}". Intenta detallar calle, número y ciudad.`);
+            // Normalizar ortografía antes de consultar a la API
+            let normalizedText = normalizarOrtografiaCalle(cleanText);
+            let query = normalizedText;
+            if (!query.toLowerCase().includes("córdoba") && !query.toLowerCase().includes("cordoba")) {
+                query += ", Córdoba, Argentina";
             }
+
+            let url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=-31.4167&lon=-64.1833&limit=5`;
+            
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+                
+                // Cerrar cualquier menú de opciones previo
+                cerrarMenuOpciones();
+
+                // Filtrar sugerencias
+                let suggestions = [];
+                if (data.features && data.features.length > 0) {
+                    data.features.forEach(f => {
+                        let props = f.properties;
+                        let coords = f.geometry.coordinates; // [lon, lat]
+                        
+                        let name = props.name || '';
+                        let street = props.street || '';
+                        let housenumber = props.housenumber || '';
+                        let city = props.city || '';
+                        
+                        let titleText = street ? (street + (housenumber ? ' ' + housenumber : '')) : name;
+                        let displayText = titleText + (city ? `, ${city}` : '');
+
+                        // Restringir a Córdoba y cercanías (filtro por distancia 15km)
+                        let distanceKm = getDistanceKm(coords[1], coords[0], -31.4167, -64.1833);
+                        if (distanceKm <= 15) {
+                            // Evitar duplicados en las sugerencias
+                            let suggestionExists = suggestions.some(s => s.displayText.toLowerCase() === displayText.toLowerCase());
+                            if (!suggestionExists) {
+                                suggestions.push({
+                                    displayText: displayText,
+                                    text: titleText,
+                                    lat: coords[1],
+                                    lon: coords[0]
+                                });
+                            }
+                        }
+                    });
+                }
+
+                addBtn.innerHTML = origHtml;
+                addBtn.disabled = false;
+
+                // Si encontramos opciones sugeridas, mostramos el mini menú
+                if (suggestions.length > 0) {
+                    mostrarMenuOpciones(cleanText, suggestions);
+                } else {
+                    // Si no hay sugerencias, agregar tal cual como fallo de geolocalización
+                    addAddressDirectly({
+                        text: cleanText,
+                        lat: null,
+                        lon: null,
+                        failedGeocode: true
+                    });
+                }
+            } catch (e) {
+                console.error("Error al buscar opciones de calles:", e);
+                addBtn.innerHTML = origHtml;
+                addBtn.disabled = false;
+                // Si falla la API, agregar tal cual
+                addAddressDirectly({
+                    text: cleanText,
+                    lat: null,
+                    lon: null,
+                    failedGeocode: true
+                });
+            }
+        }
+
+        // Mostrar el mini menú de opciones
+        function mostrarMenuOpciones(originalText, suggestions) {
+            let inputContainer = document.getElementById('direccion-manual').parentNode.parentNode; // .input-row
+            
+            let menu = document.createElement('div');
+            menu.id = 'similar-options-menu';
+            menu.className = 'options-menu-popup';
+            
+            let header = document.createElement('div');
+            header.className = 'options-menu-header';
+            header.innerHTML = `<i class="fa-solid fa-circle-question"></i> ¿Quisiste decir alguna de estas calles?`;
+            menu.appendChild(header);
+            
+            suggestions.forEach(s => {
+                let item = document.createElement('div');
+                item.className = 'options-menu-item';
+                item.innerHTML = `<i class="fa-solid fa-location-dot" style="color: var(--accent-primary);"></i> <span>${s.displayText}</span>`;
+                item.addEventListener('click', function() {
+                    addAddressDirectly({
+                        text: s.text,
+                        lat: s.lat,
+                        lon: s.lon
+                    });
+                    cerrarMenuOpciones();
+                });
+                menu.appendChild(item);
+            });
+            
+            // Opción de agregar tal cual
+            let rawItem = document.createElement('div');
+            rawItem.className = 'options-menu-item raw-fallback';
+            rawItem.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i> <span>Agregar "${originalText}" tal cual</span>`;
+            rawItem.addEventListener('click', function() {
+                addAddressDirectly({
+                    text: originalText,
+                    lat: null,
+                    lon: null,
+                    failedGeocode: true
+                });
+                cerrarMenuOpciones();
+            });
+            menu.appendChild(rawItem);
+            
+            // Insertar después de .input-row
+            inputContainer.parentNode.appendChild(menu);
+            
+            // Cerrar menú al hacer clic fuera
+            setTimeout(() => {
+                document.addEventListener('click', cerrarMenuAlClicarFuera);
+            }, 10);
+        }
+
+        function cerrarMenuOpciones() {
+            let menu = document.getElementById('similar-options-menu');
+            if (menu) {
+                menu.parentNode.removeChild(menu);
+            }
+            document.removeEventListener('click', cerrarMenuAlClicarFuera);
+        }
+
+        function cerrarMenuAlClicarFuera(e) {
+            let menu = document.getElementById('similar-options-menu');
+            let input = document.getElementById('direccion-manual');
+            let addBtn = document.getElementById('add-manual-btn');
+            if (menu && !menu.contains(e.target) && e.target !== input && !addBtn.contains(e.target)) {
+                cerrarMenuOpciones();
+            }
+        }
+
+        // Agregar dirección directamente al listado local
+        function addAddressDirectly(addrObj) {
+            addresses.push(addrObj);
+            saveAddresses();
+            renderList();
+            updateMapElements();
+            document.getElementById('direccion-manual').value = '';
         }
 
         async function borrarFilasEnSheets(rowIndices) {
@@ -1435,25 +2169,71 @@
             updateMapElements();
         }
 
+        let editingAddressIndex = null;
+
         function editAddress(idx) {
-            let newText = prompt("Modificar dirección:", addresses[idx].text);
-            if (newText && newText.trim() !== "") {
-                addresses[idx].text = newText.trim();
-                geocodeAddress(addresses[idx].text).then(coords => {
-                    if (coords) {
-                        addresses[idx].lat = coords.lat;
-                        addresses[idx].lon = coords.lon;
-                        saveAddresses();
-                        renderList();
-                        updateMapElements();
-                    } else {
-                        alert("No pudimos ubicar la nueva dirección en el mapa. Puedes corregirla arrastrando el marcador.");
-                        saveAddresses();
-                        renderList();
-                    }
-                });
-            }
+            editingAddressIndex = idx;
+            let addr = addresses[idx];
+            if (!addr) return;
+            
+            let modal = document.getElementById('modal-editar-direccion');
+            let input = document.getElementById('input-editar-direccion');
+            
+            input.value = addr.text;
+            
+            modal.style.display = 'flex';
+            // Force reflow
+            modal.offsetHeight;
+            modal.classList.add('open');
+            input.focus();
+            
+            // Clear any previous suggestions dropdown
+            let dropdown = document.getElementById('editar-suggestions');
+            if (dropdown) dropdown.style.display = 'none';
         }
+        
+        function cerrarModalEditar() {
+            let modal = document.getElementById('modal-editar-direccion');
+            modal.classList.remove('open');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 250);
+            editingAddressIndex = null;
+        }
+        
+        function abrirModalAgregar() {
+            let modal = document.getElementById('modal-agregar-direccion');
+            let input = document.getElementById('input-agregar-direccion');
+            input.value = '';
+            
+            modal.style.display = 'flex';
+            modal.offsetHeight;
+            modal.classList.add('open');
+            input.focus();
+            
+            let dropdown = document.getElementById('agregar-suggestions');
+            if (dropdown) dropdown.style.display = 'none';
+        }
+        
+        function cerrarModalAgregar() {
+            let modal = document.getElementById('modal-agregar-direccion');
+            modal.classList.remove('open');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 250);
+        }
+        
+        // Cerrar modales al hacer clic fuera del contenido
+        window.addEventListener('click', function(e) {
+            let modalEditar = document.getElementById('modal-editar-direccion');
+            let modalAgregar = document.getElementById('modal-agregar-direccion');
+            if (e.target === modalEditar) {
+                cerrarModalEditar();
+            }
+            if (e.target === modalAgregar) {
+                cerrarModalAgregar();
+            }
+        });
 
         // Drag and drop list reordering
         let dragSourceEl = null;
@@ -1634,6 +2414,120 @@
                 localStorage.setItem('eco_origin_coords', JSON.stringify(originCoords));
                 updateMapElements();
                 map.setView([originCoords.lat, originCoords.lon], 13);
+            });
+
+            // Autocompletado y guardado para el modal de edición
+            setupAutocomplete('input-editar-direccion', 'editar-suggestions', function(selected) {
+                if (editingAddressIndex !== null) {
+                    addresses[editingAddressIndex].text = selected.text;
+                    addresses[editingAddressIndex].lat = selected.lat;
+                    addresses[editingAddressIndex].lon = selected.lon;
+                    if (addresses[editingAddressIndex].failedGeocode) {
+                        delete addresses[editingAddressIndex].failedGeocode;
+                    }
+                    saveAddresses();
+                    renderList();
+                    updateMapElements();
+                    cerrarModalEditar();
+                }
+            });
+
+            document.getElementById('btn-guardar-editar').addEventListener('click', async function() {
+                if (editingAddressIndex === null) return;
+                let input = document.getElementById('input-editar-direccion');
+                let newText = input.value.trim();
+                if (!newText) return;
+                
+                let btn = this;
+                let origHtml = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+                btn.disabled = true;
+                
+                let coords = await geocodeAddress(newText);
+                
+                btn.innerHTML = origHtml;
+                btn.disabled = false;
+                
+                addresses[editingAddressIndex].text = newText;
+                if (coords) {
+                    addresses[editingAddressIndex].lat = coords.lat;
+                    addresses[editingAddressIndex].lon = coords.lon;
+                    if (addresses[editingAddressIndex].failedGeocode) {
+                        delete addresses[editingAddressIndex].failedGeocode;
+                    }
+                } else {
+                    addresses[editingAddressIndex].lat = null;
+                    addresses[editingAddressIndex].lon = null;
+                    addresses[editingAddressIndex].failedGeocode = true;
+                    alert("No pudimos ubicar la nueva dirección en el mapa. Asegúrate de escribir calle y número correctamente.");
+                }
+                
+                saveAddresses();
+                renderList();
+                updateMapElements();
+                cerrarModalEditar();
+            });
+
+            document.getElementById('input-editar-direccion').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('btn-guardar-editar').click();
+                }
+            });
+
+            // Autocompletado y guardado para el modal de agregar
+            setupAutocomplete('input-agregar-direccion', 'agregar-suggestions', function(selected) {
+                addresses.push({
+                    text: selected.text,
+                    lat: selected.lat,
+                    lon: selected.lon
+                });
+                saveAddresses();
+                renderList();
+                updateMapElements();
+                cerrarModalAgregar();
+            });
+
+            document.getElementById('btn-guardar-agregar').addEventListener('click', async function() {
+                let input = document.getElementById('input-agregar-direccion');
+                let text = input.value.trim();
+                if (!text) return;
+                
+                let btn = this;
+                let origHtml = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+                btn.disabled = true;
+                
+                let coords = await geocodeAddress(text);
+                
+                btn.innerHTML = origHtml;
+                btn.disabled = false;
+                
+                if (coords) {
+                    addresses.push({
+                        text: text,
+                        lat: coords.lat,
+                        lon: coords.lon
+                    });
+                } else {
+                    addresses.push({
+                        text: text,
+                        lat: null,
+                        lon: null,
+                        failedGeocode: true
+                    });
+                    alert("No pudimos ubicar la nueva dirección en el mapa. Asegúrate de escribir calle y número correctamente.");
+                }
+                
+                saveAddresses();
+                renderList();
+                updateMapElements();
+                cerrarModalAgregar();
+            });
+
+            document.getElementById('input-agregar-direccion').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('btn-guardar-agregar').click();
+                }
             });
 
             // Toggle Mobile Sidebar Drawer

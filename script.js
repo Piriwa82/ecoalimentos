@@ -117,9 +117,9 @@ botonEnviarWhatsapp.addEventListener("click", () => {
 
   carrito.forEach(item => {
     const precioOriginalTotal = item.precioBase * item.cantidad;
-    const descuentoTotal = descuentoUnidad * item.cantidad;
+    const descuentoTotal = item.tipo === "pack" ? 0 : (descuentoUnidad * item.cantidad);
     const precioFinal = precioOriginalTotal - descuentoTotal;
-    const precioUnitarioConDesc = item.precioBase - descuentoUnidad;
+    const precioUnitarioConDesc = item.tipo === "pack" ? item.precioBase : (item.precioBase - descuentoUnidad);
 
     if (item.cantidad === 1) {
       mensaje += `- ${encodeURIComponent(item.nombre)}: $${precioFinal.toLocaleString()}`;
