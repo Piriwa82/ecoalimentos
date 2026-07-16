@@ -429,13 +429,25 @@
         }
 
         .action-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
             background: none;
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            padding: 8px;
             border-radius: 6px;
             transition: var(--transition);
+        }
+
+        .action-icon-placeholder {
+            width: 32px;
+            height: 32px;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
         .action-icon:hover {
@@ -1972,12 +1984,17 @@
                     tooltipText += `\n\nPedido:\n${formattedProducts}`;
                 }
 
+                let upBtn = idx > 0 ? `<button class="action-icon reorder-btn" onclick="moveAddress(${idx}, -1)" title="Subir"><i class="fa-solid fa-chevron-up"></i></button>` : `<div class="action-icon-placeholder"></div>`;
+                let downBtn = idx < addresses.length - 1 ? `<button class="action-icon reorder-btn" onclick="moveAddress(${idx}, 1)" title="Bajar"><i class="fa-solid fa-chevron-down"></i></button>` : `<div class="action-icon-placeholder"></div>`;
+
                 li.innerHTML = `
                     <div class="address-details" title="${tooltipText.replace(/"/g, '&quot;')}">
                         <div class="address-index" ${indexBgStyle}>${idx + 1}</div>
                         <div class="address-text">${warningIcon}${addr.text}</div>
                     </div>
                     <div class="address-actions">
+                        ${upBtn}
+                        ${downBtn}
                         <button class="action-icon edit-btn" onclick="editAddress(${idx})" title="Editar dirección"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button class="action-icon delete-btn" onclick="deleteAddress(${idx})" title="Eliminar"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
@@ -1990,6 +2007,20 @@
 
                 listContainer.appendChild(li);
             });
+        }
+
+        // Intercambiar orden de paradas (para facilidad en celulares y pantallas táctiles)
+        function moveAddress(idx, dir) {
+            let targetIdx = idx + dir;
+            if (targetIdx < 0 || targetIdx >= addresses.length) return;
+            
+            let temp = addresses[idx];
+            addresses[idx] = addresses[targetIdx];
+            addresses[targetIdx] = temp;
+            
+            saveAddresses();
+            renderList();
+            updateMapElements();
         }
 
         function saveAddresses() {
@@ -2358,41 +2389,93 @@
         }
 
         // Algoritmo TSP (Vecino más cercano)
+        // Algoritmo TSP (Vecino más cercano + Optimización Local 2-Opt para evitar cruces de rutas)
         function optimizeRoute() {
             if (addresses.length <= 1) {
                 alert("Necesitas al menos 2 direcciones cargadas para poder optimizar la ruta.");
                 return;
             }
 
+            // 1. Fase 1: Inicialización con Vecino más cercano (Greedy TSP)
             let unvisited = [...addresses];
-            let optimized = [];
+            let tour = [];
             let currentCoords = { lat: originCoords.lat, lon: originCoords.lon };
 
-            while (unvisited.length > 0) {
+            // Filtrar las que tienen coordenadas
+            let validStops = unvisited.filter(addr => addr.lat && addr.lon);
+            let invalidStops = unvisited.filter(addr => !addr.lat || !addr.lon);
+
+            while (validStops.length > 0) {
                 let closestIdx = -1;
                 let minDistance = Infinity;
 
-                for (let i = 0; i < unvisited.length; i++) {
-                    if (unvisited[i].lat && unvisited[i].lon) {
-                        let dist = getDistanceKm(currentCoords.lat, currentCoords.lon, unvisited[i].lat, unvisited[i].lon);
-                        if (dist < minDistance) {
-                            minDistance = dist;
-                            closestIdx = i;
-                        }
+                for (let i = 0; i < validStops.length; i++) {
+                    let dist = getDistanceKm(currentCoords.lat, currentCoords.lon, validStops[i].lat, validStops[i].lon);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        closestIdx = i;
                     }
                 }
 
                 if (closestIdx !== -1) {
-                    let nextStop = unvisited.splice(closestIdx, 1)[0];
-                    optimized.push(nextStop);
+                    let nextStop = validStops.splice(closestIdx, 1)[0];
+                    tour.push(nextStop);
                     currentCoords = { lat: nextStop.lat, lon: nextStop.lon };
                 } else {
-                    optimized.push(...unvisited);
                     break;
                 }
             }
 
-            addresses = optimized;
+            // 2. Fase 2: Optimización Local 2-Opt para ruta abierta con punto de partida fijo
+            let N = tour.length;
+            let improved = true;
+            
+            // Función para calcular la distancia total de la ruta (abierta, desde el origen)
+            function getTourDistance(t) {
+                if (t.length === 0) return 0;
+                let dist = getDistanceKm(originCoords.lat, originCoords.lon, t[0].lat, t[0].lon);
+                for (let i = 0; i < t.length - 1; i++) {
+                    dist += getDistanceKm(t[i].lat, t[i].lon, t[i+1].lat, t[i+1].lon);
+                }
+                return dist;
+            }
+
+            let bestDistance = getTourDistance(tour);
+            let limitIterations = 500;
+            let iter = 0;
+
+            while (improved && iter < limitIterations) {
+                improved = false;
+                iter++;
+                
+                for (let i = 0; i < N - 1; i++) {
+                    for (let j = i + 1; j < N; j++) {
+                        let newTour = [...tour];
+                        
+                        // Inversión en el sub-tour (i a j)
+                        let left = i;
+                        let right = j;
+                        while (left < right) {
+                            let temp = newTour[left];
+                            newTour[left] = newTour[right];
+                            newTour[right] = temp;
+                            left++;
+                            right--;
+                        }
+
+                        let newDist = getTourDistance(newTour);
+                        if (newDist < bestDistance - 0.0001) {
+                            tour = newTour;
+                            bestDistance = newDist;
+                            improved = true;
+                        }
+                    }
+                }
+            }
+
+            // Concatenar las direcciones válidas optimizadas y las inválidas al final
+            addresses = [...tour, ...invalidStops];
+            
             saveAddresses();
             renderList();
             updateMapElements();
