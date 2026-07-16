@@ -1833,6 +1833,38 @@
             }
         }
 
+        // Auxiliar para separar la lista de productos de forma segura sin romper comas internas en paréntesis (ej: "Garbanzo (2, 5kg)")
+        function splitProducts(productsText) {
+            if (!productsText) return [];
+            
+            // Si contiene '|', es formato de Word. Se separa ÚNICAMENTE por '|' para respetar las comas internas.
+            if (productsText.includes('|')) {
+                return productsText.split('|').map(p => p.trim()).filter(p => p !== "");
+            }
+            
+            // Si es formato Web (Sheets), se separa por comas pero ignorando aquellas que estén dentro de paréntesis.
+            let items = [];
+            let current = "";
+            let parenCount = 0;
+            
+            for (let i = 0; i < productsText.length; i++) {
+                let char = productsText[i];
+                if (char === '(') parenCount++;
+                else if (char === ')') parenCount--;
+                
+                if (char === ',' && parenCount === 0) {
+                    items.push(current.trim());
+                    current = "";
+                } else {
+                    current += char;
+                }
+            }
+            if (current.trim()) {
+                items.push(current.trim());
+            }
+            return items.filter(p => p !== "");
+        }
+
         // Funciones del Modal de Pedido
         function mostrarModalPedido(idx) {
             let addr = addresses[idx];
@@ -1843,7 +1875,7 @@
             
             let productsHtml = "";
             if (addr.products) {
-                let itemsList = addr.products.split(/[|,]/).map(p => p.trim()).filter(p => p !== "");
+                let itemsList = splitProducts(addr.products);
                 productsHtml = `<div class="modal-products-list">`;
                 itemsList.forEach(item => {
                     productsHtml += `
@@ -1936,7 +1968,7 @@
                     tooltipText = `Cliente: ${addr.client} ${addr.quantity || ''}\n${tooltipText}`;
                 }
                 if (addr.products) {
-                    let formattedProducts = addr.products.split(/[|,]/).map(p => `- ${p.trim()}`).filter(p => p !== "- ").join('\n');
+                    let formattedProducts = splitProducts(addr.products).map(p => `- ${p}`).join('\n');
                     tooltipText += `\n\nPedido:\n${formattedProducts}`;
                 }
 
