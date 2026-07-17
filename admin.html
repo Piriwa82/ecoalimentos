@@ -1480,10 +1480,11 @@
                 return;
             }
 
-            document.getElementById('progress-status-text').textContent = "Buscando direcciones...";
-            document.getElementById('progress-bar-fill').style.width = "50%";
+            let completedCount = 0;
+            document.getElementById('progress-status-text').textContent = `Iniciando geolocalización (0/${uniqueAddressesList.length})...`;
+            document.getElementById('progress-bar-fill').style.width = "0%";
 
-            // Geolocalización en paralelo súper rápida con ArcGIS y Photon
+            // Geolocalización en paralelo súper rápida con ArcGIS y Photon (y reporte de progreso en tiempo real)
             let geocodePromises = uniqueAddressesList.map(async (item) => {
                 let query = normalizarOrtografiaCalle(item.text);
                 if (!query.toLowerCase().includes("córdoba") && !query.toLowerCase().includes("cordoba")) {
@@ -1491,6 +1492,8 @@
                 } else if (!query.toLowerCase().includes("argentina")) {
                     query += ", Argentina";
                 }
+                
+                let result = { item: item, lat: null, lon: null };
                 
                 // 1. Intentar con ArcGIS
                 try {
@@ -1500,7 +1503,7 @@
                     if (data.candidates && data.candidates.length > 0) {
                         let candidate = data.candidates[0];
                         if (candidate.score >= 80 && estaEnZonaPermitida(candidate.location.y, candidate.location.x)) {
-                            return {
+                            result = {
                                 item: item,
                                 lat: candidate.location.y,
                                 lon: candidate.location.x
@@ -1512,53 +1515,62 @@
                 }
 
                 // 2. Fallback: Intentar con Photon (OSM de alta velocidad) en paralelo
-                try {
-                    let photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=${cbaLat}&lon=${cbaLon}&limit=1`;
-                    let response = await fetch(photonUrl);
-                    let data = await response.json();
-                    if (data.features && data.features.length > 0) {
-                        let f = data.features[0];
-                        let coords = f.geometry.coordinates; // [lon, lat]
-                        if (estaEnZonaPermitida(coords[1], coords[0])) {
-                            return {
-                                item: item,
-                                lat: coords[1],
-                                lon: coords[0]
-                            };
-                        }
-                    }
-                } catch (e) {
-                    console.error("Error geocodificando con Photon:", e);
-                }
-
-                // 3. Fallback 2: Intentar con Photon quitando números (por si es calle sola)
-                try {
-                    let cleanQuery = item.text.replace(/\d+$/, '').trim();
-                    if (cleanQuery && cleanQuery !== item.text) {
-                        let fallbackQuery = cleanQuery;
-                        if (!fallbackQuery.toLowerCase().includes("córdoba") && !fallbackQuery.toLowerCase().includes("cordoba")) {
-                            fallbackQuery += ", Córdoba, Argentina";
-                        }
-                        let photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(fallbackQuery)}&lat=${cbaLat}&lon=${cbaLon}&limit=1`;
+                if (!result.lat || !result.lon) {
+                    try {
+                        let photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=${cbaLat}&lon=${cbaLon}&limit=1`;
                         let response = await fetch(photonUrl);
                         let data = await response.json();
                         if (data.features && data.features.length > 0) {
                             let f = data.features[0];
                             let coords = f.geometry.coordinates; // [lon, lat]
                             if (estaEnZonaPermitida(coords[1], coords[0])) {
-                                return {
+                                result = {
                                     item: item,
                                     lat: coords[1],
                                     lon: coords[0]
                                 };
                             }
                         }
+                    } catch (e) {
+                        console.error("Error geocodificando con Photon:", e);
                     }
-                } catch (e) {
-                    console.error("Error geocodificando en fallback de Photon:", e);
                 }
 
-                return { item: item, lat: null, lon: null };
+                // 3. Fallback 2: Intentar con Photon quitando números (por si es calle sola)
+                if (!result.lat || !result.lon) {
+                    try {
+                        let cleanQuery = item.text.replace(/\d+$/, '').trim();
+                        if (cleanQuery && cleanQuery !== item.text) {
+                            let fallbackQuery = cleanQuery;
+                            if (!fallbackQuery.toLowerCase().includes("córdoba") && !fallbackQuery.toLowerCase().includes("cordoba")) {
+                                fallbackQuery += ", Córdoba, Argentina";
+                            }
+                            let photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(fallbackQuery)}&lat=${cbaLat}&lon=${cbaLon}&limit=1`;
+                            let response = await fetch(photonUrl);
+                            let data = await response.json();
+                            if (data.features && data.features.length > 0) {
+                                let f = data.features[0];
+                                let coords = f.geometry.coordinates; // [lon, lat]
+                                if (estaEnZonaPermitida(coords[1], coords[0])) {
+                                    result = {
+                                        item: item,
+                                        lat: coords[1],
+                                        lon: coords[0]
+                                    };
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Error geocodificando en fallback de Photon:", e);
+                    }
+                }
+
+                completedCount++;
+                let pct = Math.round((completedCount / uniqueAddressesList.length) * 100);
+                document.getElementById('progress-bar-fill').style.width = `${pct}%`;
+                document.getElementById('progress-status-text').textContent = `Buscando (${completedCount}/${uniqueAddressesList.length}): ${item.text}`;
+
+                return result;
             });
 
             let results = await Promise.all(geocodePromises);
@@ -2749,9 +2761,11 @@
             }
         });
 
-        // Gestos de deslizamiento táctil para abrir/cerrar el menú lateral en dispositivos móviles
+        // Gestos de deslizamiento táctil para abrir/cerrar el menú lateral en dispositivos móviles (filtrando scroll vertical)
         let touchStartX = 0;
+        let touchStartY = 0;
         let touchEndX = 0;
+        let touchEndY = 0;
 
         // Registrar gestos en el documento, el mapa y el sidebar para evitar intercepciones de Leaflet
         const elementsToTrack = [document, document.getElementById('map'), document.getElementById('sidebar')];
@@ -2759,29 +2773,38 @@
             if (!el) return;
             el.addEventListener('touchstart', e => {
                 touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
             }, { passive: true });
             
             el.addEventListener('touchend', e => {
                 touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
                 handleSwipe();
             }, { passive: true });
         });
 
         function handleSwipe() {
-            let swipeDistance = touchEndX - touchStartX;
+            let swipeDistanceX = touchEndX - touchStartX;
+            let swipeDistanceY = touchEndY - touchStartY;
+            
+            // Si el movimiento es predominantemente vertical (scroll en mapa o lista), ignoramos el gesto
+            if (Math.abs(swipeDistanceY) > Math.abs(swipeDistanceX)) {
+                return;
+            }
+
             let sidebar = document.getElementById('sidebar');
             let toggleBtn = document.getElementById('drawer-toggle');
             if (!sidebar || !toggleBtn) return;
 
             // Deslizar desde la izquierda hacia la derecha para abrir (umbral amplio para facilitar uso)
-            if (swipeDistance > 60 && touchStartX < 120) {
+            if (swipeDistanceX > 60 && touchStartX < 120) {
                 if (!sidebar.classList.contains('open')) {
                     sidebar.classList.add('open');
                     toggleBtn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
                 }
             }
             // Deslizar de derecha a izquierda para cerrar
-            if (swipeDistance < -60) {
+            if (swipeDistanceX < -60) {
                 if (sidebar.classList.contains('open')) {
                     sidebar.classList.remove('open');
                     toggleBtn.innerHTML = `<i class="fa-solid fa-bars"></i>`;
