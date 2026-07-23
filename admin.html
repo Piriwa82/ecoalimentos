@@ -426,6 +426,7 @@
         .address-actions {
             display: flex;
             gap: 4px;
+            align-items: center;
         }
 
         .action-icon {
@@ -455,9 +456,19 @@
             color: var(--accent-secondary);
         }
 
+        .action-icon.delete-btn {
+            width: 38px;
+            height: 38px;
+            font-size: 1.15em;
+            color: #ff5252;
+            background-color: rgba(255, 77, 77, 0.08);
+            border-radius: 8px;
+            margin-left: 4px;
+        }
+
         .action-icon.delete-btn:hover {
-            color: var(--danger);
-            background-color: rgba(255, 77, 77, 0.1);
+            color: #ffffff;
+            background-color: #ff4d4d;
         }
 
         /* Map area */
@@ -2503,18 +2514,13 @@
             return clean;
         }
 
-        // Abrir en Google Maps multiruta con nombres de calles en lugar de "Dropped pin"
+        // Abrir en Google Maps multiruta con origen vacío para usar la ubicación GPS actual y habilitar el botón "Iniciar" navegación directamente
         function openGoogleMaps() {
             if (addresses.length === 0) {
                 alert("No hay direcciones cargadas.");
                 return;
             }
 
-            let cleanOrigin = cleanAddressForGmaps(originAddress);
-            let origin = cleanOrigin 
-                ? encodeURIComponent(cleanOrigin + ", Córdoba, Argentina") 
-                : `${originCoords.lat},${originCoords.lon}`;
-            
             let stops = addresses
                 .filter(addr => addr.lat && addr.lon)
                 .map(addr => {
@@ -2529,7 +2535,9 @@
                 return;
             }
 
-            let url = `https://www.google.com/maps/dir/${origin}/${stops.join('/')}`;
+            // Usamos doble barra '//' para que el origen sea la ubicación GPS del celular ("Tu ubicación")
+            // Esto habilita el botón "Iniciar" (Start) de navegación giro a giro directamente en lugar de solo "Previsualizar"
+            let url = `https://www.google.com/maps/dir//${stops.join('/')}`;
             window.open(url, '_blank');
         }
 
