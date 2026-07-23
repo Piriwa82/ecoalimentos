@@ -2493,17 +2493,36 @@
             updateMapElements();
         }
 
-        // Abrir en Google Maps multiruta
+        function cleanAddressForGmaps(text) {
+            if (!text) return "";
+            let clean = text.trim();
+            clean = clean.split('/')[0].trim();
+            let regex = /\b(torre|piso|depto|dpto|apto|casa|lote|mza|manzana|planta|pa|pb|oficina|block|monoblock)\b.*/i;
+            clean = clean.replace(regex, '');
+            clean = clean.replace(/[\s,-]+$/, '').trim();
+            return clean;
+        }
+
+        // Abrir en Google Maps multiruta con nombres de calles en lugar de "Dropped pin"
         function openGoogleMaps() {
             if (addresses.length === 0) {
                 alert("No hay direcciones cargadas.");
                 return;
             }
 
-            let origin = `${originCoords.lat},${originCoords.lon}`;
+            let cleanOrigin = cleanAddressForGmaps(originAddress);
+            let origin = cleanOrigin 
+                ? encodeURIComponent(cleanOrigin + ", Córdoba, Argentina") 
+                : `${originCoords.lat},${originCoords.lon}`;
+            
             let stops = addresses
                 .filter(addr => addr.lat && addr.lon)
-                .map(addr => `${addr.lat},${addr.lon}`);
+                .map(addr => {
+                    let cleanAddr = cleanAddressForGmaps(addr.text);
+                    return cleanAddr 
+                        ? encodeURIComponent(cleanAddr + ", Córdoba, Argentina") 
+                        : `${addr.lat},${addr.lon}`;
+                });
 
             if (stops.length === 0) {
                 alert("Ninguna dirección cargada tiene coordenadas válidas.");
