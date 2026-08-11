@@ -1294,13 +1294,44 @@
             let lines = text.split(/\r?\n/);
             let extractedAddresses = [];
             
+            const productKeywords = [
+                "mix", "granola", "nuez", "almendras", "almendra", "castañas", "castaña", 
+                "maní", "mani", "semillas", "semilla", "almohaditas", "almohadita", 
+                "aceite", "aceitunas", "aceituna", "maca", "colágeno", "colageno", 
+                "pasta", "azúcar", "azucar", "bicarbonato", "cacao", "harina", 
+                "fécula", "fecula", "cúrcuma", "curcuma", "copos", "copo", "arroz", 
+                "avena", "chalitas", "chalita", "pepas", "pepa", "lenteja", "poroto", 
+                "tutucas", "tutuca", "miel", "arándanos", "arandanos", "ciruela", 
+                "salsa", "yerba", "condimento", "laurel", "orégano", "oregano", 
+                "pimienta", "pimentón", "pimenton", "barritas", "barrita", "maíz", 
+                "maiz", "garbanzo", "garbanzos", "lentejas", "porotos", "dulce", 
+                "leche", "queso", "chocolate", "chocolates", "alfajor", "alfajores"
+            ];
+
+            // Auxiliar para saber si una línea es un cliente o es una línea de productos
+            function esLineaCliente(lineStr) {
+                let match = lineStr.match(/\(x?\s*\d+\)/i);
+                if (!match) return false;
+                if (lineStr.includes('|')) return false; // El separador pipe es exclusivo de productos
+                
+                let clientPart = lineStr.split('(')[0].trim().toLowerCase();
+                let wordsBefore = clientPart.split(/\s+/);
+                
+                // Si el nombre tentativo del cliente contiene palabras clave de productos, no es un cliente
+                let containsKeyword = wordsBefore.some(w => {
+                    let cleanW = w.replace(/[^a-záéíóúñ]/g, '');
+                    return productKeywords.includes(cleanW);
+                });
+                
+                return !containsKeyword;
+            }
+            
             for (let idx = 0; idx < lines.length; idx++) {
                 let line = lines[idx].trim();
                 if (!line) continue;
                 
-                // Regex para buscar cantidad entre paréntesis (ej: "(x8)", "(x12)", "(5)")
-                let match = line.match(/\(x?\s*\d+\)/i);
-                if (match) {
+                if (esLineaCliente(line)) {
+                    let match = line.match(/\(x?\s*\d+\)/i);
                     let parts = line.split(')');
                     if (parts.length > 1) {
                         let addressPart = parts.slice(1).join(')').trim();
@@ -1347,7 +1378,6 @@
                                 address = originalAddressPart;
                             }
                         } else if (originalAddressPart.includes('-')) {
-                            // Encontrar la posición del último guión (para casos pegados como Depto. C-Almendras)
                             let lastDashIndex = originalAddressPart.lastIndexOf('-');
                             let potentialAddress = originalAddressPart.substring(0, lastDashIndex).trim();
                             let potentialProducts = originalAddressPart.substring(lastDashIndex + 1).trim();
@@ -1365,9 +1395,10 @@
                             address = separarDireccionDeProductos(originalAddressPart);
                         }
                         
-                        // Omitir barras para números compuestos y limpiar (ej: 948/950 -> 948)
+                        // Omitir barras para números compuestos y limpiar
                         address = address.split('/')[0].trim();
-                        address = address.replace(/\s*-\s*$/, '').trim();
+                        // Limpiar guiones y espacios al principio y al final (normales, en-dash, em-dash)
+                        address = address.replace(/^[\s\-\–\—]+/, '').replace(/[\s\-\–\—]+$/, '').trim();
                         
                         // Buscar productos en las siguientes líneas (incluso si ya encontramos algo en la misma línea)
                         let nextIdx = idx + 1;
@@ -1379,14 +1410,14 @@
                         while (nextIdx < lines.length) {
                             let nextLine = lines[nextIdx].trim();
                             if (nextLine) {
-                                // Si contiene un nuevo cliente (que tiene cantidad entre paréntesis) o un separador de sección, paramos
-                                if (nextLine.match(/\(x?\s*\d+\)/i) || nextLine.includes('───') || nextLine.includes('===')) {
+                                // Si contiene un nuevo cliente (que pase los mismos filtros inteligentes) o un separador de sección, paramos
+                                if (esLineaCliente(nextLine) || nextLine.includes('───') || nextLine.includes('===')) {
                                     break;
                                 }
                                 // De lo contrario, es una línea de productos
                                 collectedProducts.push(nextLine);
                             }
-                            nextIdx++; // Si estaba en blanco, seguimos buscando abajo
+                            nextIdx++;
                         }
                         
                         if (collectedProducts.length > 0) {
