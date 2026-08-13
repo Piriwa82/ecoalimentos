@@ -1289,7 +1289,7 @@
             return original;
         }
 
-        // Extraer direcciones del texto según el formato del dueño, capturando datos del pedido
+        // Extraer direcciones del texto según el formato acordado con el dueño
         function procesarTextoPedidos(text) {
             let lines = text.split(/\r?\n/);
             let extractedAddresses = [];
@@ -1305,20 +1305,21 @@
                 "salsa", "yerba", "condimento", "laurel", "orégano", "oregano", 
                 "pimienta", "pimentón", "pimenton", "barritas", "barrita", "maíz", 
                 "maiz", "garbanzo", "garbanzos", "lentejas", "porotos", "dulce", 
-                "leche", "queso", "chocolate", "chocolates", "alfajor", "alfajores"
+                "leche", "queso", "chocolate", "chocolates", "alfajor", "alfajores",
+                "oliva", "olivas", "pack", "packs", "soja", "nueces", "cajú", "caju",
+                "mascabo", "cebolla", "jengibre"
             ];
 
-            // Auxiliar para saber si una línea es un cliente o es una línea de productos
-            function esLineaCliente(lineStr) {
-                let match = lineStr.match(/\(x?\s*\d+\)/i);
-                if (!match) return false;
-                if (lineStr.includes('|')) return false; // El separador pipe es exclusivo de productos
+            // Auxiliar: sabe si es una línea de cabecera de cliente
+            function esCabeceraCliente(lineStr) {
+                let parts = lineStr.split(/\s*[\-\–\—]\s*/);
+                if (parts.length < 2) return false;
                 
-                let clientPart = lineStr.split('(')[0].trim().toLowerCase();
-                let wordsBefore = clientPart.split(/\s+/);
+                let clientPart = parts[0].trim();
+                if (clientPart.length < 2) return false;
                 
-                // Si el nombre tentativo del cliente contiene palabras clave de productos, no es un cliente
-                let containsKeyword = wordsBefore.some(w => {
+                let words = clientPart.toLowerCase().split(/\s+/);
+                let containsKeyword = words.some(w => {
                     let cleanW = w.replace(/[^a-záéíóúñ]/g, '');
                     return productKeywords.includes(cleanW);
                 });
@@ -1330,120 +1331,95 @@
                 let line = lines[idx].trim();
                 if (!line) continue;
                 
-                if (esLineaCliente(line)) {
-                    let match = line.match(/\(x?\s*\d+\)/i);
-                    let parts = line.split(')');
-                    if (parts.length > 1) {
-                        let addressPart = parts.slice(1).join(')').trim();
-                        
-                        // Nombre del cliente
-                        let clientName = line.split('(')[0].trim();
-                        
-                        // Cantidad
-                        let qty = match[0].trim();
-                        
-                        // Separar la dirección y los posibles productos en la misma línea
-                        let address = "";
-                        let productsText = "";
-                        
-                        let originalAddressPart = addressPart.trim();
-                        
-                        // Intentar separar por " -" o "- " primero
-                        if (originalAddressPart.includes(' -')) {
-                            let splitParts = originalAddressPart.split(' -');
-                            let potentialAddress = splitParts[0].trim();
-                            let potentialProducts = splitParts.slice(1).join(' -').trim();
-                            
-                            let isActuallyProducts = potentialProducts.includes('|') || 
-                                /almendra|chala|pepa|mix|fruto|seco|granola|mani|avena|aceite|miel|pasa|uva|semilla|tutuca|azucar|harina|coco|arroz|casta/i.test(potentialProducts);
-                            
-                            if (isActuallyProducts) {
-                                address = potentialAddress;
-                                productsText = potentialProducts;
-                            } else {
-                                address = originalAddressPart;
+                if (esCabeceraCliente(line)) {
+                    let parts = line.split(/\s*[\-\–\—]\s*/);
+                    let clientPart = parts[0].trim();
+                    let addressPart = parts[1].trim();
+                    
+                    // Si no hay dirección (está vacía o es solo un guión/punto), lo ignoramos y seguimos
+                    let hasAddress = addressPart && addressPart !== "." && addressPart !== "-";
+                    if (!hasAddress) {
+                        // Ignoramos este cliente y todas las líneas siguientes hasta la próxima cabecera
+                        idx++;
+                        while (idx < lines.length) {
+                            let nextLine = lines[idx].trim();
+                            if (esCabeceraCliente(nextLine)) {
+                                break;
                             }
-                        } else if (originalAddressPart.includes('- ')) {
-                            let splitParts = originalAddressPart.split('- ');
-                            let potentialAddress = splitParts[0].trim();
-                            let potentialProducts = splitParts.slice(1).join('- ').trim();
-                            
-                            let isActuallyProducts = potentialProducts.includes('|') || 
-                                /almendra|chala|pepa|mix|fruto|seco|granola|mani|avena|aceite|miel|pasa|uva|semilla|tutuca|azucar|harina|coco|arroz|casta/i.test(potentialProducts);
-                            
-                            if (isActuallyProducts) {
-                                address = potentialAddress;
-                                productsText = potentialProducts;
-                            } else {
-                                address = originalAddressPart;
-                            }
-                        } else if (originalAddressPart.includes('-')) {
-                            let lastDashIndex = originalAddressPart.lastIndexOf('-');
-                            let potentialAddress = originalAddressPart.substring(0, lastDashIndex).trim();
-                            let potentialProducts = originalAddressPart.substring(lastDashIndex + 1).trim();
-                            
-                            let isActuallyProducts = potentialProducts.includes('|') || 
-                                /almendra|chala|pepa|mix|fruto|seco|granola|mani|avena|aceite|miel|pasa|uva|semilla|tutuca|azucar|harina|coco|arroz|casta/i.test(potentialProducts);
-                            
-                            if (isActuallyProducts) {
-                                address = potentialAddress;
-                                productsText = potentialProducts;
-                            } else {
-                                address = originalAddressPart;
-                            }
-                        } else {
-                            address = separarDireccionDeProductos(originalAddressPart);
+                            idx++;
                         }
-                        
-                        // Omitir barras para números compuestos y limpiar
-                        address = address.split('/')[0].trim();
-                        // Limpiar guiones y espacios al principio y al final (normales, en-dash, em-dash)
-                        address = address.replace(/^[\s\-\–\—]+/, '').replace(/[\s\-\–\—]+$/, '').trim();
-                        
-                        // Buscar productos en las siguientes líneas (incluso si ya encontramos algo en la misma línea)
-                        let nextIdx = idx + 1;
-                        let collectedProducts = [];
-                        if (productsText) {
-                            collectedProducts.push(productsText);
-                        }
-                        
-                        while (nextIdx < lines.length) {
-                            let nextLine = lines[nextIdx].trim();
-                            if (nextLine) {
-                                // Si contiene un nuevo cliente (que pase los mismos filtros inteligentes) o un separador de sección, paramos
-                                if (esLineaCliente(nextLine) || nextLine.includes('───') || nextLine.includes('===')) {
-                                    break;
-                                }
-                                // De lo contrario, es una línea de productos
-                                collectedProducts.push(nextLine);
+                        idx--; // Decrementar para compensar el incremento en el loop principal
+                        continue;
+                    }
+                    
+                    // Extraer cantidad si existe en el nombre
+                    let qty = "(x1)";
+                    let clientName = clientPart;
+                    let qtyMatch = clientPart.match(/\(x?\s*\d+\)/i);
+                    if (qtyMatch) {
+                        qty = qtyMatch[0].trim();
+                        clientName = clientPart.replace(/\(x?\s*\d+\)/i, '').trim();
+                    }
+                    
+                    // Buscar productos en las siguientes líneas
+                    let nextIdx = idx + 1;
+                    let collectedProducts = [];
+                    
+                    while (nextIdx < lines.length) {
+                        let nextLine = lines[nextIdx].trim();
+                        if (nextLine) {
+                            if (esCabeceraCliente(nextLine)) {
+                                break;
                             }
-                            nextIdx++;
-                        }
-                        
-                        if (collectedProducts.length > 0) {
-                            productsText = collectedProducts.join(' | ');
-                            idx = nextIdx - 1; // Avanzar el cursor del bucle principal
-                        }
-                        
-                        let addrLower = address.toLowerCase();
-                        if (addrLower && 
-                            !addrLower.includes("tengo ubi") && 
-                            !addrLower.includes("depósito") && 
-                            !addrLower.includes("deposito") && 
-                            !addrLower.includes("retiro")) {
                             
-                            // Evitar duplicar en la extracción inicial
-                            let exists = extractedAddresses.some(item => item.text.toLowerCase() === address.toLowerCase());
-                            if (!exists) {
-                                extractedAddresses.push({
-                                    text: address,
-                                    client: clientName,
-                                    quantity: qty,
-                                    products: productsText
-                                });
+                            let hasEndMarker = false;
+                            let cleanProdLine = nextLine;
+                            
+                            // Si termina con punto, limpia el punto y detiene la búsqueda
+                            if (nextLine.endsWith('.')) {
+                                hasEndMarker = true;
+                                cleanProdLine = nextLine.slice(0, -1).trim();
                             }
+                            
+                            if (cleanProdLine) {
+                                collectedProducts.push(cleanProdLine);
+                            }
+                            
+                            if (hasEndMarker) {
+                                nextIdx++;
+                                break;
+                            }
+                        }
+                        nextIdx++;
+                    }
+                    
+                    let productsText = collectedProducts.join(' | ');
+                    
+                    // Limpiar la dirección (quitar guiones y barras compuestas)
+                    let cleanAddr = addressPart.split('/')[0].trim();
+                    cleanAddr = cleanAddr.replace(/^[\s\-\–\—]+/, '').replace(/[\s\-\–\—]+$/, '').trim();
+                    
+                    let addrLower = cleanAddr.toLowerCase();
+                    // Solo agregar si tiene productos y la dirección es válida
+                    if (productsText.trim() && cleanAddr && 
+                        !addrLower.includes("tengo ubi") && 
+                        !addrLower.includes("depósito") && 
+                        !addrLower.includes("deposito") && 
+                        !addrLower.includes("retiro")) {
+                        
+                        // Evitar duplicados exactos en la lista
+                        let exists = extractedAddresses.some(x => x.text.toLowerCase() === cleanAddr.toLowerCase());
+                        if (!exists) {
+                            extractedAddresses.push({
+                                text: cleanAddr,
+                                client: clientName,
+                                quantity: qty,
+                                products: productsText
+                            });
                         }
                     }
+                    
+                    idx = nextIdx - 1; // Avanzar el cursor del bucle principal
                 }
             }
             return extractedAddresses;
@@ -2780,9 +2756,27 @@
                 loadMammoth(function() {
                     reader.onload = function(event) {
                         let arrayBuffer = event.target.result;
-                        mammoth.extractRawText({arrayBuffer: arrayBuffer})
+                        mammoth.convertToHtml({arrayBuffer: arrayBuffer})
                             .then(function(result) {
-                                document.getElementById('text-word-input').value = result.value;
+                                let html = result.value;
+                                // Convertir saltos de línea de Word e interrupciones de párrafo a saltos de línea de texto reales
+                                let cleanText = html
+                                    .replace(/<p\b[^>]*>/gi, '')
+                                    .replace(/<\/p>/gi, '\n')
+                                    .replace(/<br\s*\/?>/gi, '\n')
+                                    .replace(/<tr\b[^>]*>/gi, '')
+                                    .replace(/<\/tr>/gi, '\n')
+                                    .replace(/<td\b[^>]*>/gi, ' ')
+                                    .replace(/<\/td>/gi, '\n')
+                                    // Eliminar todas las demás etiquetas HTML
+                                    .replace(/<[^>]+>/g, '')
+                                    // Descodificar entidades HTML
+                                    .replace(/&nbsp;/g, ' ')
+                                    .replace(/&amp;/g, '&')
+                                    .replace(/&lt;/g, '<')
+                                    .replace(/&gt;/g, '>');
+                                
+                                document.getElementById('text-word-input').value = cleanText.trim();
                             })
                             .catch(function(err) {
                                 alert("Error al leer el archivo Word: " + err);
