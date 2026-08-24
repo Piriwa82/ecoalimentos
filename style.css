@@ -20,9 +20,10 @@ header {
     justify-content: center;
     align-items: center;
     gap: 1.5em;
-    padding: 1.2em 0;
+    padding: 1.2em 1.5em;
     border-bottom: 4px solid #2e7d32;
     flex-wrap: wrap;
+    position: relative;
 }
 
 #header-imagen {
@@ -472,24 +473,33 @@ nav a {
     bottom: 1.5em;
     right: 1.5em;
     z-index: 999;
-}
-
-.wpp {
     background-color: #25d366;
-    color: white;
-    font-size: 2.2em;
-    width: 2.2em;
-    height: 2.2em;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.wpp:hover {
+.wpp-contenedor:hover {
     transform: scale(1.1) rotate(5deg);
+}
+
+.wpp {
+    color: #ffffff !important;
+    font-size: 32px !important;
+    background-color: transparent !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: static !important;
 }
 
 /* ABOUT US (NOSOTROS) SECTION */
@@ -677,99 +687,155 @@ footer {
     color: inherit;
 }
 
-/* MOBILE RESPONSIVENESS */
-@media screen and (max-width: 480px) {
+/* MOBILE RESPONSIVENESS (PHONES & PORTRAIT TABLETS) */
+@media screen and (max-width: 768px) {
+    header {
+        padding-right: 4.5em !important; /* Shunt layout to the left to leave space for the fixed cart button */
+    }
+
+    #header-titulo {
+        font-size: clamp(1.5em, 4vw, 2.2em) !important;
+    }
+
+    /* CATALOG DISPLAY: FIXED 2 COLUMNS */
     .catalogo {
-        padding: 1em 0.8em;
-        gap: 1em;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.8em !important;
+        padding: 0.8em !important;
     }
 
     .producto {
-        flex: 1 1 calc(50% - 0.5em);
-        min-width: 0;
-        max-width: none;
-        font-size: 0.85em;
-        border-radius: 12px;
+        max-width: none !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        font-size: 0.82em !important;
+        border-radius: 12px !important;
     }
 
     .producto img {
-        height: 8em;
+        height: 7.5em !important;
     }
 
     .producto h2 {
-        font-size: 1.15em;
-        padding: 0.5em;
-        min-height: 2.2em;
+        font-size: 1.1em !important;
+        padding: 0.5em !important;
+        min-height: 2.2em !important;
     }
 
     .producto h3 {
-        font-size: 0.85em;
-        padding: 0 0.5em;
-        min-height: 3.8em;
+        font-size: 0.85em !important;
+        padding: 0 0.5em !important;
+        min-height: 3.5em !important;
     }
 
     .producto p {
-        font-size: 1.2em;
-        padding: 0.2em;
+        font-size: 1.15em !important;
+        padding: 0.2em !important;
     }
 
     .producto-acciones {
-        padding: 0.4em 0.5em 0.8em 0.5em;
-        gap: 0.4em;
+        padding: 0.4em 0.5em 0.8em 0.5em !important;
+        gap: 0.4em !important;
     }
 
     .cantidad {
-        width: 2.6em;
-        padding: 0.3em;
-        font-size: 0.9em;
+        width: 2.6em !important;
+        padding: 0.3em !important;
+        font-size: 0.9em !important;
     }
 
     .boton-agregar {
-        padding: 0.5em 0.6em;
-        font-size: 0.85em;
-        border-radius: 6px;
+        padding: 0.5em 0.6em !important;
+        font-size: 0.82em !important;
+        border-radius: 6px !important;
     }
 
+    /* CART DRAWERS */
     #carrito-menu {
-        width: calc(100% - 2em);
-        right: 1em;
-        left: 1em;
-        top: 5em;
-        max-height: 80vh;
+        width: calc(100% - 2em) !important;
+        right: 1em !important;
+        left: 1em !important;
+        top: 5.5em !important;
+        max-height: 80vh !important;
     }
 
     #carrito-fijo {
-        top: 0.5em;
-        right: 0.8em;
-        font-size: 1.5em;
+        top: 0.5em !important;
+        right: 0.8em !important;
+        font-size: 1.5em !important;
     }
 
+    /* ABOUT US SECTION */
     .nosotros {
-        margin: 1.5em 0;
+        margin: 1.5em 0 !important;
     }
 
     .nosotros-intro, .nosotros-mision, .nosotros-llegamos, .nosotros-pedido {
-        flex-direction: column;
-        padding: 1em;
-        gap: 1em;
+        flex-direction: column !important;
+        padding: 1em !important;
+        gap: 1em !important;
     }
 
     .foto1, .foto2, .foto3, .foto4 {
-        width: 100%;
-        height: 180px;
+        width: 100% !important;
+        height: 180px !important;
     }
 
     .texto-llegamos {
-        margin-right: 0;
+        margin-right: 0 !important;
     }
 
     #ubicacion-entrega {
-        font-size: 0.9em;
+        font-size: 0.9em !important;
     }
     
     #menu a {
-        font-size: 1.2em;
-        margin-left: 0;
-        border-bottom: none;
+        font-size: 1.1em !important;
+        margin-left: 0 !important;
+        border-bottom: none !important;
+    }
+
+    /* MOBILE FLOATING WHATSAPP BUTTON */
+    .wpp-contenedor {
+        bottom: 1.2em !important;
+        right: 1em !important;
+        width: 52px !important;
+        height: 52px !important;
+    }
+
+    .wpp {
+        font-size: 26px !important;
+    }
+
+    /* MOBILE FOOTER: SIDE-BY-SIDE */
+    .footer-contenido {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        gap: 1em !important;
+    }
+
+    .footer-columna {
+        flex: 1 1 50% !important;
+        font-size: 0.8em !important;
+        text-align: center !important;
+    }
+
+    .footer-columna h4 {
+        font-size: 0.95em !important;
+        margin-bottom: 0.5em !important;
+    }
+
+    .footer-columna a {
+        font-size: 0.9em !important;
+        margin: 0.2em 0 !important;
+    }
+
+    .footer-abajo {
+        font-size: 0.75em !important;
+        margin-top: 1.5em !important;
+        padding-top: 1em !important;
     }
 }
