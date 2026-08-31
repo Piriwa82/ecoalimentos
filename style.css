@@ -156,22 +156,25 @@ nav a {
 }
 
 #main-subtitulo {
-    color: #4a5d4e;
+    color: #12331c; /* Darker green for higher contrast */
     text-align: center;
-    font-size: 1.1em;
+    font-size: 1.15em;
+    font-weight: 600;
     max-width: 800px;
-    margin: 0.5em auto 1.5em auto;
-    border-bottom: 2px solid #dcdfdc;
-    padding-bottom: 1em;
+    margin: 0.6em auto 0.6em auto;
+    border-bottom: 2px solid #b9dfc7; /* A matching green border */
+    padding-bottom: 0.8em;
     font-family: 'Lato', sans-serif;
+    line-height: 1.5;
 }
 
 #aclaracion {
     text-align: center;
-    color: #5c7562;
-    font-size: 0.9em;
-    margin-top: -0.8em;
-    margin-bottom: 1.5em;
+    color: #2b5c38; /* Faded green to rich green for readability */
+    font-size: 0.95em;
+    font-weight: 600;
+    margin-top: -0.2em;
+    margin-bottom: 2em;
 }
 
 /* CATALOG GRID */
@@ -305,55 +308,71 @@ nav a {
     right: 2em;
     background-color: #ffffff;
     border-radius: 16px;
-    padding: 1.5em;
-    max-height: 500px;
-    overflow-y: auto;
+    padding: 1em;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    width: 25em;
+    width: 22em;
     z-index: 1000;
     border: 1px solid #e1e8e3;
+    display: flex;
+    flex-direction: column;
+    max-height: 480px;
     transition: all 0.3s ease;
-}
-
-#carrito-menu h3 {
-    font-size: 1.4em;
-    font-weight: 700;
-    color: #1c2b20;
-    margin-bottom: 1em;
-    border-bottom: 1px solid #e8ede9;
-    padding-bottom: 0.5em;
-    background-color: white;
 }
 
 #carrito-menu.oculto {
     display: none;
 }
 
+.carrito-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e8ede9;
+    padding-bottom: 0.4em;
+    margin-bottom: 0.5em;
+}
+
+.carrito-header h3 {
+    font-size: 1.15em;
+    font-weight: 700;
+    color: #1c2b20;
+    margin: 0;
+}
+
 #cerrar-carrito {
-    background-color: #758a7b;
-    color: white;
+    background: none;
     border: none;
-    padding: 0.5em 1em;
-    font-size: 0.95em;
-    border-radius: 8px;
+    color: #758a7b;
+    font-size: 1.7em;
+    line-height: 1;
     cursor: pointer;
-    margin-top: 1em;
-    width: 100%;
-    font-weight: 600;
-    transition: background-color 0.2s;
+    padding: 0 0.1em;
+    margin: 0;
+    width: auto;
+    font-weight: normal;
+    transition: color 0.2s;
 }
 
 #cerrar-carrito:hover {
-    background-color: #5c7062;
+    color: #c62828;
+    background: none;
+}
+
+#carrito-items {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    margin-bottom: 0.5em;
+    padding-right: 0.2em;
+    max-height: 230px;
 }
 
 .carrito-item {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
+    grid-template-columns: 1.3fr 0.9fr 0.8fr;
     align-items: center;
-    padding: 0.8em 0;
+    padding: 0.5em 0;
     border-bottom: 1px solid #f1f5f2;
-    font-size: 0.95em;
+    font-size: 0.88em;
     background-color: white;
 }
 
@@ -362,6 +381,9 @@ nav a {
     color: #2e3d30;
     text-align: left;
     background-color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .carrito-item .precio {
@@ -372,7 +394,10 @@ nav a {
 }
 
 .carrito-item .acciones {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2em;
     background-color: white;
 }
 
@@ -380,11 +405,11 @@ nav a {
     background-color: #ffebee;
     color: #c62828;
     border: none;
-    padding: 0.3em 0.6em;
-    border-radius: 6px;
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 0.85em;
+    font-weight: 700;
+    font-size: 0.8em;
     transition: background-color 0.2s;
 }
 
@@ -392,37 +417,59 @@ nav a {
     background-color: #ffcdd2;
 }
 
+.carrito-item .cantidad {
+    font-weight: 600;
+    min-width: 1.1em;
+    display: inline-block;
+    text-align: center;
+}
+
 .carrito-vacio {
     color: #758a7b;
-    padding: 2em 0;
+    padding: 1.5em 0;
     font-style: italic;
     background-color: white;
+    text-align: center;
+}
+
+.carrito-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+    border-top: 1px solid #e8ede9;
+    padding-top: 0.5em;
+}
+
+.carrito-resumen {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
 
 #total-pedido {
-    font-size: 1.25em;
+    font-size: 1.05em;
     font-weight: 700;
-    color: #1c2b20;
-    margin-top: 1em;
+    color: #2e7d32;
+    margin: 0;
     text-align: right;
     background-color: white;
 }
 
 #cantidad-items {
-    font-size: 0.95em;
+    font-size: 0.82em;
     color: #617365;
-    text-align: right;
-    margin-top: 0.2em;
+    text-align: left;
+    margin: 0;
     background-color: white;
 }
 
 .mensaje-descuento {
-    font-size: 0.85em;
+    font-size: 0.8em;
     color: #2e7d32;
     background-color: #e8f5e9;
-    padding: 0.6em 1em;
-    border-radius: 8px;
-    margin-top: 0.8em;
+    padding: 0.4em 0.8em;
+    border-radius: 6px;
+    margin-top: 0.2em;
     font-weight: 600;
     border-left: 3px solid #2e7d32;
     text-align: left;
@@ -430,14 +477,14 @@ nav a {
 
 #ubicacion-entrega {
     width: 100%;
-    margin-top: 1em;
     border: 1px solid #b9dfc7;
-    font-size: 0.95em;
-    padding: 0.8em;
-    border-radius: 8px;
+    font-size: 0.85em;
+    padding: 0.5em 0.6em;
+    border-radius: 6px;
     outline: none;
     transition: border-color 0.3s;
     background-color: white;
+    margin: 0;
 }
 
 #ubicacion-entrega:focus {
@@ -448,15 +495,15 @@ nav a {
     background-color: #25d366;
     color: white;
     border: none;
-    padding: 0.8em 1em;
-    font-size: 1em;
+    padding: 0.55em 1em;
+    font-size: 0.95em;
     font-weight: 700;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     width: 100%;
-    margin-top: 1em;
+    margin: 0;
     transition: background-color 0.2s, transform 0.1s;
-    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+    box-shadow: 0 2px 6px rgba(37, 211, 102, 0.15);
 }
 
 #btn-enviar-whatsapp:hover {
@@ -562,7 +609,7 @@ nav a {
 .inicio-prinicipal {
     width: 100vw;
     height: 100vh;
-    background-image: linear-gradient(rgba(15, 37, 25, 0.6), rgba(15, 37, 25, 0.75)), url('img/inicio.png');
+    background-image: linear-gradient(rgba(15, 37, 25, 0.6), rgba(15, 37, 25, 0.75)), url('img/inicio.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -753,55 +800,49 @@ footer {
 
     /* CART DRAWERS */
     #carrito-menu {
-        width: 90% !important;
-        max-width: 340px !important;
-        height: 380px !important;
-        left: 50% !important;
-        right: auto !important;
-        transform: translateX(-50%) !important;
+        width: calc(100% - 1.5em) !important;
+        right: 0.75em !important;
+        left: 0.75em !important;
         top: 4.8em !important;
-        padding: 0.8em !important;
-        display: flex !important;
-        flex-direction: column !important;
-        overflow: hidden !important;
-    }
-
-    #carrito-menu.oculto {
-        display: none !important;
-    }
-
-    #carrito-menu h3 {
-        font-size: 1.15em !important;
-        margin-bottom: 0.5em !important;
-        padding-bottom: 0.3em !important;
+        max-height: 72vh !important;
+        padding: 0.75em !important;
+        gap: 0.3em !important;
     }
 
     #carrito-items {
-        flex-grow: 1 !important;
-        overflow-y: auto !important;
-        max-height: none !important;
-        padding-right: 2px !important;
+        max-height: 160px !important;
     }
 
     .carrito-item {
-        font-size: 0.80em !important;
+        font-size: 0.82em !important;
         padding: 0.4em 0 !important;
     }
 
-    .carrito-item button {
-        padding: 0.25em 0.5em !important;
-        font-size: 0.80em !important;
-    }
-
-    #total-pedido {
+    .carrito-header h3 {
         font-size: 1.05em !important;
-        margin-top: 0.5em !important;
     }
 
     #cerrar-carrito {
-        padding: 0.4em 0.8em !important;
-        font-size: 0.85em !important;
-        margin-top: 0.55em !important;
+        font-size: 1.5em !important;
+    }
+
+    .carrito-footer {
+        padding-top: 0.4em !important;
+        gap: 0.3em !important;
+    }
+
+    .carrito-resumen {
+        font-size: 0.82em !important;
+    }
+
+    #ubicacion-entrega {
+        font-size: 0.8em !important;
+        padding: 0.4em 0.5em !important;
+    }
+
+    #btn-enviar-whatsapp {
+        font-size: 0.88em !important;
+        padding: 0.45em 0.8em !important;
     }
 
     #carrito-fijo {

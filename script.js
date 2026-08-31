@@ -1,20 +1,52 @@
+const carritoMenu = document.getElementById("carrito-menu");
+if (carritoMenu) {
+  carritoMenu.innerHTML = `
+    <div class="carrito-header">
+      <h3>Carrito de compras</h3>
+      <button id="cerrar-carrito" aria-label="Cerrar">&times;</button>
+    </div>
+    <div id="carrito-items"></div>
+    <div class="carrito-footer">
+      <div class="carrito-resumen">
+        <span id="cantidad-items"></span>
+        <span id="total-pedido"></span>
+      </div>
+      <input type="text" id="ubicacion-entrega" placeholder="📍 Dirección de entrega">
+      <button id="btn-enviar-whatsapp">Enviar pedido por WhatsApp</button>
+    </div>
+  `;
+}
+
 const carrito = [];
 let yaSeMostroCarrito = false;
 
-const carritoMenu = document.getElementById("carrito-menu");
 const carritoItems = document.getElementById("carrito-items");
 const btnCerrarCarrito = document.getElementById("cerrar-carrito");
 const iconoCarrito = document.getElementById("carrito-fijo");
 const tipoCatalogo = document.body.dataset.catalogo;
+const inputUbicacion = document.getElementById("ubicacion-entrega");
+const botonEnviarWhatsapp = document.getElementById("btn-enviar-whatsapp");
+const totalPedidoSpan = document.getElementById("total-pedido");
+const cantidadItemsSpan = document.getElementById("cantidad-items");
+const numeroWhatsapp = "543517612075";
 
-// Mostrar/ocultar el carrito
-iconoCarrito.addEventListener("click", () => {
-  carritoMenu.classList.toggle("oculto");
-});
+// Mostrar/ocultar el carrito o redirigir a catálogo
+if (iconoCarrito) {
+  iconoCarrito.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (tipoCatalogo) {
+      carritoMenu.classList.toggle("oculto");
+    } else {
+      window.location.href = "catalogo-personal.html";
+    }
+  });
+}
 
-btnCerrarCarrito.addEventListener("click", () => {
-  carritoMenu.classList.add("oculto");
-});
+if (btnCerrarCarrito) {
+  btnCerrarCarrito.addEventListener("click", () => {
+    carritoMenu.classList.add("oculto");
+  });
+}
 
 // Agregar productos
 document.querySelectorAll(".boton-agregar").forEach((boton) => {
@@ -45,37 +77,6 @@ document.querySelectorAll(".boton-agregar").forEach((boton) => {
     }
   });
 });
-
-// WhatsApp y Total/Ahorro
-// URL de tu Apps Script de Google Sheets para registrar pedidos automáticamente
-const googleSheetsAppURL = "https://script.google.com/macros/s/AKfycbw4S6DTNTGSk9QWRCpISerEvoVgMaUSLnDYzOxOtRiGGXAWd4Ohm22xflcT07Qy7JxTOw/exec";
-
-// WhatsApp y Total/Ahorro
-const numeroWhatsapp = "543517612075";
-const botonEnviarWhatsapp = document.createElement("button");
-botonEnviarWhatsapp.textContent = "Enviar pedido por WhatsApp";
-botonEnviarWhatsapp.id = "btn-enviar-whatsapp";
-carritoMenu.appendChild(botonEnviarWhatsapp);
-
-const inputUbicacion = document.createElement("input");
-inputUbicacion.type = "text";
-inputUbicacion.placeholder = "📍 Direccion de entrega";
-inputUbicacion.id = "ubicacion-entrega";
-carritoMenu.appendChild(inputUbicacion);
-
-// Total
-const totalPedidoSpan = document.createElement("span");
-totalPedidoSpan.id = "total-pedido";
-totalPedidoSpan.style.display = "block";
-totalPedidoSpan.style.marginTop = "0.3em";
-totalPedidoSpan.style.fontWeight = "bold";
-totalPedidoSpan.style.fontSize = "1.1em";
-carritoMenu.appendChild(totalPedidoSpan);
-
-const cantidadItemsSpan = document.createElement("span");
-cantidadItemsSpan.id = "cantidad-items";
-cantidadItemsSpan.style.display = "block";
-carritoMenu.appendChild(cantidadItemsSpan);
 
 // Enviar por WhatsApp
 botonEnviarWhatsapp.addEventListener("click", () => {
@@ -117,9 +118,9 @@ botonEnviarWhatsapp.addEventListener("click", () => {
 
   carrito.forEach(item => {
     const precioOriginalTotal = item.precioBase * item.cantidad;
-    const descuentoTotal = item.tipo === "pack" ? 0 : (descuentoUnidad * item.cantidad);
+    const descuentoTotal = descuentoUnidad * item.cantidad;
     const precioFinal = precioOriginalTotal - descuentoTotal;
-    const precioUnitarioConDesc = item.tipo === "pack" ? item.precioBase : (item.precioBase - descuentoUnidad);
+    const precioUnitarioConDesc = item.precioBase - descuentoUnidad;
 
     if (item.cantidad === 1) {
       mensaje += `- ${encodeURIComponent(item.nombre)}: $${precioFinal.toLocaleString()}`;
@@ -156,21 +157,6 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   mensaje += `%0A📍 Entrega en: ${encodeURIComponent(ubicacion)}%0A`;
   mensaje += `%0A¡Gracias!`;
 
-  // Enviar pedido a la planilla de Google Sheets en segundo plano (usando url-encoded para evitar problemas de CORS)
-  if (googleSheetsAppURL && googleSheetsAppURL !== "URL_DE_TU_APPS_SCRIPT") {
-    const formData = new URLSearchParams();
-    formData.append("direccion", ubicacion);
-    formData.append("cliente", "Cliente Web");
-    formData.append("pedido", carrito.map(item => `${item.nombre} x${item.cantidad}`).join(", "));
-    formData.append("total", total);
-
-    fetch(googleSheetsAppURL, {
-      method: "POST",
-      mode: "no-cors",
-      body: formData
-    }).catch(err => console.error("Error al registrar el pedido:", err));
-  }
-
   const urlWhatsapp = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${mensaje}`;
   const link = document.createElement("a");
   link.href = urlWhatsapp;
@@ -181,37 +167,35 @@ botonEnviarWhatsapp.addEventListener("click", () => {
   document.body.removeChild(link);
 });
 
-// Descuentos por catálogo (solo aplican a productos individuales, no a packs)
+// Descuentos por catálogo
 function calcularDescuentoPorUnidad() {
-  const totalUnidadesNormales = carrito.filter(item => item.tipo !== "pack").reduce((sum, item) => sum + item.cantidad, 0);
+  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidadesNormales >= 12) return 190;
-    if (totalUnidadesNormales >= 7) return 120;
+    if (totalUnidades >= 12) return 190;
+    if (totalUnidades >= 7) return 120;
     return 0;
   }
 
   if (tipoCatalogo === "mayorista") {
-    if (totalUnidadesNormales >= 50) return 340;
-    if (totalUnidadesNormales >= 30) return 280;
-    if (totalUnidadesNormales >= 12) return 210; // Corregido de 10 a 12 según las reglas del dueño
+    if (totalUnidades >= 50) return 340;
+    if (totalUnidades >= 30) return 280;
+    if (totalUnidades >= 10) return 210;
     return 0;
   }
 
   return 0;
 }
 
+
 function calcularAhorro() {
   const descuentoUnidad = calcularDescuentoPorUnidad();
-  return carrito.reduce((sum, item) => sum + (item.tipo === "pack" ? 0 : descuentoUnidad) * item.cantidad, 0);
+  return carrito.reduce((sum, item) => sum + descuentoUnidad * item.cantidad, 0);
 }
 
 function calcularTotalConDescuento() {
   const descuentoUnidad = calcularDescuentoPorUnidad();
-  return carrito.reduce((sum, item) => {
-    const desc = item.tipo === "pack" ? 0 : descuentoUnidad;
-    return sum + (item.precioBase - desc) * item.cantidad;
-  }, 0);
+  return carrito.reduce((sum, item) => sum + (item.precioBase - descuentoUnidad) * item.cantidad, 0);
 }
 
 // Actualizar HTML del carrito
@@ -229,8 +213,7 @@ function actualizarCarrito() {
     const item = document.createElement("div");
     item.classList.add("carrito-item");
 
-    const desc = producto.tipo === "pack" ? 0 : calcularDescuentoPorUnidad();
-    const precioUnitario = producto.precioBase - desc;
+    const precioUnitario = producto.precioBase - calcularDescuentoPorUnidad();
 
     item.innerHTML = `
       <span class="nombre">${producto.nombre}</span>
@@ -246,31 +229,28 @@ function actualizarCarrito() {
   });
 
   const total = calcularTotalConDescuento();
-  const totalUnidadesNormales = carrito.filter(item => item.tipo !== "pack").reduce((sum, item) => sum + item.cantidad, 0);
+  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
   let mensajeDescuento = "";
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidadesNormales >= 12) mensajeDescuento = "Descuento por 12 unidades";
-    else if (totalUnidadesNormales >= 7) mensajeDescuento = "Descuento por 7 unidades";
+    if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
+    else if (totalUnidades >= 7) mensajeDescuento = "Descuento por 7 unidades";
   }
 
   if (tipoCatalogo === "distribuidor") {
-    const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
     if (totalUnidades >= 100) mensajeDescuento = "Descuento por 100 unidades";
     else if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
   }
 
   if (tipoCatalogo === "mayorista") {
-    if (totalUnidadesNormales >= 50) mensajeDescuento = "Descuento por 50 unidades";
-    else if (totalUnidadesNormales >= 30) mensajeDescuento = "Descuento por 30 unidades";
-    else if (totalUnidadesNormales >= 12) mensajeDescuento = "Descuento por 12 unidades"; // Corregido de 10 a 12
+    if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
+    else if (totalUnidades >= 30) mensajeDescuento = "Descuento por 30 unidades";
+    else if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
   }
 
   totalPedidoSpan.textContent = `🧾 Total: $${total.toLocaleString()} ${mensajeDescuento ? "| " + mensajeDescuento : ""}`;
-  
-  const totalCant = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-  cantidadItemsSpan.textContent = `${totalCant}un seleccionadas`; 
+  cantidadItemsSpan.textContent = `${totalUnidades}un seleccionadas`; 
 
   agregarEventosBotonesCantidad();
 }
@@ -297,150 +277,5 @@ function agregarEventosBotonesCantidad() {
     });
   });
 }
-
-// Actualizar precios desde la planilla de Google Sheets dinámicamente
-async function actualizarPreciosDesdeSheets() {
-  if (!googleSheetsAppURL || googleSheetsAppURL === "URL_DE_TU_APPS_SCRIPT") return;
-  
-  try {
-    const response = await fetch(`${googleSheetsAppURL}?action=getPrices&_=${Date.now()}`);
-    const data = await response.json();
-    if (data.status === "success" && data.prices) {
-      
-      // Diccionario de mapeo de nombres de productos de la web a la planilla
-      const nombreMapping = {
-        "granola crocante (1kg)": "granola crocante con miel",
-        "granola crocante (xpack de 20kg)": "granola crocante con miel",
-        "granola crocante (x pack de 20kg)": "granola crocante con miel",
-        "granola crocante sin pasas (1kg)": "granola crocante con miel sin pasas",
-        "granola crocante sin pasas (xpack de 20kg)": "granola crocante con miel sin pasas",
-        "granola crocante sin pasas (x pack de 20kg)": "granola crocante con miel sin pasas",
-        "granola c/ pasta de mani (1kg)": "granola con pasta de mani",
-        "mix de frutos secos clásico (1kg)": "mix de frutos secos clásico",
-        "mix de frutos secos clásico (x pack de 20kg)": "mix de frutos secos clásico",
-        
-        "miel (xpack de 20 potes de 1/2kg)": "miel comun (1/2kg)",
-        "miel (xpack de 20 frascos de 1/2kg)": "miel comun (1/2kg)",
-        "miel (xpack de 10 potes de un 1kg)": "miel comun (1kg)",
-        "miel (xpack de 10 frascos de 1kg)": "miel comun (1kg)",
-        "miel pura agroecologica (1/2kg)": "miel pura agroecologica (1/2kg)",
-        "miel comun (1/2kg)": "miel comun (1/2kg)",
-        "miel comun (1kg)": "miel comun (1kg)",
-        
-        "aceite de oliva (xpack de 12 botellas de 1/2l)": "aceite de oliva (1/2l)",
-        "aceite de oliva (xpack de 12 botellas de 1l)": "aceite de oliva [1l]",
-        "aceite de oliva (1/2l)": "aceite de oliva (1/2l)",
-        "aceite de oliva (1l)": "aceite de oliva [1l]",
-        
-        "tutucas c/azucar (x10kg fraccionadas en 2 bolsas de 5kg)": "tutucas con azucar",
-        "tutucas c/azucar (x10 unidades fraccionadas en 2 bolsas de 5kg)": "tutucas con azucar",
-        "tutucas c/edulcorante (x9kg fraccionadas en 3 bolsas de 3kg)": "tutucas con edulcorante",
-        "tutucas c/edulcorante (x9 unidades fraccionadas en 3 bolsas de 3kg)": "tutucas con edulcorante"
-      };
-
-      document.querySelectorAll(".producto").forEach(productoDiv => {
-        const nombreH2 = productoDiv.querySelector("h2");
-        if (!nombreH2) return;
-        
-        let nombreOriginal = nombreH2.textContent.trim().toLowerCase();
-        let esPack = productoDiv.dataset.tipo === "pack" || 
-                     nombreOriginal.includes("pack") || 
-                     nombreOriginal.includes("bulto") || 
-                     nombreOriginal.includes("caja") || 
-                     nombreOriginal.includes("bolsa de 10kg") || 
-                     nombreOriginal.includes("bolsa de 25kg");
-        
-        // Buscar en mapping primero
-        let nombreBuscar = nombreMapping[nombreOriginal] || nombreOriginal;
-        
-        // Si no está en mapping, remover sufijo de tamaño/pack para aproximar
-        if (!nombreMapping[nombreOriginal]) {
-          nombreBuscar = nombreBuscar
-            .replace(/\(1kg\)/i, '')
-            .replace(/\(x\s*pack\s*de\s*\d+kg\)/i, '')
-            .replace(/\(x\s*pack\s*de\s*\d+\s*[^\)]+\)/i, '')
-            .replace(/\(x\s*bulto\s*de\s*\d+kg\)/i, '')
-            .replace(/\(x\s*caja\s*de\s*\d+kg\)/i, '')
-            .replace(/\(bolsa\s*de\s*\d+kg\)/i, '')
-            .replace(/\(bulto\s*de\s*\d+kg\)/i, '')
-            .replace(/Bulto\s*de\s*\d+kg/i, '')
-            .trim();
-        }
-        
-        // Buscar el producto en la lista de precios de la planilla (comparando nombres normalizados)
-        const precioItem = data.prices.find(item => {
-          if (!item.productos) return false;
-          let prodName = item.productos.toString().toLowerCase().trim();
-          
-          // Normalizar caracteres (ej: c/ -> con, quitar tildes, comillas y comparar)
-          let n1 = prodName.replace(/c\//g, 'con').replace(/[^a-z0-9]/g, '');
-          let n2 = nombreBuscar.replace(/c\//g, 'con').replace(/[^a-z0-9]/g, '');
-          return n1 === n2 || prodName === nombreBuscar;
-        });
-        
-        if (precioItem) {
-          let nuevoPrecio = null;
-          
-          if (esPack) {
-            // Obtener el multiplicador (ej: 20 para granola 20kg, 12 para oliva)
-            let mult = obtenerMultiplicadorPack(nombreOriginal);
-            
-            // Priorizar columna "precio pack" de la planilla, si está vacía usar "distribuidor"
-            let precioUnidadPack = precioItem["precio pack"] || precioItem["distribuidor"];
-            
-            if (precioUnidadPack) {
-              precioUnidadPack = parseFloat(precioUnidadPack.toString().replace("$", "").replace(/\./g, "").replace(/,/g, "").trim());
-            }
-            
-            if (precioUnidadPack && !isNaN(precioUnidadPack)) {
-              nuevoPrecio = precioUnidadPack * mult;
-            }
-          } else {
-            // Producto Unitario
-            if (tipoCatalogo === "personal") {
-              nuevoPrecio = precioItem["precio de venta x1un"];
-            } else if (tipoCatalogo === "mayorista") {
-              nuevoPrecio = precioItem["precio de venta x1un"];
-            } else if (tipoCatalogo === "distribuidor") {
-              nuevoPrecio = precioItem["50 prod"];
-            }
-            
-            if (nuevoPrecio) {
-              nuevoPrecio = parseFloat(nuevoPrecio.toString().replace("$", "").replace(/\./g, "").replace(/,/g, "").trim());
-            }
-          }
-          
-          if (nuevoPrecio !== null && nuevoPrecio !== undefined && nuevoPrecio !== "" && !isNaN(nuevoPrecio)) {
-            const precioP = productoDiv.querySelector("p");
-            if (precioP) {
-              // Formatear con punto de miles
-              const formattedPrice = "$" + nuevoPrecio.toLocaleString('de-DE');
-              precioP.textContent = formattedPrice;
-            }
-          }
-        }
-      });
-    }
-  } catch (e) {
-    console.error("Error al actualizar precios desde Google Sheets:", e);
-  }
-}
-
-function obtenerMultiplicadorPack(nombre) {
-  let match = nombre.match(/x\s*Pack\s*de\s*(\d+)/i) || 
-              nombre.match(/x\s*Bulto\s*de\s*(\d+)/i) ||
-              nombre.match(/x\s*Caja\s*de\s*(\d+)/i) ||
-              nombre.match(/de\s*(\d+)\s*(?:kg|botellas|potes|frascos|unidades)/i) ||
-              nombre.match(/bolsa\s*de\s*(\d+)/i) ||
-              nombre.match(/bulto\s*de\s*(\d+)/i);
-  if (match && match[1]) {
-    return parseInt(match[1]);
-  }
-  return 1;
-}
-
-// Inicializar carga de precios al cargar la página
-document.addEventListener("DOMContentLoaded", actualizarPreciosDesdeSheets);
-actualizarPreciosDesdeSheets();
 
 
