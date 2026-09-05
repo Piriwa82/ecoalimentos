@@ -298,6 +298,16 @@ function agregarEventosBotonesCantidad() {
       .replace(/[^a-z0-9]/g, '');
   }
 
+  const titleMap = {
+    "aceitedeoliva12l": "aceitedeoliva12l",
+    "aceitedeoliva1l": "aceitedeoliva1l",
+    "miel12kg": "mielcomun12kg",
+    "miel1kg": "mielcomun1kg",
+    "mielpremiumagroecologica12kg": "mielpuraagroecologica12kg",
+    "acitunasverdespremiun00012kg": "aceitunasverdespremium00012kg",
+    "aceitunasverdespremium00012kg": "aceitunasverdespremium00012kg"
+  };
+
   fetch(SPREADSHEET_CSV_URL)
     .then(res => {
       if (!res.ok) throw new Error("Error HTTP al descargar precios de Google Sheets");
@@ -349,11 +359,19 @@ function agregarEventosBotonesCantidad() {
         const pPrice = prod.querySelector("p");
         if (!h2 || !pPrice) return;
 
-        const h2Clean = limpiarTexto(h2.textContent);
-        for (const [key, val] of Object.entries(priceMap)) {
-          if (h2Clean.includes(key) || key.includes(h2Clean) || (key.length > 4 && h2Clean.startsWith(key.slice(0, 6)))) {
-            pPrice.textContent = val;
-            break;
+        let h2Clean = limpiarTexto(h2.textContent);
+        if (titleMap[h2Clean]) {
+          h2Clean = titleMap[h2Clean];
+        }
+
+        if (priceMap[h2Clean]) {
+          pPrice.textContent = priceMap[h2Clean];
+        } else {
+          for (const [key, val] of Object.entries(priceMap)) {
+            if (h2Clean.includes(key) || key.includes(h2Clean)) {
+              pPrice.textContent = val;
+              break;
+            }
           }
         }
       });
@@ -362,6 +380,7 @@ function agregarEventosBotonesCantidad() {
       console.log("No se pudo cargar la sincronización en vivo, usando precios estáticos por defecto:", err);
     });
 })();
+
 
 
 
