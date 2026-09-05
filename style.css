@@ -305,17 +305,17 @@ nav a {
 #carrito-menu {
     position: fixed;
     top: 5.5em;
-    right: 2em;
+    right: 0.5em;
     background-color: #ffffff;
     border-radius: 16px;
-    padding: 0.8em;
+    padding: 0.6em;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    width: 22em;
+    width: 16.5em;
     z-index: 1000;
     border: 1px solid #e1e8e3;
     display: flex;
     flex-direction: column;
-    max-height: 520px;
+    max-height: 480px;
     transition: all 0.3s ease;
 }
 
@@ -333,7 +333,7 @@ nav a {
 }
 
 .carrito-header h3 {
-    font-size: 1.1em;
+    font-size: 0.98em;
     font-weight: 700;
     color: #1c2b20;
     margin: 0;
@@ -368,11 +368,11 @@ nav a {
 
 .carrito-item {
     display: grid;
-    grid-template-columns: 1.3fr 0.9fr 0.8fr;
+    grid-template-columns: 1.1fr 0.9fr 0.8fr;
     align-items: center;
-    padding: 0.5em 0;
+    padding: 0.35em 0;
     border-bottom: 1px solid #f1f5f2;
-    font-size: 0.88em;
+    font-size: 0.82em;
     background-color: white;
 }
 
@@ -478,8 +478,8 @@ nav a {
 #ubicacion-entrega {
     width: 100%;
     border: 1px solid #b9dfc7;
-    font-size: 0.85em;
-    padding: 0.5em 0.6em;
+    font-size: 0.8em;
+    padding: 0.4em 0.5em;
     border-radius: 6px;
     outline: none;
     transition: border-color 0.3s;
@@ -495,8 +495,8 @@ nav a {
     background-color: #25d366;
     color: white;
     border: none;
-    padding: 0.55em 1em;
-    font-size: 0.95em;
+    padding: 0.45em 0.8em;
+    font-size: 0.88em;
     font-weight: 700;
     border-radius: 6px;
     cursor: pointer;
@@ -609,7 +609,7 @@ nav a {
 .inicio-prinicipal {
     width: 100vw;
     height: 100vh;
-    background-image: linear-gradient(rgba(15, 37, 25, 0.6), rgba(15, 37, 25, 0.75)), url('img/inicio.jpg');
+    background-image: linear-gradient(rgba(15, 37, 25, 0.6), rgba(15, 37, 25, 0.75)), url('img/inicio.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
