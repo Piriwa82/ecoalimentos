@@ -278,4 +278,90 @@ function agregarEventosBotonesCantidad() {
   });
 }
 
+// SINCRONIZACIÓN EN VIVO CON GOOGLE SHEETS
+(function sincronizarPreciosGoogleSheets() {
+  const SPREADSHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1uep9aGKtdhokeBQhvJkBlGiF2CbCqYftQBnirM0nBmo/export?format=csv";
+  const tipo = document.body.dataset.catalogo;
+  if (!tipo) return;
+
+  function limpiarTexto(str) {
+    if (!str) return "";
+    return str.toLowerCase()
+      .replace(/[áàäâ]/g, 'a')
+      .replace(/[éèëê]/g, 'e')
+      .replace(/[íìïî]/g, 'i')
+      .replace(/[óòöô]/g, 'o')
+      .replace(/[úùüû]/g, 'u')
+      .replace(/ñ/g, 'n')
+      .replace(/c\//g, 'con')
+      .replace(/premiun/g, 'premium')
+      .replace(/[^a-z0-9]/g, '');
+  }
+
+  fetch(SPREADSHEET_CSV_URL)
+    .then(res => {
+      if (!res.ok) throw new Error("Error HTTP al descargar precios de Google Sheets");
+      return res.text();
+    })
+    .then(csvText => {
+      const lines = csvText.split(/\r?\n/);
+      const priceMap = {};
+
+      lines.forEach(line => {
+        if (!line.trim() || line.includes("Productos,Precio de Costo") || line.includes(",,Consumo Personal")) return;
+        
+        const fields = [];
+        let inQuotes = false;
+        let current = "";
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i];
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            fields.push(current.trim());
+            current = "";
+          } else {
+            current += char;
+          }
+        }
+        fields.push(current.trim());
+
+        if (fields.length > 2) {
+          const rawName = fields[0].replace(/"/g, '').trim();
+          const personalX1 = fields[2].replace(/"/g, '').trim();
+          const mayorista12 = fields.length > 6 ? fields[6].replace(/"/g, '').trim() : "";
+          const distribuidor = fields.length > 10 ? fields[10].replace(/"/g, '').trim() : "";
+          const pack = fields.length > 11 ? fields[11].replace(/"/g, '').trim() : "";
+
+          if (personalX1 && personalX1.startsWith("$")) {
+            let precioFinal = personalX1;
+            if (tipo === "mayorista" && mayorista12) precioFinal = mayorista12;
+            if (tipo === "distribuidor") precioFinal = distribuidor || pack || personalX1;
+
+            const key = limpiarTexto(rawName);
+            if (key) priceMap[key] = precioFinal;
+          }
+        }
+      });
+
+      document.querySelectorAll(".producto").forEach(prod => {
+        const h2 = prod.querySelector("h2");
+        const pPrice = prod.querySelector("p");
+        if (!h2 || !pPrice) return;
+
+        const h2Clean = limpiarTexto(h2.textContent);
+        for (const [key, val] of Object.entries(priceMap)) {
+          if (h2Clean.includes(key) || key.includes(h2Clean) || (key.length > 4 && h2Clean.startsWith(key.slice(0, 6)))) {
+            pPrice.textContent = val;
+            break;
+          }
+        }
+      });
+    })
+    .catch(err => {
+      console.log("No se pudo cargar la sincronización en vivo, usando precios estáticos por defecto:", err);
+    });
+})();
+
+
 
