@@ -1220,3 +1220,25 @@ footer {
         transform: rotate(-15deg) !important;
     }
 }
+
+
+/* DESKTOP CATEGORY TITLES ALIGNMENT (>= 992px) */
+@media screen and (min-width: 992px) {
+    .catalogo {
+        max-width: 1180px !important;
+        margin: 0 auto !important;
+        justify-content: flex-start !important;
+        padding: 1.2em 0 2.5em 0 !important;
+    }
+
+    #main-titulo,
+    .main-titulo,
+    h1#main-titulo {
+        max-width: 1180px !important;
+        margin: 1.8em auto 0.4em auto !important;
+        padding: 0 !important;
+        text-align: left !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
