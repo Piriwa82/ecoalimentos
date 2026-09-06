@@ -188,19 +188,7 @@ nav a {
     border-radius: var(--radius-card);
 }
 
-.banner-deco {
-    position: absolute;
-    object-fit: contain;
-    border-radius: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 1 !important;
-    filter: none !important;
-    mix-blend-mode: normal !important;
-}
+
 
 .banner-tag,
 .banner-titulo,
@@ -212,20 +200,9 @@ nav a {
 }
 
 /* DESKTOP (>= 992px) */
-.deco-left {
-    width: 440px;
-    height: 440px;
-    top: -45px;
-    left: -140px;
-}
 
-.deco-right {
-    width: 440px;
-    height: 440px;
-    top: -45px;
-    right: -130px;
-    transform: rotate(-35deg);
-}
+
+
 
 .banner-tag {
     display: inline-block;
@@ -1174,23 +1151,31 @@ footer {
     }
 }
 
+.banner-deco {
+    position: absolute;
+    object-fit: contain;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 1 !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+}
 
-
-
-
-
-
-
-
+/* DESKTOP (>= 992px) - HOJAS EXTREMO DERECHO */
+.deco-right {
+    width: 440px;
+    height: 440px;
+    top: -45px;
+    right: -130px;
+    transform: rotate(-35deg);
+}
 
 /* RESPONSIVE DECORATION RULES */
 @media screen and (max-width: 991px) and (min-width: 769px) {
-    .deco-left {
-        width: 310px !important;
-        height: 310px !important;
-        top: -40px !important;
-        left: -100px !important;
-    }
     .deco-right {
         width: 320px !important;
         height: 320px !important;
@@ -1207,15 +1192,7 @@ footer {
         filter: none !important;
     }
 
-    /* FRUTOS SECOS IZQUIERDA - ELEVADOS CON ESPACIO BLANCO CLARO ANTES DEL SUBTITULO */
-    .deco-left {
-        width: 135px !important;
-        height: 135px !important;
-        top: -38px !important;
-        left: -72px !important;
-    }
-
-    /* HOJAS DERECHA - INTACTAS */
+    /* HOJAS DERECHA - MOVILES */
     .deco-right {
         width: 155px !important;
         height: 155px !important;
@@ -1226,14 +1203,6 @@ footer {
 }
 
 @media screen and (max-width: 380px) {
-    /* FRUTOS SECOS IZQUIERDA - ESPACIO BLANCO EN MOVILES PEQUEÑOS (360px) */
-    .deco-left {
-        width: 115px !important;
-        height: 115px !important;
-        top: -32px !important;
-        left: -62px !important;
-    }
-
     .deco-right {
         width: 130px !important;
         height: 130px !important;
