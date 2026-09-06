@@ -1181,13 +1181,15 @@ footer {
 
 
 
+
+
 /* RESPONSIVE DECORATION RULES */
 @media screen and (max-width: 991px) and (min-width: 769px) {
     .deco-left {
-        width: 320px !important;
-        height: 320px !important;
-        top: -35px !important;
-        left: -95px !important;
+        width: 310px !important;
+        height: 310px !important;
+        top: -40px !important;
+        left: -100px !important;
     }
     .deco-right {
         width: 320px !important;
@@ -1205,15 +1207,15 @@ footer {
         filter: none !important;
     }
 
-    /* FRUTOS SECOS IZQUIERDA - SUBIDOS Y CON MAYOR RECORTE EXTERIOR */
+    /* FRUTOS SECOS IZQUIERDA - ELEVADOS CON ESPACIO BLANCO CLARO ANTES DEL SUBTITULO */
     .deco-left {
-        width: 155px !important;
-        height: 155px !important;
-        top: -32px !important;
-        left: -68px !important;
+        width: 135px !important;
+        height: 135px !important;
+        top: -38px !important;
+        left: -72px !important;
     }
 
-    /* HOJAS DERECHA - ESQUINA SUPERIOR DERECHA */
+    /* HOJAS DERECHA - INTACTAS */
     .deco-right {
         width: 155px !important;
         height: 155px !important;
@@ -1224,11 +1226,12 @@ footer {
 }
 
 @media screen and (max-width: 380px) {
+    /* FRUTOS SECOS IZQUIERDA - ESPACIO BLANCO EN MOVILES PEQUEÑOS (360px) */
     .deco-left {
-        width: 130px !important;
-        height: 130px !important;
-        top: -26px !important;
-        left: -58px !important;
+        width: 115px !important;
+        height: 115px !important;
+        top: -32px !important;
+        left: -62px !important;
     }
 
     .deco-right {
