@@ -565,7 +565,7 @@ nav a {
     overflow-x: hidden;
     margin-bottom: 0.4em;
     padding-right: 0.2em;
-    max-height: 175px !important;
+    max-height: 125px !important;
 }
 
 .carrito-item {
@@ -1092,11 +1092,13 @@ footer {
     }
 
     #carrito-items {
-        max-height: 175px !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        flex: 0 1 auto !important;
-    }
+    flex: 0 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 0.4em;
+    padding-right: 0.2em;
+    max-height: 125px !important;
+}
 
     .nosotros {
         max-width: 100% !important;
