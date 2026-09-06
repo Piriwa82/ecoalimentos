@@ -190,8 +190,6 @@ nav a {
 
 .banner-deco {
     position: absolute;
-    width: 135px;
-    height: 135px;
     object-fit: cover;
     border-radius: 0 !important;
     border: none !important;
@@ -199,21 +197,34 @@ nav a {
     background: transparent !important;
     pointer-events: none;
     z-index: 1;
-    opacity: 0.8;
+    opacity: 0.85;
     mix-blend-mode: multiply;
     -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 95%);
     mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 95%);
 }
 
+.banner-tag,
+.banner-titulo,
+.banner-subtitulo,
+.banner-beneficios,
+.banner-nota {
+    position: relative;
+    z-index: 2;
+}
+
 .deco-left {
-    top: -20px;
-    left: -20px;
+    width: 170px;
+    height: 170px;
+    top: -15px;
+    left: -25px;
     transform: rotate(-10deg);
 }
 
 .deco-right {
-    top: -20px;
-    right: -20px;
+    width: 170px;
+    height: 170px;
+    top: -10px;
+    right: -25px;
     transform: rotate(15deg);
 }
 
@@ -940,9 +951,7 @@ footer {
         overflow: hidden !important;
     }
 
-    .banner-deco {
-        display: none !important;
-    }
+    
 
     .banner-titulo {
         font-size: 1.7em !important;
@@ -1163,5 +1172,61 @@ footer {
 
     .wpp {
         font-size: 26px !important;
+    }
+}
+
+
+/* RESPONSIVE DECORATION RULES */
+@media screen and (max-width: 900px) and (min-width: 769px) {
+    .deco-left {
+        width: 110px !important;
+        height: 110px !important;
+        top: -10px !important;
+        left: -15px !important;
+    }
+    .deco-right {
+        width: 110px !important;
+        height: 110px !important;
+        top: -5px !important;
+        right: -15px !important;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .banner-deco {
+        display: block !important;
+        opacity: 0.65 !important;
+    }
+
+    .deco-left {
+        width: 48px !important;
+        height: 48px !important;
+        top: -4px !important;
+        left: -8px !important;
+        transform: rotate(-10deg) !important;
+    }
+
+    .deco-right {
+        width: 48px !important;
+        height: 48px !important;
+        top: -2px !important;
+        right: -8px !important;
+        transform: rotate(15deg) !important;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .deco-left {
+        width: 36px !important;
+        height: 36px !important;
+        top: -3px !important;
+        left: -10px !important;
+    }
+
+    .deco-right {
+        width: 36px !important;
+        height: 36px !important;
+        top: -2px !important;
+        right: -10px !important;
     }
 }
