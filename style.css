@@ -1222,7 +1222,7 @@ footer {
 }
 
 
-/* DESKTOP CATEGORY TITLES ALIGNMENT (EXACT GRID MATCH) */
+/* DESKTOP CATEGORY TITLES & ESPECIALIDADES ALIGNMENT (EXACT GRID MATCH) */
 @media screen and (min-width: 1200px) {
     .catalogo {
         display: grid !important;
@@ -1242,9 +1242,10 @@ footer {
 
     #main-titulo,
     .main-titulo,
-    h1#main-titulo {
+    h1#main-titulo,
+    .categoria-header {
         max-width: 1180px !important;
-        margin: 1.8em auto 0.4em auto !important;
+        margin: 2em auto 0.4em auto !important;
         padding: 0 !important;
         text-align: left !important;
         width: 100% !important;
@@ -1271,9 +1272,10 @@ footer {
 
     #main-titulo,
     .main-titulo,
-    h1#main-titulo {
+    h1#main-titulo,
+    .categoria-header {
         max-width: 880px !important;
-        margin: 1.8em auto 0.4em auto !important;
+        margin: 2em auto 0.4em auto !important;
         padding: 0 !important;
         text-align: left !important;
         width: 100% !important;
