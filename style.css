@@ -179,6 +179,7 @@ nav a {
 
 /* COMMERCIAL CATALOG HEADER BANNER (MOCKUP DESIGN) */
 .catalogo-header-banner {
+    position: relative;
     max-width: 920px;
     margin: 2em auto 1.5em auto;
     padding: 1.5em;
@@ -920,6 +921,7 @@ footer {
     }
 
     .catalogo-header-banner {
+    position: relative;
         max-width: 100% !important;
         box-sizing: border-box !important;
         padding: 0 0.6em !important;
@@ -1153,6 +1155,11 @@ footer {
     }
 }
 
+
+
+/* DESKTOP (>= 992px) - HOJAS EXTREMO DERECHO */
+
+
 .banner-deco {
     position: absolute;
     object-fit: contain;
@@ -1167,23 +1174,23 @@ footer {
     mix-blend-mode: normal !important;
 }
 
-/* DESKTOP (>= 992px) - HOJAS EXTREMO DERECHO */
+/* DESKTOP (>= 992px) - HOJAS ESQUINA SUPERIOR DERECHA DEL HERO */
 .deco-right {
-    width: 440px;
-    height: 440px;
-    top: -45px;
-    right: -130px;
-    transform: rotate(-35deg);
+    top: -20px !important;
+    right: -55px !important;
+    width: 250px !important;
+    height: auto !important;
+    transform: rotate(-15deg) !important;
 }
 
 /* RESPONSIVE DECORATION RULES */
 @media screen and (max-width: 991px) and (min-width: 769px) {
     .deco-right {
-        width: 320px !important;
-        height: 320px !important;
-        top: -35px !important;
-        right: -85px !important;
-        transform: rotate(-35deg) !important;
+        top: -15px !important;
+        right: -40px !important;
+        width: 200px !important;
+        height: auto !important;
+        transform: rotate(-15deg) !important;
     }
 }
 
@@ -1194,22 +1201,22 @@ footer {
         filter: none !important;
     }
 
-    /* HOJAS DERECHA - MOVILES */
+    /* HOJAS DERECHA - MOVILES (SUPERIOR DERECHA) */
     .deco-right {
-        width: 155px !important;
-        height: 155px !important;
-        top: -24px !important;
-        right: -55px !important;
-        transform: rotate(-35deg) !important;
+        top: -10px !important;
+        right: -30px !important;
+        width: 135px !important;
+        height: auto !important;
+        transform: rotate(-15deg) !important;
     }
 }
 
 @media screen and (max-width: 380px) {
     .deco-right {
-        width: 130px !important;
-        height: 130px !important;
-        top: -20px !important;
-        right: -48px !important;
-        transform: rotate(-35deg) !important;
+        top: -8px !important;
+        right: -25px !important;
+        width: 115px !important;
+        height: auto !important;
+        transform: rotate(-15deg) !important;
     }
 }
