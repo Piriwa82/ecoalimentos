@@ -12,7 +12,7 @@ if (carritoMenu) {
         <span id="total-pedido"></span>
       </div>
       <input type="text" id="ubicacion-entrega" placeholder="📍 Dirección de entrega">
-      <button id="btn-enviar-whatsapp">Enviar pedido por WhatsApp</button>
+      <button id="btn-enviar-whatsapp"><i class="fa-brands fa-whatsapp"></i> Enviar pedido por WhatsApp</button>
     </div>
   `;
 }
