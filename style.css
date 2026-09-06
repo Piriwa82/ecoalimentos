@@ -440,11 +440,14 @@ nav a {
     color: var(--color-text-muted);
     padding: 0 0.9em 0.4em 0.9em;
     text-align: left;
-    min-height: 3.2em;
-    display: flex;
-    align-items: flex-start;
+    min-height: 2.8em;
+    height: auto;
+    display: block;
     background-color: white;
-    line-height: 1.4;
+    line-height: 1.45;
+    word-break: break-word;
+    white-space: normal;
+    overflow: visible;
 }
 
 .producto p {
@@ -1045,9 +1048,15 @@ footer {
     }
 
     .producto h3 {
-        font-size: 0.8em !important;
-        padding: 0 0.5em !important;
-        min-height: 3.2em !important;
+        font-size: 0.82em !important;
+        padding: 0 0.5em 0.4em 0.5em !important;
+        min-height: auto !important;
+        height: auto !important;
+        display: block !important;
+        line-height: 1.4 !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+        overflow: visible !important;
     }
 
     .producto p {
