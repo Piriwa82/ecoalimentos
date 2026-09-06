@@ -528,7 +528,7 @@ nav a {
 }
 
 #carrito-menu.oculto {
-    display: none;
+    display: none !important;
 }
 
 .carrito-header {
@@ -1079,7 +1079,7 @@ footer {
         padding: 0.6em 0.8em 0.8em 0.8em !important;
         gap: 0.2em !important;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
-        display: flex !important;
+        display: flex;
         flex-direction: column !important;
         box-sizing: border-box !important;
     }
