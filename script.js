@@ -1,3 +1,101 @@
+const PRECIOS_DB = {
+  "granola crocante con miel": { c: 5650, d: 5530, e: 5460, g: 5440, i: 5370, j: 5310, k: 5150, l: 4850 },
+  "granola crocante con miel sin pasas": { c: 5850, d: 5730, e: 5660, g: 5640, i: 5570, j: 5510, k: 5350, l: 5050 },
+  "granola proteica": { c: 6800, d: 6680, e: 6610, g: 6590, i: 6520, j: 6460, k: 6300, l: 6000 },
+  "granola con pasta de mani": { c: 6800, d: 6680, e: 6610, g: 6590, i: 6520, j: 6460, k: 6300, l: 6000 },
+  "mix de frutos secos clasico": { c: 8200, d: 8080, e: 8010, g: 7990, i: 7920, j: 7860, k: 7700, l: 8200 },
+  "mix tropical": { c: 7950, d: 7830, e: 7760, g: 7740, i: 7670, j: 7610, k: 7450, l: 7950 },
+  "mix azteca": { c: 6100, d: 5980, e: 5910, g: 5890, i: 5820, j: 5760, k: 5600, l: 5300 },
+  "mix de frutos secos sin pasas": { c: 15200, d: 15080, e: 15010, g: 14990, i: 14920, j: 14860, k: 14700, l: 15200 },
+  "barritas de frutos secos": { c: 11400, d: 11280, e: 11210, g: 11190, i: 11120, j: 11060, k: 10900, l: 11400 },
+  "barritas tropicales": { c: 11400, d: 11280, e: 11210, g: 11190, i: 11120, j: 11060, k: 10900, l: 11400 },
+  "nuez mariposa extra ligth": { c: 17300, d: 17180, e: 17110, g: 17090, i: 17020, j: 16960, k: 16800, l: 17300 },
+  "almendras": { c: 20300, d: 20180, e: 20110, g: 20090, i: 20020, j: 19960, k: 19800, l: 20300 },
+  "castanas de caju": { c: 14900, d: 14780, e: 14710, g: 14690, i: 14620, j: 14560, k: 14400, l: 14900 },
+  "mani sin sal": { c: 3600, d: 3480, e: 3410, g: 3390, i: 3320, j: 3260, k: 3100, l: 3600 },
+  "mani con sal": { c: 3600, d: 3480, e: 3410, g: 3390, i: 3320, j: 3260, k: 3100, l: 2800 },
+  "mani saborizado": { c: 5000, d: 4880, e: 4810, g: 4790, i: 4720, j: 4660, k: 4500, l: 2800 },
+  "mani con cascara": { c: 5000, d: 4880, e: 4810, g: 4790, i: 4720, j: 4660, k: 4500, l: 5000 },
+  "mani crudo": { c: 4700, d: 4580, e: 4510, g: 4490, i: 4420, j: 4360, k: 4200, l: 4700 },
+  "pistachos con cascara salados": { c: 34700, d: 34580, e: 34510, g: 34490, i: 34420, j: 34360, k: 34200, l: 34700 },
+  "avena instantanea": { c: 3000, d: 2880, e: 2810, g: 2790, i: 2720, j: 2660, k: 2500, l: 2200 },
+  "avena tradicional": { c: 3000, d: 2880, e: 2810, g: 2790, i: 2720, j: 2660, k: 2500, l: 2200 },
+  "almohaditas limon o frutilla": { c: 8600, d: 8480, e: 8410, g: 8390, i: 8320, j: 8260, k: 8100, l: 8600 },
+  "copos de maiz c azucar": { c: 3900, d: 3780, e: 3710, g: 3690, i: 3620, j: 3560, k: 3400, l: 3900 },
+  "copos naturales": { c: 4200, d: 4080, e: 4010, g: 3990, i: 3920, j: 3860, k: 3700, l: 4200 },
+  "maiz pisinallo x25kg": { c: 3800, d: 3680, e: 3610, g: 3590, i: 3520, j: 3460, k: 3300, l: 3800 },
+  "arroz yamani x25kg": { c: 5700, d: 5580, e: 5510, g: 5490, i: 5420, j: 5360, k: 5200, l: 5700 },
+  "mix de semilllas": { c: 4300, d: 4180, e: 4110, g: 4090, i: 4020, j: 3960, k: 3800, l: 4300 },
+  "semillas de girasol": { c: 4300, d: 4180, e: 4110, g: 4090, i: 4020, j: 3960, k: 3800, l: 4300 },
+  "semillas de chia": { c: 6000, d: 5880, e: 5810, g: 5790, i: 5720, j: 5660, k: 5500, l: 6000 },
+  "semillas de lino": { c: 4300, d: 4180, e: 4110, g: 4090, i: 4020, j: 3960, k: 3800, l: 4300 },
+  "semilla de quinoa blanca": { c: 6900, d: 6780, e: 6710, g: 6690, i: 6620, j: 6560, k: 6400, l: 6900 },
+  "semillas de zapallo": { c: 13800, d: 13680, e: 13610, g: 13590, i: 13520, j: 13460, k: 13300, l: 13800 },
+  "garbanzo x25kg": { c: 3800, d: 3680, e: 3610, g: 3590, i: 3520, j: 3460, k: 3300, l: 3800 },
+  "lenteja x25kg": { c: 6500, d: 6380, e: 6310, g: 6290, i: 6220, j: 6160, k: 6000, l: 6500 },
+  "poroto alubia x25kg": { c: 4700, d: 4580, e: 4510, g: 4490, i: 4420, j: 4360, k: 4200, l: 4700 },
+  "soja texturizada x25kg": { c: 4200, d: 4080, e: 4010, g: 3990, i: 3920, j: 3860, k: 3700, l: 4200 },
+  "aceite de oliva 12l": { c: 4500, d: 4380, e: 4310, g: 4290, i: 4220, j: 4160, k: 4000, l: 3700 },
+  "aceite de oliva 1l": { c: 6500, d: 6380, e: 6310, g: 6290, i: 6220, j: 6160, k: 6000, l: 5700 },
+  "aceitunas verdes premium 000 12kg": { c: 7200, d: 7080, e: 7010, g: 6990, i: 6920, j: 6860, k: 6700, l: 6400 },
+  "miel pura agroecologica 12kg": { c: 7000, d: 6880, e: 6810, g: 6790, i: 6720, j: 6660, k: 6500, l: 7000 },
+  "miel comun 12kg": { c: 3500, d: 3380, e: 3310, g: 3290, i: 3220, j: 3160, k: 3000, l: 2700 },
+  "miel comun 1kg": { c: 4900, d: 4780, e: 4710, g: 4690, i: 4620, j: 4560, k: 4400, l: 4100 },
+  "pasas de uva": { c: 5300, d: 5180, e: 5110, g: 5090, i: 5020, j: 4960, k: 4800, l: 4500 },
+  "arandanos deshidratados": { c: 17300, d: 17180, e: 17110, g: 17090, i: 17020, j: 16960, k: 16800, l: 17300 },
+  "tutucas con azucar": { c: 5400, d: 5280, e: 5210, g: 5190, i: 5120, j: 5060, k: 4900, l: 5400 },
+  "tutucas con edulcorante": { c: 7600, d: 7480, e: 7410, g: 7390, i: 7320, j: 7260, k: 7100, l: 7600 },
+  "yerba tucangua": { c: 5100, d: 4980, e: 4910, g: 4890, i: 4820, j: 4760, k: 4600, l: 4300 },
+  "fruta escurrida comun": { c: 5900, d: 5780, e: 5710, g: 5690, i: 5620, j: 5560, k: 5400, l: 5900 },
+  "fruta escurrida especial": { c: 6200, d: 6080, e: 6010, g: 5990, i: 5920, j: 5860, k: 5700, l: 6200 },
+  "pasta de mani x350gr": { c: 3650, d: 3530, e: 3460, g: 3440, i: 3370, j: 3310, k: 3150, l: 3650 },
+  "colageno en polvo x90gr": { c: 2000, d: 1880, e: 1810, g: 1790, i: 1720, j: 1660, k: 1500, l: 2000 },
+  "maca negra x150gr": { c: 2700, d: 2580, e: 2510, g: 2490, i: 2420, j: 2360, k: 2200, l: 2700 },
+  "maca blanca x500gr": { c: 3300, d: 3180, e: 3110, g: 3090, i: 3020, j: 2960, k: 2800, l: 3300 },
+  "ciruela sin carozo": { c: 9300, d: 9180, e: 9110, g: 9090, i: 9020, j: 8960, k: 8800, l: 9300 },
+  "aceite de coco x200cc": { c: 5500, d: 5380, e: 5310, g: 5290, i: 5220, j: 5160, k: 5000, l: 5500 },
+  "moringa x90gr": { c: 2000, d: 1880, e: 1810, g: 1790, i: 1720, j: 1660, k: 1500, l: 2000 },
+  "chalitas de almendras": { c: 10600, d: 10480, e: 10410, g: 10390, i: 10320, j: 10260, k: 10100, l: 10600 },
+  "pepas de almendras con membrillo": { c: 13000, d: 12880, e: 12810, g: 12790, i: 12720, j: 12660, k: 12500, l: 13000 },
+  "salsa de soja x500cc": { c: 4900, d: 4780, e: 4710, g: 4690, i: 4620, j: 4560, k: 4400, l: 4900 },
+  "citrato de magnesio": { c: 13800, d: 13680, e: 13610, g: 13590, i: 13520, j: 13460, k: 13300, l: 13800 },
+  "flor de hibiscus jamaica": { c: 20400, d: 20280, e: 20210, g: 20190, i: 20120, j: 20060, k: 19900, l: 20400 },
+  "stevia boliviana": { c: 8400, d: 8280, e: 8210, g: 8190, i: 8120, j: 8060, k: 7900, l: 8400 },
+  "gelatina sin sabor": { c: 20600, d: 20480, e: 20410, g: 20390, i: 20320, j: 20260, k: 20100, l: 20600 },
+  "coco rallado": { c: 7900, d: 7780, e: 7710, g: 7690, i: 7620, j: 7560, k: 7400, l: 7900 },
+  "bicarbonato de sodio": { c: 3500, d: 3380, e: 3310, g: 3290, i: 3220, j: 3160, k: 3000, l: 2700 },
+  "azucar impalpable": { c: 3800, d: 3680, e: 3610, g: 3590, i: 3520, j: 3460, k: 3300, l: 3800 },
+  "azucar mascabo": { c: 5900, d: 5780, e: 5710, g: 5690, i: 5620, j: 5560, k: 5400, l: 5900 },
+  "polvo de hornear": { c: 5700, d: 5580, e: 5510, g: 5490, i: 5420, j: 5360, k: 5200, l: 5700 },
+  "cacao amargo": { c: 12300, d: 12180, e: 12110, g: 12090, i: 12020, j: 11960, k: 11800, l: 12300 },
+  "harina de arroz": { c: 2900, d: 2780, e: 2710, g: 2690, i: 2620, j: 2560, k: 2400, l: 2900 },
+  "fecula de mandioca": { c: 4100, d: 3980, e: 3910, g: 3890, i: 3820, j: 3760, k: 3600, l: 4100 },
+  "harina de almendras con piel": { c: 3800, d: 3680, e: 3610, g: 3590, i: 3520, j: 3460, k: 3300, l: 3800 },
+  "harina de avena": { c: 3100, d: 2980, e: 2910, g: 2890, i: 2820, j: 2760, k: 2600, l: 3100 },
+  "harina integral x25kg": { c: 4900, d: 4780, e: 4710, g: 4690, i: 4620, j: 4560, k: 4400, l: 4900 },
+  "aji molido": { c: 5400, d: 5280, e: 5210, g: 5190, i: 5120, j: 5060, k: 4900, l: 5400 },
+  "ajo en polvo": { c: 6550, d: 6430, e: 6360, g: 6340, i: 6270, j: 6210, k: 6050, l: 6550 },
+  "ajo granulado nacional": { c: 13100, d: 12980, e: 12910, g: 12890, i: 12820, j: 12760, k: 12600, l: 13100 },
+  "cebolla desecada": { c: 12800, d: 12680, e: 12610, g: 12590, i: 12520, j: 12460, k: 12300, l: 12800 },
+  "chimichurri": { c: 6200, d: 6080, e: 6010, g: 5990, i: 5920, j: 5860, k: 5700, l: 6200 },
+  "comino molido": { c: 6700, d: 6580, e: 6510, g: 6490, i: 6420, j: 6360, k: 6200, l: 6700 },
+  "condimento para pizza": { c: 5750, d: 5630, e: 5560, g: 5540, i: 5470, j: 5410, k: 5250, l: 5750 },
+  "curcuma molida": { c: 6400, d: 6280, e: 6210, g: 6190, i: 6120, j: 6060, k: 5900, l: 6400 },
+  "curry molido": { c: 8300, d: 8180, e: 8110, g: 8090, i: 8020, j: 7960, k: 7800, l: 8300 },
+  "jengibre molido": { c: 12500, d: 12380, e: 12310, g: 12290, i: 12220, j: 12160, k: 12000, l: 12500 },
+  "laurel en hojas": { c: 14100, d: 13980, e: 13910, g: 13890, i: 13820, j: 13760, k: 13600, l: 14100 },
+  "nuez moscada molida": { c: 20200, d: 20080, e: 20010, g: 19990, i: 19920, j: 19860, k: 19700, l: 20200 },
+  "oregano": { c: 6000, d: 5880, e: 5810, g: 5790, i: 5720, j: 5660, k: 5500, l: 6000 },
+  "perejil": { c: 10200, d: 10080, e: 10010, g: 9990, i: 9920, j: 9860, k: 9700, l: 10200 },
+  "pimienta blanca molida": { c: 15300, d: 15180, e: 15110, g: 15090, i: 15020, j: 14960, k: 14800, l: 15300 },
+  "pimienta negra molida": { c: 14400, d: 14280, e: 14210, g: 14190, i: 14120, j: 14060, k: 13900, l: 14400 },
+  "pimenton dulce extra": { c: 6800, d: 6680, e: 6610, g: 6590, i: 6520, j: 6460, k: 6300, l: 6800 },
+  "provenzal": { c: 6600, d: 6480, e: 6410, g: 6390, i: 6320, j: 6260, k: 6100, l: 6600 },
+  "albahaca": { c: 10000, d: 9880, e: 9810, g: 9790, i: 9720, j: 9660, k: 9500, l: 10000 },
+  "canela molida": { c: 10500, d: 10380, e: 10310, g: 10290, i: 10220, j: 10160, k: 10000, l: 10500 },
+  "romero": { c: 9600, d: 9480, e: 9410, g: 9390, i: 9320, j: 9260, k: 9100, l: 9600 },
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   const carritoMenu = document.getElementById("carrito-menu");
   if (carritoMenu && !carritoMenu.innerHTML.trim()) {
@@ -137,7 +235,7 @@ function enviarPedidoWhatsapp() {
   const tipoCatalogo = getTipoCatalogo();
   const totalProductos = carrito.reduce((sum, item) => sum + item.cantidad, 0);
   const totalPacks = carrito
-    .filter(item => item.tipo === "pack")
+    .filter(item => isPackProduct(item.nombre) || item.tipo === "pack")
     .reduce((sum, item) => sum + item.cantidad, 0);
 
   let minimoUnidades;
@@ -164,38 +262,34 @@ function enviarPedidoWhatsapp() {
   }
 
   let mensaje = "🏷️  Solicitud de Pedido:%0A";
-  const descuentoUnidad = calcularDescuentoPorUnidad();
+  const totalUnidades = totalProductos;
 
   carrito.forEach(item => {
-    const precioOriginalTotal = item.precioBase * item.cantidad;
-    const descuentoTotal = descuentoUnidad * item.cantidad;
-    const precioFinal = precioOriginalTotal - descuentoTotal;
-    const precioUnitarioConDesc = item.precioBase - descuentoUnidad;
+    const precioUnitario = obtenerPrecioUnitarioCalculado(item, totalUnidades, tipoCatalogo);
+    const precioFinal = precioUnitario * item.cantidad;
 
     if (item.cantidad === 1) {
       mensaje += `- ${encodeURIComponent(item.nombre)}: $${precioFinal.toLocaleString()}`;
     } else {
-      mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidades | ($${precioUnitarioConDesc.toLocaleString()} x ${item.cantidad}un) | $${precioFinal.toLocaleString()}`;
+      mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidades | ($${precioUnitario.toLocaleString()} x ${item.cantidad}un) | $${precioFinal.toLocaleString()}`;
     }
     mensaje += `%0A`;
   });
 
   const total = calcularTotalConDescuento();
-  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
-  if (descuentoUnidad > 0) {
-    let umbral = "";
-    if (tipoCatalogo === "personal") {
-      if (totalUnidades >= 12) umbral = "12 unidades";
-      else if (totalUnidades >= 7) umbral = "7 unidades";
-    } else if (tipoCatalogo === "distribuidor") {
-      if (totalUnidades >= 20) umbral = "20 unidades";
-    } else if (tipoCatalogo === "mayorista") {
-      if (totalUnidades >= 50) umbral = "50 unidades";
-      else if (totalUnidades >= 30) umbral = "30 unidades";
-      else if (totalUnidades >= 12) umbral = "12 unidades";
-    }
-    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas | Descuento aplicado por ${umbral}%0A`;
+  let umbral = "";
+  if (tipoCatalogo === "personal") {
+    if (totalUnidades >= 12) umbral = "escala 12+ unidades";
+    else if (totalUnidades >= 7) umbral = "escala 7+ unidades";
+  } else if (tipoCatalogo === "mayorista") {
+    if (totalUnidades >= 50) umbral = "escala 50+ unidades";
+    else if (totalUnidades >= 30) umbral = "escala 30+ unidades";
+    else if (totalUnidades >= 12) umbral = "escala 12+ unidades";
+  }
+
+  if (umbral) {
+    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas | Precios actualizados por ${umbral}%0A`;
   } else {
     mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas %0A`;
   }
@@ -207,31 +301,85 @@ function enviarPedidoWhatsapp() {
   window.open(urlWhatsapp, "_blank", "noopener");
 }
 
-// Descuentos por catálogo
-function calcularDescuentoPorUnidad() {
-  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-  const tipoCatalogo = getTipoCatalogo();
+function normalizeNameForDb(name) {
+  if (!name) return "";
+  name = name.replace(/<h3[^>]*>.*?<\/h3>/gi, "");
+  name = name.toLowerCase();
+  name = name.replace(/á/g, "a").replace(/é/g, "e").replace(/í/g, "i").replace(/ó/g, "o").replace(/ú/g, "u").replace(/ñ/g, "n");
+  name = name.replace(/[^\w\s]/g, "");
+  name = name.replace(/\s+/g, " ").trim();
+  return name;
+}
+
+function extractPackUnits(name) {
+  const m = name.match(/(?:pack|bolsa|unidades|x)\s*(?:de\s*)?(\d+)/i);
+  if (m && m[1]) {
+    const u = parseInt(m[1]);
+    if (u > 0) return u;
+  }
+  if (/pack/i.test(name)) return 20;
+  return 1;
+}
+
+function isPackProduct(name) {
+  const lower = name.toLowerCase();
+  return lower.includes("pack") || lower.includes("bulto") || lower.includes("20kg") || lower.includes("10kg") || lower.includes("bolsa de");
+}
+
+function findDbItem(nombre) {
+  const key = normalizeNameForDb(nombre);
+  if (PRECIOS_DB[key]) return PRECIOS_DB[key];
+
+  for (const k in PRECIOS_DB) {
+    if (key.includes(k) || k.includes(key)) return PRECIOS_DB[k];
+  }
+  return null;
+}
+
+function obtenerPrecioUnitarioCalculado(item, totalUnidades, tipoCatalogo) {
+  const isPack = isPackProduct(item.nombre) || item.tipo === "pack";
+  const dbItem = findDbItem(item.nombre);
+
+  if (isPack) {
+    const units = extractPackUnits(item.nombre);
+    if (dbItem && dbItem.l > 0) {
+      return dbItem.l * units;
+    }
+    return item.precioBase;
+  }
+
+  if (!dbItem) return item.precioBase;
 
   if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 12) return 190;
-    if (totalUnidades >= 7) return 120;
-    return 0;
+    if (totalUnidades >= 12) return dbItem.e;
+    if (totalUnidades >= 7) return dbItem.d;
+    return dbItem.c;
   }
 
   if (tipoCatalogo === "mayorista") {
-    if (totalUnidades >= 50) return 340;
-    if (totalUnidades >= 30) return 280;
-    if (totalUnidades >= 10) return 210;
-    return 0;
+    if (totalUnidades >= 50) return dbItem.j;
+    if (totalUnidades >= 30) return dbItem.i;
+    if (totalUnidades >= 12) return dbItem.g;
+    return dbItem.c; // Initial Mayorista price = Personal x1 (Col C)!
   }
 
-  return 0;
+  if (tipoCatalogo === "distribuidor") {
+    return dbItem.k;
+  }
+
+  return dbItem.c;
 }
 
 function calcularTotalConDescuento() {
-  const descuentoUnidad = calcularDescuentoPorUnidad();
-  return carrito.reduce((sum, item) => sum + (item.precioBase - descuentoUnidad) * item.cantidad, 0);
+  const tipoCatalogo = getTipoCatalogo();
+  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+
+  return carrito.reduce((sum, item) => {
+    const precioUnitario = obtenerPrecioUnitarioCalculado(item, totalUnidades, tipoCatalogo);
+    return sum + (precioUnitario * item.cantidad);
+  }, 0);
 }
+
 
 // Actualizar HTML del carrito
 function actualizarCarrito() {
@@ -249,151 +397,28 @@ function actualizarCarrito() {
     return;
   }
 
-  carrito.forEach((producto, index) => {
-    const item = document.createElement("div");
-    item.classList.add("carrito-item");
+  const tipoCatalogo = getTipoCatalogo();
+  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 
-    const precioUnitario = producto.precioBase - calcularDescuentoPorUnidad();
+  carrito.forEach((item, index) => {
+    const precioUnitario = obtenerPrecioUnitarioCalculado(item, totalUnidades, tipoCatalogo);
+    const subtotal = precioUnitario * item.cantidad;
 
-    item.innerHTML = `
-      <span class="nombre">${producto.nombre}</span>
+    const div = document.createElement("div");
+    div.className = "carrito-item";
+    div.innerHTML = `
+      <span class="nombre">${item.nombre}</span>
       <div class="acciones">
-        <button class="menos" data-index="${index}">–</button>
-        <span class="cantidad">${producto.cantidad}</span>
+        <button class="menos" data-index="${index}">-</button>
+        <span class="cantidad">${item.cantidad}</span>
         <button class="mas" data-index="${index}">+</button>
       </div>
-      <span class="precio">$${(precioUnitario * producto.cantidad).toLocaleString()}</span>
+      <span class="precio">$${subtotal.toLocaleString()}</span>
     `;
-
-    carritoItems.appendChild(item);
+    carritoItems.appendChild(div);
   });
 
   const total = calcularTotalConDescuento();
-  const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-  const tipoCatalogo = getTipoCatalogo();
-
-  let mensajeDescuento = "";
-  if (tipoCatalogo === "personal") {
-    if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
-    else if (totalUnidades >= 7) mensajeDescuento = "Descuento por 7 unidades";
-  }
-  if (tipoCatalogo === "distribuidor") {
-    if (totalUnidades >= 100) mensajeDescuento = "Descuento por 100 unidades";
-    else if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
-  }
-  if (tipoCatalogo === "mayorista") {
-    if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
-    else if (totalUnidades >= 30) mensajeDescuento = "Descuento por 30 unidades";
-    else if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
-  }
-
-  if (totalPedidoSpan) {
-    totalPedidoSpan.textContent = `🧾 Total: $${total.toLocaleString()} ${mensajeDescuento ? "| " + mensajeDescuento : ""}`;
-  }
-  if (cantidadItemsSpan) {
-    cantidadItemsSpan.textContent = `${totalUnidades}un seleccionadas`;
-  }
+  if (totalPedidoSpan) totalPedidoSpan.textContent = `Total: $${total.toLocaleString()}`;
+  if (cantidadItemsSpan) cantidadItemsSpan.textContent = `${totalUnidades} un.`;
 }
-
-// SINCRONIZACIÓN EN VIVO CON GOOGLE SHEETS
-document.addEventListener("DOMContentLoaded", function sincronizarPreciosGoogleSheets() {
-  const SPREADSHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1uep9aGKtdhokeBQhvJkBlGiF2CbCqYftQBnirM0nBmo/export?format=csv";
-  const tipo = getTipoCatalogo();
-  if (!tipo) return;
-
-  function limpiarTexto(str) {
-    if (!str) return "";
-    return str.toLowerCase()
-      .replace(/[áàäâ]/g, 'a')
-      .replace(/[éèëê]/g, 'e')
-      .replace(/[íìïî]/g, 'i')
-      .replace(/[óòöô]/g, 'o')
-      .replace(/[úùüû]/g, 'u')
-      .replace(/ñ/g, 'n')
-      .replace(/c\//g, 'con')
-      .replace(/premiun/g, 'premium')
-      .replace(/[^a-z0-9]/g, '');
-  }
-
-  const titleMap = {
-    "aceitedeoliva12l": "aceitedeoliva12l",
-    "aceitedeoliva1l": "aceitedeoliva1l",
-    "miel12kg": "mielcomun12kg",
-    "miel1kg": "mielcomun1kg",
-    "mielpremiumagroecologica12kg": "mielpuraagroecologica12kg",
-    "acitunasverdespremiun00012kg": "aceitunasverdespremium00012kg",
-    "aceitunasverdespremium00012kg": "aceitunasverdespremium00012kg"
-  };
-
-  fetch(SPREADSHEET_CSV_URL)
-    .then(res => {
-      if (!res.ok) throw new Error("Error HTTP al descargar precios de Google Sheets");
-      return res.text();
-    })
-    .then(csvText => {
-      const lines = csvText.split(/\r?\n/);
-      const priceMap = {};
-
-      lines.forEach(line => {
-        if (!line.trim() || line.includes("Productos,Precio de Costo") || line.includes(",,Consumo Personal")) return;
-        
-        const fields = [];
-        let inQuotes = false;
-        let current = "";
-        for (let i = 0; i < line.length; i++) {
-          const char = line[i];
-          if (char === '"') {
-            inQuotes = !inQuotes;
-          } else if (char === ',' && !inQuotes) {
-            fields.push(current.trim());
-            current = "";
-          } else {
-            current += char;
-          }
-        }
-        fields.push(current.trim());
-
-        if (fields.length > 2) {
-          const rawName = fields[0].replace(/"/g, '').trim();
-          const personalX1 = fields[2].replace(/"/g, '').trim();
-          const mayorista12 = fields.length > 6 ? fields[6].replace(/"/g, '').trim() : "";
-          const distribuidor = fields.length > 10 ? fields[10].replace(/"/g, '').trim() : "";
-          const pack = fields.length > 11 ? fields[11].replace(/"/g, '').trim() : "";
-
-          if (personalX1 && personalX1.startsWith("$")) {
-            let precioFinal = personalX1;
-            if (tipo === "mayorista" && mayorista12) precioFinal = mayorista12;
-            if (tipo === "distribuidor") precioFinal = distribuidor || pack || personalX1;
-
-            const key = limpiarTexto(rawName);
-            if (key) priceMap[key] = precioFinal;
-          }
-        }
-      });
-
-      document.querySelectorAll(".producto").forEach(prod => {
-        const h2 = prod.querySelector("h2");
-        const pPrice = prod.querySelector("p");
-        if (!h2 || !pPrice) return;
-
-        let h2Clean = limpiarTexto(h2.textContent);
-        if (titleMap[h2Clean]) {
-          h2Clean = titleMap[h2Clean];
-        }
-
-        if (priceMap[h2Clean]) {
-          pPrice.textContent = priceMap[h2Clean];
-        } else {
-          for (const [key, val] of Object.entries(priceMap)) {
-            if (h2Clean.includes(key) || key.includes(h2Clean)) {
-              pPrice.textContent = val;
-              break;
-            }
-          }
-        }
-      });
-    })
-    .catch(err => {
-      console.log("No se pudo cargar la sincronización en vivo, usando precios estáticos por defecto:", err);
-    });
-});
