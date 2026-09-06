@@ -55,9 +55,9 @@ document.querySelectorAll(".boton-agregar").forEach((boton) => {
     const nombre = productoDiv.querySelector("h2").textContent.trim();
     const precioTexto = productoDiv.querySelector("p").textContent.trim();
     const cantidadInput = productoDiv.querySelector(".cantidad");
+    const cantidad = cantidadInput ? (parseInt(cantidadInput.value) || 1) : 1;
     const tipoProducto = productoDiv.dataset.tipo || "normal";
 
-    const cantidad = parseInt(cantidadInput.value) || 1;
     const precioBase = parseFloat(precioTexto.replace("$", "").replace(/\./g, "").replace(/,/g, ""));
 
     const existente = carrito.find(item => item.nombre === nombre);
@@ -69,7 +69,9 @@ document.querySelectorAll(".boton-agregar").forEach((boton) => {
     }
 
     actualizarCarrito();
-    cantidadInput.value = "1";
+    if (cantidadInput) {
+      cantidadInput.value = "1";
+    }
 
     if (!yaSeMostroCarrito) {
       carritoMenu.classList.remove("oculto");
