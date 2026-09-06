@@ -77,9 +77,21 @@
         </footer>     
         
     <div id="carrito-menu" class="oculto">
-        <h3>Carrito de compras</h3>
+        <div class="carrito-header">
+            <h3>Carrito de compras</h3>
+            <button id="cerrar-carrito" aria-label="Cerrar">&times;</button>
+        </div>
         <div id="carrito-items"></div>
-        <button id="cerrar-carrito">Cerrar</button>
+        <div class="carrito-footer">
+            <div class="carrito-resumen">
+                <span id="cantidad-items"></span>
+                <span id="total-pedido"></span>
+            </div>
+            <input type="text" id="ubicacion-entrega" placeholder="ðŸ“ DirecciÃ³n de entrega">
+            <button id="btn-enviar-whatsapp"><i class="fa-brands fa-whatsapp"></i> Enviar pedido por WhatsApp</button>
+        </div>
+    </div>
+        
     </div>
     <script src="script.js?v=2.0" defer></script>
 </body>
