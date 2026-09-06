@@ -190,8 +190,8 @@ nav a {
 
 .banner-deco {
     position: absolute;
-    width: 140px;
-    height: 140px;
+    width: 135px;
+    height: 135px;
     object-fit: cover;
     border-radius: 0 !important;
     border: none !important;
@@ -199,8 +199,10 @@ nav a {
     background: transparent !important;
     pointer-events: none;
     z-index: 1;
-    opacity: 0.85;
+    opacity: 0.8;
     mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 95%);
+    mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 95%);
 }
 
 .deco-left {
