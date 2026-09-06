@@ -457,6 +457,7 @@ nav a {
     padding: 0.2em 0.9em;
     text-align: left;
     background-color: white;
+    margin-top: auto;
 }
 
 .producto-acciones {
@@ -1062,6 +1063,7 @@ footer {
     .producto p {
         font-size: 1.18em !important;
         padding: 0.2em 0.5em !important;
+        margin-top: auto !important;
     }
 
     .producto-acciones {
