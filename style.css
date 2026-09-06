@@ -197,7 +197,9 @@ nav a {
     background: transparent !important;
     pointer-events: none;
     z-index: 1;
-    opacity: 0.95;
+    opacity: 1 !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
 }
 
 .banner-tag,
@@ -209,19 +211,20 @@ nav a {
     z-index: 2;
 }
 
+/* DESKTOP (>= 992px) */
 .deco-left {
-    width: 310px;
-    height: 310px;
-    top: -35px;
-    left: -70px;
-    transform: rotate(75deg);
+    width: 440px;
+    height: 440px;
+    top: -45px;
+    left: -140px;
 }
 
 .deco-right {
-    width: 310px;
-    height: 310px;
-    top: -25px;
-    right: -70px;
+    width: 440px;
+    height: 440px;
+    top: -45px;
+    right: -130px;
+    transform: rotate(-35deg);
 }
 
 .banner-tag {
@@ -1174,57 +1177,61 @@ footer {
 
 
 
+
+
 /* RESPONSIVE DECORATION RULES */
 @media screen and (max-width: 991px) and (min-width: 769px) {
     .deco-left {
-        width: 220px !important;
-        height: 220px !important;
-        top: -25px !important;
-        left: -45px !important;
-        transform: rotate(75deg) !important;
+        width: 320px !important;
+        height: 320px !important;
+        top: -35px !important;
+        left: -95px !important;
     }
     .deco-right {
-        width: 220px !important;
-        height: 220px !important;
-        top: -20px !important;
-        right: -45px !important;
+        width: 320px !important;
+        height: 320px !important;
+        top: -35px !important;
+        right: -85px !important;
+        transform: rotate(-35deg) !important;
     }
 }
 
 @media screen and (max-width: 768px) {
     .banner-deco {
         display: block !important;
-        opacity: 0.92 !important;
+        opacity: 1 !important;
+        filter: none !important;
     }
 
     .deco-left {
-        width: 105px !important;
-        height: 105px !important;
-        top: -15px !important;
-        left: -28px !important;
-        transform: rotate(75deg) !important;
+        width: 170px !important;
+        height: 170px !important;
+        top: -20px !important;
+        left: -50px !important;
     }
 
     .deco-right {
-        width: 105px !important;
-        height: 105px !important;
-        top: -12px !important;
-        right: -28px !important;
+        width: 170px !important;
+        height: 170px !important;
+        top: -20px !important;
+        right: -45px !important;
+        transform: rotate(-35deg) !important;
     }
 }
 
 @media screen and (max-width: 380px) {
     .deco-left {
-        width: 85px !important;
-        height: 85px !important;
-        top: -12px !important;
-        left: -22px !important;
+        width: 140px !important;
+        height: 140px !important;
+        top: -15px !important;
+        left: -42px !important;
     }
 
     .deco-right {
-        width: 85px !important;
-        height: 85px !important;
-        top: -10px !important;
-        right: -22px !important;
+        width: 140px !important;
+        height: 140px !important;
+        top: -15px !important;
+        right: -38px !important;
+        transform: rotate(-35deg) !important;
     }
 }
