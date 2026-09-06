@@ -1,64 +1,77 @@
-const carritoMenu = document.getElementById("carrito-menu");
-if (carritoMenu) {
-  carritoMenu.innerHTML = `
-    <div class="carrito-header">
-      <h3>Carrito de compras</h3>
-      <button id="cerrar-carrito" aria-label="Cerrar">&times;</button>
-    </div>
-    <div id="carrito-items"></div>
-    <div class="carrito-footer">
-      <div class="carrito-resumen">
-        <span id="cantidad-items"></span>
-        <span id="total-pedido"></span>
+document.addEventListener("DOMContentLoaded", () => {
+  const carritoMenu = document.getElementById("carrito-menu");
+  if (carritoMenu && !carritoMenu.innerHTML.trim()) {
+    carritoMenu.innerHTML = `
+      <div class="carrito-header">
+        <h3>Carrito de compras</h3>
+        <button id="cerrar-carrito" aria-label="Cerrar">&times;</button>
       </div>
-      <input type="text" id="ubicacion-entrega" placeholder="📍 Dirección de entrega">
-      <button id="btn-enviar-whatsapp"><i class="fa-brands fa-whatsapp"></i> Enviar pedido por WhatsApp</button>
-    </div>
-  `;
-}
+      <div id="carrito-items"></div>
+      <div class="carrito-footer">
+        <div class="carrito-resumen">
+          <span id="cantidad-items"></span>
+          <span id="total-pedido"></span>
+        </div>
+        <input type="text" id="ubicacion-entrega" placeholder="📍 Dirección de entrega">
+        <button id="btn-enviar-whatsapp"><i class="fa-brands fa-whatsapp"></i> Enviar pedido por WhatsApp</button>
+      </div>
+    `;
+  }
+});
 
+// State
 const carrito = [];
 let yaSeMostroCarrito = false;
-
-const carritoItems = document.getElementById("carrito-items");
-const btnCerrarCarrito = document.getElementById("cerrar-carrito");
-const iconoCarrito = document.getElementById("carrito-fijo");
-const tipoCatalogo = document.body.dataset.catalogo;
-const inputUbicacion = document.getElementById("ubicacion-entrega");
-const botonEnviarWhatsapp = document.getElementById("btn-enviar-whatsapp");
-const totalPedidoSpan = document.getElementById("total-pedido");
-const cantidadItemsSpan = document.getElementById("cantidad-items");
 const numeroWhatsapp = "543517612075";
 
-// Mostrar/ocultar el carrito o redirigir a catálogo
-if (iconoCarrito) {
-  iconoCarrito.addEventListener("click", (e) => {
+function getTipoCatalogo() {
+  return document.body ? document.body.dataset.catalogo : null;
+}
+
+// Global Event Delegation for Clicks (Chrome, Firefox, Edge, Mobile safe!)
+document.addEventListener("click", (e) => {
+  const target = e.target;
+  const carritoMenu = document.getElementById("carrito-menu");
+  const tipoCatalogo = getTipoCatalogo();
+
+  // 1. Floating Cart Icon Click
+  const iconoCarrito = target.closest("#carrito-fijo");
+  if (iconoCarrito) {
     e.preventDefault();
     if (tipoCatalogo) {
-      carritoMenu.classList.toggle("oculto");
+      if (carritoMenu) carritoMenu.classList.toggle("oculto");
     } else {
       window.location.href = "catalogo-personal.html";
     }
-  });
-}
+    return;
+  }
 
-if (btnCerrarCarrito) {
-  btnCerrarCarrito.addEventListener("click", () => {
-    carritoMenu.classList.add("oculto");
-  });
-}
+  // 2. Close Cart Button Click
+  const btnCerrar = target.closest("#cerrar-carrito");
+  if (btnCerrar) {
+    e.preventDefault();
+    if (carritoMenu) carritoMenu.classList.add("oculto");
+    return;
+  }
 
-// Agregar productos
-document.querySelectorAll(".boton-agregar").forEach((boton) => {
-  boton.addEventListener("click", () => {
-    const productoDiv = boton.closest(".producto");
-    const nombre = productoDiv.querySelector("h2").textContent.trim();
-    const precioTexto = productoDiv.querySelector("p").textContent.trim();
+  // 3. Add to Cart Button Click
+  const btnAgregar = target.closest(".boton-agregar");
+  if (btnAgregar) {
+    e.preventDefault();
+    const productoDiv = btnAgregar.closest(".producto");
+    if (!productoDiv) return;
+
+    const h2 = productoDiv.querySelector("h2");
+    const pPrice = productoDiv.querySelector("p");
+    if (!h2 || !pPrice) return;
+
+    const nombre = h2.textContent.trim();
+    const precioTexto = pPrice.textContent.trim();
     const cantidadInput = productoDiv.querySelector(".cantidad");
     const cantidad = cantidadInput ? (parseInt(cantidadInput.value) || 1) : 1;
     const tipoProducto = productoDiv.dataset.tipo || "normal";
 
-    const precioBase = parseFloat(precioTexto.replace("$", "").replace(/\./g, "").replace(/,/g, ""));
+    const precioBase = parseFloat(precioTexto.replace("$", "").replace(/\./g, "").replace(/,/g, "")) || 0;
 
     const existente = carrito.find(item => item.nombre === nombre);
 
@@ -69,31 +82,65 @@ document.querySelectorAll(".boton-agregar").forEach((boton) => {
     }
 
     actualizarCarrito();
-    if (cantidadInput) {
-      cantidadInput.value = "1";
-    }
+    if (cantidadInput) cantidadInput.value = "1";
 
-    if (!yaSeMostroCarrito) {
+    if (carritoMenu) {
       carritoMenu.classList.remove("oculto");
       yaSeMostroCarrito = true;
     }
-  });
+    return;
+  }
+
+  // 4. Cart Item Increase (+)
+  const btnMas = target.closest(".mas");
+  if (btnMas) {
+    e.preventDefault();
+    const index = parseInt(btnMas.dataset.index);
+    if (!isNaN(index) && carrito[index]) {
+      carrito[index].cantidad++;
+      actualizarCarrito();
+    }
+    return;
+  }
+
+  // 5. Cart Item Decrease (-)
+  const btnMenos = target.closest(".menos");
+  if (btnMenos) {
+    e.preventDefault();
+    const index = parseInt(btnMenos.dataset.index);
+    if (!isNaN(index) && carrito[index]) {
+      if (carrito[index].cantidad > 1) {
+        carrito[index].cantidad--;
+      } else {
+        carrito.splice(index, 1);
+      }
+      actualizarCarrito();
+    }
+    return;
+  }
+
+  // 6. Send WhatsApp Order Button Click
+  const btnWpp = target.closest("#btn-enviar-whatsapp");
+  if (btnWpp) {
+    e.preventDefault();
+    enviarPedidoWhatsapp();
+    return;
+  }
 });
 
-// Enviar por WhatsApp
-botonEnviarWhatsapp.addEventListener("click", () => {
+function enviarPedidoWhatsapp() {
   if (carrito.length === 0) {
     alert("El carrito está vacío");
     return;
   }
 
+  const tipoCatalogo = getTipoCatalogo();
   const totalProductos = carrito.reduce((sum, item) => sum + item.cantidad, 0);
   const totalPacks = carrito
     .filter(item => item.tipo === "pack")
     .reduce((sum, item) => sum + item.cantidad, 0);
 
   let minimoUnidades;
-
   if (totalPacks > 0) {
     minimoUnidades = 1;
   } else {
@@ -108,10 +155,11 @@ botonEnviarWhatsapp.addEventListener("click", () => {
     return;
   }
 
-  const ubicacion = inputUbicacion.value.trim();
+  const inputUbicacion = document.getElementById("ubicacion-entrega");
+  const ubicacion = inputUbicacion ? inputUbicacion.value.trim() : "";
   if (!ubicacion) {
     alert("Debes ingresar una ubicación válida para enviar el pedido.");
-    inputUbicacion.focus();
+    if (inputUbicacion) inputUbicacion.focus();
     return;
   }
 
@@ -129,7 +177,6 @@ botonEnviarWhatsapp.addEventListener("click", () => {
     } else {
       mensaje += `- ${encodeURIComponent(item.nombre)}: ${item.cantidad} unidades | ($${precioUnitarioConDesc.toLocaleString()} x ${item.cantidad}un) | $${precioFinal.toLocaleString()}`;
     }
-
     mensaje += `%0A`;
   });
 
@@ -138,7 +185,6 @@ botonEnviarWhatsapp.addEventListener("click", () => {
 
   if (descuentoUnidad > 0) {
     let umbral = "";
-
     if (tipoCatalogo === "personal") {
       if (totalUnidades >= 12) umbral = "12 unidades";
       else if (totalUnidades >= 7) umbral = "7 unidades";
@@ -149,29 +195,22 @@ botonEnviarWhatsapp.addEventListener("click", () => {
       else if (totalUnidades >= 30) umbral = "30 unidades";
       else if (totalUnidades >= 12) umbral = "12 unidades";
     }
-
     mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas | Descuento aplicado por ${umbral}%0A`;
   } else {
-    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas %0A` ;
+    mensaje += `%0A🧾 Total: $${total.toLocaleString()} | ${totalUnidades.toLocaleString()}un seleccionadas %0A`;
   }
 
-  mensaje += ``;
   mensaje += `%0A📍 Entrega en: ${encodeURIComponent(ubicacion)}%0A`;
   mensaje += `%0A¡Gracias!`;
 
   const urlWhatsapp = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${mensaje}`;
-  const link = document.createElement("a");
-  link.href = urlWhatsapp;
-  link.target = "_blank";
-  link.rel = "noopener";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-});
+  window.open(urlWhatsapp, "_blank", "noopener");
+}
 
 // Descuentos por catálogo
 function calcularDescuentoPorUnidad() {
   const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+  const tipoCatalogo = getTipoCatalogo();
 
   if (tipoCatalogo === "personal") {
     if (totalUnidades >= 12) return 190;
@@ -189,12 +228,6 @@ function calcularDescuentoPorUnidad() {
   return 0;
 }
 
-
-function calcularAhorro() {
-  const descuentoUnidad = calcularDescuentoPorUnidad();
-  return carrito.reduce((sum, item) => sum + descuentoUnidad * item.cantidad, 0);
-}
-
 function calcularTotalConDescuento() {
   const descuentoUnidad = calcularDescuentoPorUnidad();
   return carrito.reduce((sum, item) => sum + (item.precioBase - descuentoUnidad) * item.cantidad, 0);
@@ -202,12 +235,17 @@ function calcularTotalConDescuento() {
 
 // Actualizar HTML del carrito
 function actualizarCarrito() {
+  const carritoItems = document.getElementById("carrito-items");
+  const totalPedidoSpan = document.getElementById("total-pedido");
+  const cantidadItemsSpan = document.getElementById("cantidad-items");
+  if (!carritoItems) return;
+
   carritoItems.innerHTML = "";
 
   if (carrito.length === 0) {
     carritoItems.innerHTML = '<p class="carrito-vacio">Tu carrito está vacío.</p>';
-    totalPedidoSpan.textContent = "";
-    cantidadItemsSpan.textContent = ""; 
+    if (totalPedidoSpan) totalPedidoSpan.textContent = "";
+    if (cantidadItemsSpan) cantidadItemsSpan.textContent = "";
     return;
   }
 
@@ -232,58 +270,35 @@ function actualizarCarrito() {
 
   const total = calcularTotalConDescuento();
   const totalUnidades = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+  const tipoCatalogo = getTipoCatalogo();
 
   let mensajeDescuento = "";
-
   if (tipoCatalogo === "personal") {
     if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
     else if (totalUnidades >= 7) mensajeDescuento = "Descuento por 7 unidades";
   }
-
   if (tipoCatalogo === "distribuidor") {
     if (totalUnidades >= 100) mensajeDescuento = "Descuento por 100 unidades";
     else if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
   }
-
   if (tipoCatalogo === "mayorista") {
     if (totalUnidades >= 50) mensajeDescuento = "Descuento por 50 unidades";
     else if (totalUnidades >= 30) mensajeDescuento = "Descuento por 30 unidades";
     else if (totalUnidades >= 12) mensajeDescuento = "Descuento por 12 unidades";
   }
 
-  totalPedidoSpan.textContent = `🧾 Total: $${total.toLocaleString()} ${mensajeDescuento ? "| " + mensajeDescuento : ""}`;
-  cantidadItemsSpan.textContent = `${totalUnidades}un seleccionadas`; 
-
-  agregarEventosBotonesCantidad();
-}
-
-// Botones + y -
-function agregarEventosBotonesCantidad() {
-  document.querySelectorAll(".mas").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const index = parseInt(btn.dataset.index);
-      carrito[index].cantidad++;
-      actualizarCarrito();
-    });
-  });
-
-  document.querySelectorAll(".menos").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const index = parseInt(btn.dataset.index);
-      if (carrito[index].cantidad > 1) {
-        carrito[index].cantidad--;
-      } else {
-        carrito.splice(index, 1);
-      }
-      actualizarCarrito();
-    });
-  });
+  if (totalPedidoSpan) {
+    totalPedidoSpan.textContent = `🧾 Total: $${total.toLocaleString()} ${mensajeDescuento ? "| " + mensajeDescuento : ""}`;
+  }
+  if (cantidadItemsSpan) {
+    cantidadItemsSpan.textContent = `${totalUnidades}un seleccionadas`;
+  }
 }
 
 // SINCRONIZACIÓN EN VIVO CON GOOGLE SHEETS
-(function sincronizarPreciosGoogleSheets() {
+document.addEventListener("DOMContentLoaded", function sincronizarPreciosGoogleSheets() {
   const SPREADSHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1uep9aGKtdhokeBQhvJkBlGiF2CbCqYftQBnirM0nBmo/export?format=csv";
-  const tipo = document.body.dataset.catalogo;
+  const tipo = getTipoCatalogo();
   if (!tipo) return;
 
   function limpiarTexto(str) {
@@ -381,8 +396,4 @@ function agregarEventosBotonesCantidad() {
     .catch(err => {
       console.log("No se pudo cargar la sincronización en vivo, usando precios estáticos por defecto:", err);
     });
-})();
-
-
-
-
+});

@@ -923,7 +923,7 @@ footer {
     .catalogo-header-banner {
         max-width: 100% !important;
         box-sizing: border-box !important;
-        padding: 0 0.8em !important;
+        padding: 0 0.6em !important;
         margin: 1.2em auto 1em auto !important;
         overflow: hidden !important;
     }
@@ -944,33 +944,50 @@ footer {
     }
 
     .banner-beneficios {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 0.5em !important;
-        padding: 0.6em 0.8em !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.3em !important;
+        padding: 0.8em 0.3em !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
 
     .chip-item {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        padding: 0.4em 0.6em !important;
-        gap: 0.6em !important;
+        padding: 0.3em 0.1em !important;
+        gap: 0.25em !important;
     }
 
     .chip-icono {
-        width: 2.2em !important;
-        height: 2.2em !important;
-        font-size: 1em !important;
+        width: 2.1em !important;
+        height: 2.1em !important;
+        font-size: 1.05em !important;
+        margin-bottom: 0.1em !important;
+    }
+
+    .chip-texto {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
     }
 
     .chip-val {
-        font-size: 1em !important;
+        font-size: 0.92em !important;
+        font-weight: 800 !important;
+        line-height: 1.15 !important;
     }
 
     .chip-lbl {
-        font-size: 0.78em !important;
+        font-size: 0.7em !important;
+        line-height: 1.15 !important;
+        margin-top: 0.15em !important;
     }
 
     .banner-nota {
@@ -1049,17 +1066,19 @@ footer {
     }
 
     #carrito-menu {
-        width: calc(100% - 1.5em) !important;
-        right: 0.75em !important;
-        left: 0.75em !important;
-        top: 4.8em !important;
+        width: calc(100% - 1em) !important;
+        right: 0.5em !important;
+        left: 0.5em !important;
+        top: 4.5em !important;
         max-height: 78vh !important;
         padding: 0.6em !important;
         gap: 0.25em !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
     }
 
     #carrito-items {
-        max-height: 42vh !important;
+        max-height: 40vh !important;
+        overflow-y: auto !important;
     }
 
     .wpp-contenedor {
