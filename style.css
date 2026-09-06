@@ -1179,6 +1179,8 @@ footer {
 
 
 
+
+
 /* RESPONSIVE DECORATION RULES */
 @media screen and (max-width: 991px) and (min-width: 769px) {
     .deco-left {
@@ -1203,35 +1205,37 @@ footer {
         filter: none !important;
     }
 
+    /* FRUTOS SECOS IZQUIERDA - SUBIDOS Y CON MAYOR RECORTE EXTERIOR */
     .deco-left {
-        width: 170px !important;
-        height: 170px !important;
-        top: -20px !important;
-        left: -50px !important;
+        width: 155px !important;
+        height: 155px !important;
+        top: -32px !important;
+        left: -68px !important;
     }
 
+    /* HOJAS DERECHA - ESQUINA SUPERIOR DERECHA */
     .deco-right {
-        width: 170px !important;
-        height: 170px !important;
-        top: -20px !important;
-        right: -45px !important;
+        width: 155px !important;
+        height: 155px !important;
+        top: -24px !important;
+        right: -55px !important;
         transform: rotate(-35deg) !important;
     }
 }
 
 @media screen and (max-width: 380px) {
     .deco-left {
-        width: 140px !important;
-        height: 140px !important;
-        top: -15px !important;
-        left: -42px !important;
+        width: 130px !important;
+        height: 130px !important;
+        top: -26px !important;
+        left: -58px !important;
     }
 
     .deco-right {
-        width: 140px !important;
-        height: 140px !important;
-        top: -15px !important;
-        right: -38px !important;
+        width: 130px !important;
+        height: 130px !important;
+        top: -20px !important;
+        right: -48px !important;
         transform: rotate(-35deg) !important;
     }
 }
