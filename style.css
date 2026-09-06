@@ -210,18 +210,18 @@ nav a {
 }
 
 .deco-left {
-    width: 220px;
-    height: 220px;
-    top: -15px;
-    left: -25px;
-    transform: rotate(90deg);
+    width: 310px;
+    height: 310px;
+    top: -35px;
+    left: -70px;
+    transform: rotate(75deg);
 }
 
 .deco-right {
-    width: 220px;
-    height: 220px;
-    top: -10px;
-    right: -25px;
+    width: 310px;
+    height: 310px;
+    top: -25px;
+    right: -70px;
 }
 
 .banner-tag {
@@ -1172,57 +1172,59 @@ footer {
 }
 
 
+
+
 /* RESPONSIVE DECORATION RULES */
-@media screen and (max-width: 900px) and (min-width: 769px) {
+@media screen and (max-width: 991px) and (min-width: 769px) {
     .deco-left {
-        width: 110px !important;
-        height: 110px !important;
-        top: -10px !important;
-        left: -15px !important;
+        width: 220px !important;
+        height: 220px !important;
+        top: -25px !important;
+        left: -45px !important;
+        transform: rotate(75deg) !important;
     }
     .deco-right {
-        width: 110px !important;
-        height: 110px !important;
-        top: -5px !important;
-        right: -15px !important;
+        width: 220px !important;
+        height: 220px !important;
+        top: -20px !important;
+        right: -45px !important;
     }
 }
 
 @media screen and (max-width: 768px) {
     .banner-deco {
         display: block !important;
-        opacity: 0.65 !important;
+        opacity: 0.92 !important;
     }
 
     .deco-left {
-        width: 48px !important;
-        height: 48px !important;
-        top: -4px !important;
-        left: -8px !important;
-        transform: rotate(-10deg) !important;
+        width: 105px !important;
+        height: 105px !important;
+        top: -15px !important;
+        left: -28px !important;
+        transform: rotate(75deg) !important;
     }
 
     .deco-right {
-        width: 48px !important;
-        height: 48px !important;
-        top: -2px !important;
-        right: -8px !important;
-        transform: rotate(15deg) !important;
+        width: 105px !important;
+        height: 105px !important;
+        top: -12px !important;
+        right: -28px !important;
     }
 }
 
 @media screen and (max-width: 380px) {
     .deco-left {
-        width: 36px !important;
-        height: 36px !important;
-        top: -3px !important;
-        left: -10px !important;
+        width: 85px !important;
+        height: 85px !important;
+        top: -12px !important;
+        left: -22px !important;
     }
 
     .deco-right {
-        width: 36px !important;
-        height: 36px !important;
-        top: -2px !important;
-        right: -10px !important;
+        width: 85px !important;
+        height: 85px !important;
+        top: -10px !important;
+        right: -22px !important;
     }
 }
