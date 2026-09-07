@@ -345,6 +345,9 @@ function isPackProduct(name, tipo) {
 function findDbItem(nombre) {
   const key = normalizeNameForDb(nombre);
   if (PRECIOS_DB[key]) return PRECIOS_DB[key];
+  if (key.includes('pasas de uva') && PRECIOS_DB['pasas de uva']) return PRECIOS_DB['pasas de uva'];
+  if ((key.includes('mix semillas') || key.includes('mix de semillas')) && PRECIOS_DB['mix de semilllas']) return PRECIOS_DB['mix de semilllas'];
+  if (key.includes('quinoa blanca') && PRECIOS_DB['semilla de quinoa blanca']) return PRECIOS_DB['semilla de quinoa blanca'];
   if (key.includes('granola crocante sin pasas') && PRECIOS_DB['granola crocante con miel sin pasas']) return PRECIOS_DB['granola crocante con miel sin pasas'];
   if (key.includes('granola crocante') && !key.includes('sin pasas') && PRECIOS_DB['granola crocante con miel']) return PRECIOS_DB['granola crocante con miel'];
   if (key.includes('granola c pasta de mani') && PRECIOS_DB['granola con pasta de mani']) return PRECIOS_DB['granola con pasta de mani'];
@@ -375,9 +378,19 @@ function findDbItem(nombre) {
   if (key.includes('pepas') && PRECIOS_DB['pepas de almendras con membrillo']) return PRECIOS_DB['pepas de almendras con membrillo'];
   if (key.includes('salsa de soja') && PRECIOS_DB['salsa de soja x500cc']) return PRECIOS_DB['salsa de soja x500cc'];
   if (key.includes('harina integral') && PRECIOS_DB['harina integral x25kg']) return PRECIOS_DB['harina integral x25kg'];
+  let bestMatch = null;
+  let bestLen = 0;
   for (const k in PRECIOS_DB) {
-    if (key.includes(k) || k.includes(key)) return PRECIOS_DB[k];
+    const item = PRECIOS_DB[k];
+    if (item.c === 0 && item.d === 0 && item.e === 0 && item.g === 0 && item.i === 0 && item.j === 0 && item.k === 0 && item.l === 0) continue;
+    if (key.includes(k) || k.includes(key)) {
+      if (k.length > bestLen) {
+        bestLen = k.length;
+        bestMatch = item;
+      }
+    }
   }
+  if (bestMatch) return bestMatch;
   console.warn('Producto sin correspondencia de precio en Google Sheets:', nombre);
   return null;
 }
@@ -393,14 +406,14 @@ function obtenerPrecioUnitarioCalculado(item, totalUnidades, tipoCatalogo) {
   }
   if (!dbItem) return item.precioBase;
   if (tipoCatalogo === 'personal') {
-    if (totalUnidades >= 12) return dbItem.e;
-    if (totalUnidades >= 7) return dbItem.d;
+    if (totalUnidades >= 12) return dbItem.e > 0 ? dbItem.e : dbItem.c;
+    if (totalUnidades >= 7) return dbItem.d > 0 ? dbItem.d : dbItem.c;
     return dbItem.c;
   }
   if (tipoCatalogo === 'mayorista') {
-    if (totalUnidades >= 50) return dbItem.j;
-    if (totalUnidades >= 30) return dbItem.i;
-    if (totalUnidades >= 12) return dbItem.g;
+    if (totalUnidades >= 50) return dbItem.j > 0 ? dbItem.j : dbItem.c;
+    if (totalUnidades >= 30) return dbItem.i > 0 ? dbItem.i : dbItem.c;
+    if (totalUnidades >= 12) return dbItem.g > 0 ? dbItem.g : dbItem.c;
     return dbItem.c; // Initial Mayorista price = Personal Col C
   }
   if (tipoCatalogo === 'distribuidor') {
@@ -428,6 +441,20 @@ function enviarPedidoWhatsapp() {
   const inputUbicacion = document.getElementById('ubicacion-entrega');
   const ubicacion = inputUbicacion ? inputUbicacion.value.trim() : '';
   if (!ubicacion) { alert('Debes ingresar una ubicación válida para enviar el pedido.'); if (inputUbicacion) inputUbicacion.focus(); return; }
+
+  // SAFETY BLOCK: Check if any item has 0, NaN, or invalid price
+  let hayPrecioInvalido = false;
+  carrito.forEach(item => {
+    const precioUnitario = obtenerPrecioUnitarioCalculado(item, totalProductos, tipoCatalogo);
+    if (isNaN(precioUnitario) || precioUnitario <= 0 || precioUnitario === null || precioUnitario === undefined) {
+      hayPrecioInvalido = true;
+    }
+  });
+  if (hayPrecioInvalido) {
+    alert('No pudimos verificar el precio de uno o más productos. Por favor, intentá nuevamente o consultanos por WhatsApp.');
+    return;
+  }
+
   let mensaje = '🏷️  Solicitud de Pedido:%0A';
   const totalUnidades = totalProductos;
   carrito.forEach(item => {
