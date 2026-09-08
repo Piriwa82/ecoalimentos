@@ -25,7 +25,7 @@ let PRECIOS_DB = {
   "avena instantanea": { c: 3000, d: 2880, e: 2810, g: 2790, i: 2720, j: 2660, k: 2500, l: 2200 },
   "avena tradicional": { c: 3000, d: 2880, e: 2810, g: 2790, i: 2720, j: 2660, k: 2500, l: 2200 },
   "almohaditas limon o frutilla": { c: 8600, d: 8480, e: 8410, g: 8390, i: 8320, j: 8260, k: 8100, l: 0 },
-  "copos de maiz c azucar": { c: 3900, d: 3780, e: 3710, g: 3690, i: 3620, j: 3560, k: 3400, l: 0 },
+  "copos de maiz con azucar": { c: 3900, d: 3780, e: 3710, g: 3690, i: 3620, j: 3560, k: 3400, l: 0 },
   "copos naturales": { c: 4200, d: 4080, e: 4010, g: 3990, i: 3920, j: 3860, k: 3700, l: 0 },
   "maiz pisinallo x25kg": { c: 3800, d: 3680, e: 3610, g: 3590, i: 3520, j: 3460, k: 3300, l: 0 },
   "arroz yamani x25kg": { c: 5700, d: 5580, e: 5510, g: 5490, i: 5420, j: 5360, k: 5200, l: 0 },
@@ -312,6 +312,7 @@ function normalizeNameForDb(name) {
   name = name.replace(/<h3[^>]*>.*?<\/h3>/gi, '');
   name = name.toLowerCase();
   name = name.replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n');
+  name = name.replace(/\bc\//g, 'con ');
   name = name.replace(/[^\w\s]/g, '');
   name = name.replace(/\s+/g, ' ').trim();
   return name;
@@ -345,6 +346,7 @@ function isPackProduct(name, tipo) {
 function findDbItem(nombre) {
   const key = normalizeNameForDb(nombre);
   if (PRECIOS_DB[key]) return PRECIOS_DB[key];
+  if (key.includes('harina de almendras') && PRECIOS_DB['harina de almendras con piel']) return PRECIOS_DB['harina de almendras con piel'];
   if (key.includes('pasas de uva') && PRECIOS_DB['pasas de uva']) return PRECIOS_DB['pasas de uva'];
   if ((key.includes('mix semillas') || key.includes('mix de semillas')) && PRECIOS_DB['mix de semilllas']) return PRECIOS_DB['mix de semilllas'];
   if (key.includes('quinoa blanca') && PRECIOS_DB['semilla de quinoa blanca']) return PRECIOS_DB['semilla de quinoa blanca'];
