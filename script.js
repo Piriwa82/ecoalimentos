@@ -1,4 +1,4 @@
-﻿// EcoAlimentos - Dynamic Google Sheets Live Price Sync System
+// EcoAlimentos - Dynamic Google Sheets Live Price Sync System
 const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/1uep9aGKtdhokeBQhvJkBlGiF2CbCqYftQBnirM0nBmo/export?format=csv';
 
 // Fallback PRECIOS_DB initialized with Google Sheets offline data
@@ -312,6 +312,8 @@ function normalizeNameForDb(name) {
   if (!name) return '';
   name = name.replace(/<h3[^>]*>.*?<\/h3>/gi, '');
   name = name.toLowerCase();
+  name = name.replace(/\(sin stock\)/gi, '');
+  name = name.replace(/sin stock/gi, '');
   name = name.replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n');
   name = name.replace(/\bc\//g, 'con ');
   name = name.replace(/[^\w\s]/g, '');
