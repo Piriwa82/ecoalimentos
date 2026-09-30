@@ -14,7 +14,7 @@ let PRECIOS_DB = {
   "barritas de frutos secos": { c: 11400, d: 11280, e: 11210, g: 11190, i: 11120, j: 11060, k: 10900, l: 0 },
   "barritas tropicales": { c: 11400, d: 11280, e: 11210, g: 11190, i: 11120, j: 11060, k: 10900, l: 0 },
   "nuez mariposa extra ligth": { c: 17300, d: 17180, e: 17110, g: 17090, i: 17020, j: 16960, k: 16800, l: 0 },
-  "almendras": { c: 20300, d: 20180, e: 20110, g: 20090, i: 20020, j: 19960, k: 19800, l: 0 },
+  "almendras": { c: 21600, d: 21480, e: 21410, g: 21390, i: 21320, j: 21260, k: 21100, l: 0 },
   "castanas de caju": { c: 14900, d: 14780, e: 14710, g: 14690, i: 14620, j: 14560, k: 14400, l: 0 },
   "mani sin sal": { c: 3600, d: 3480, e: 3410, g: 3390, i: 3320, j: 3260, k: 3100, l: 0 },
   "mani con sal": { c: 3600, d: 3480, e: 3410, g: 3390, i: 3320, j: 3260, k: 3100, l: 2800 },
@@ -42,12 +42,12 @@ let PRECIOS_DB = {
   "soja texturizada x25kg": { c: 4200, d: 4080, e: 4010, g: 3990, i: 3920, j: 3860, k: 3700, l: 0 },
   "aceite de oliva 12l": { c: 4500, d: 4380, e: 4310, g: 4290, i: 4220, j: 4160, k: 4000, l: 3700 },
   "aceite de oliva 1l": { c: 6500, d: 6380, e: 6310, g: 6290, i: 6220, j: 6160, k: 6000, l: 5700 },
-  "aceitunas verdes premium 000 12kg": { c: 7200, d: 7080, e: 7010, g: 6990, i: 6920, j: 6860, k: 6700, l: 6400 },
+  "aceitunas verdes premium 000 12kg": { c: 7700, d: 7580, e: 7510, g: 7490, i: 7420, j: 7360, k: 7200, l: 6900 },
   "miel pura agroecologica 12kg": { c: 7000, d: 6880, e: 6810, g: 6790, i: 6720, j: 6660, k: 6500, l: 0 },
   "miel comun 12kg": { c: 3500, d: 3380, e: 3310, g: 3290, i: 3220, j: 3160, k: 3000, l: 2700 },
   "miel comun 1kg": { c: 4900, d: 4780, e: 4710, g: 4690, i: 4620, j: 4560, k: 4400, l: 4100 },
   "pasas de uva": { c: 5300, d: 5180, e: 5110, g: 5090, i: 5020, j: 4960, k: 4800, l: 4500 },
-  "arandanos deshidratados": { c: 17700, d: 17580, e: 17510, g: 17490, i: 17420, j: 17360, k: 17200, l: 0 },
+  "arandanos deshidratados": { c: 18300, d: 18180, e: 18110, g: 18090, i: 18020, j: 17960, k: 17800, l: 0 },
   "tutucas con azucar": { c: 5400, d: 5280, e: 5210, g: 5190, i: 5120, j: 5060, k: 4900, l: 0 },
   "tutucas con edulcorante": { c: 7600, d: 7480, e: 7410, g: 7390, i: 7320, j: 7260, k: 7100, l: 0 },
   "yerba tucangua": { c: 5100, d: 4980, e: 4910, g: 4890, i: 4820, j: 4760, k: 4600, l: 4300 },
@@ -347,55 +347,98 @@ function isPackProduct(name, tipo) {
 }
 
 function findDbItem(nombre) {
-  const key = normalizeNameForDb(nombre);
-  if (PRECIOS_DB[key]) return PRECIOS_DB[key];
-  if (key.includes('harina de almendras') && PRECIOS_DB['harina de almendras con piel']) return PRECIOS_DB['harina de almendras con piel'];
-  if (key.includes('pasas de uva') && PRECIOS_DB['pasas de uva']) return PRECIOS_DB['pasas de uva'];
-  if ((key.includes('mix semillas') || key.includes('mix de semillas')) && PRECIOS_DB['mix de semilllas']) return PRECIOS_DB['mix de semilllas'];
-  if (key.includes('quinoa blanca') && PRECIOS_DB['semilla de quinoa blanca']) return PRECIOS_DB['semilla de quinoa blanca'];
-  if (key.includes('granola crocante sin pasas') && PRECIOS_DB['granola crocante con miel sin pasas']) return PRECIOS_DB['granola crocante con miel sin pasas'];
-  if (key.includes('granola crocante') && !key.includes('sin pasas') && PRECIOS_DB['granola crocante con miel']) return PRECIOS_DB['granola crocante con miel'];
-  if (key.includes('granola c pasta de mani') && PRECIOS_DB['granola con pasta de mani']) return PRECIOS_DB['granola con pasta de mani'];
-  if (key.includes('nuez mariposa') && PRECIOS_DB['nuez mariposa extra ligth']) return PRECIOS_DB['nuez mariposa extra ligth'];
-  if (key.includes('pistacho') && PRECIOS_DB['pistachos con cascara salados']) return PRECIOS_DB['pistachos con cascara salados'];
-  if (key.includes('almohaditas') && PRECIOS_DB['almohaditas limon o frutilla']) return PRECIOS_DB['almohaditas limon o frutilla'];
-  if (key.includes('copos de maiz naturales') && PRECIOS_DB['copos naturales']) return PRECIOS_DB['copos naturales'];
-  if ((key.includes('maiz pisingallo') || key.includes('maiz pisinallo')) && PRECIOS_DB['maiz pisinallo x25kg']) return PRECIOS_DB['maiz pisinallo x25kg'];
-  if (key.includes('arroz yamani') && PRECIOS_DB['arroz yamani x25kg']) return PRECIOS_DB['arroz yamani x25kg'];
-  if (key.includes('garbanzo') && PRECIOS_DB['garbanzo x25kg']) return PRECIOS_DB['garbanzo x25kg'];
-  if (key.includes('lenteja') && PRECIOS_DB['lenteja x25kg']) return PRECIOS_DB['lenteja x25kg'];
-  if (key.includes('poroto alubia') && PRECIOS_DB['poroto alubia x25kg']) return PRECIOS_DB['poroto alubia x25kg'];
-  if (key.includes('soja texturizada') && PRECIOS_DB['soja texturizada x25kg']) return PRECIOS_DB['soja texturizada x25kg'];
-  if (key.includes('aceite de oliva') && (key.includes('12l') || key.includes('12 l') || key.includes('12 botellas de 12l')) && PRECIOS_DB['aceite de oliva 12l']) return PRECIOS_DB['aceite de oliva 12l'];
-  if (key.includes('aceite de oliva') && (key.includes('1l') || key.includes('1 l') || key.includes('12 botellas de 1l')) && PRECIOS_DB['aceite de oliva 1l']) return PRECIOS_DB['aceite de oliva 1l'];
-  if ((key.includes('miel premium') || key.includes('miel pura')) && PRECIOS_DB['miel pura agroecologica 12kg']) return PRECIOS_DB['miel pura agroecologica 12kg'];
-  if (key.includes('miel') && key.includes('12kg') && PRECIOS_DB['miel comun 12kg']) return PRECIOS_DB['miel comun 12kg'];
-  if (key.includes('miel') && key.includes('1kg') && PRECIOS_DB['miel comun 1kg']) return PRECIOS_DB['miel comun 1kg'];
-  if (key.includes('tutucas') && key.includes('azucar') && PRECIOS_DB['tutucas con azucar']) return PRECIOS_DB['tutucas con azucar'];
-  if (key.includes('tutucas') && key.includes('edulcorante') && PRECIOS_DB['tutucas con edulcorante']) return PRECIOS_DB['tutucas con edulcorante'];
-  if (key.includes('pasta de mani') && PRECIOS_DB['pasta de mani x350gr']) return PRECIOS_DB['pasta de mani x350gr'];
-  if (key.includes('colageno') && PRECIOS_DB['colageno en polvo x90gr']) return PRECIOS_DB['colageno en polvo x90gr'];
-  if (key.includes('maca negra') && PRECIOS_DB['maca negra x150gr']) return PRECIOS_DB['maca negra x150gr'];
-  if (key.includes('maca blanca') && PRECIOS_DB['maca blanca x500gr']) return PRECIOS_DB['maca blanca x500gr'];
-  if (key.includes('aceite de coco') && PRECIOS_DB['aceite de coco x200cc']) return PRECIOS_DB['aceite de coco x200cc'];
-  if (key.includes('moringa') && PRECIOS_DB['moringa x90gr']) return PRECIOS_DB['moringa x90gr'];
-  if (key.includes('chalitas') && PRECIOS_DB['chalitas de almendras']) return PRECIOS_DB['chalitas de almendras'];
-  if (key.includes('pepas') && PRECIOS_DB['pepas de almendras con membrillo']) return PRECIOS_DB['pepas de almendras con membrillo'];
-  if (key.includes('salsa de soja') && PRECIOS_DB['salsa de soja x500cc']) return PRECIOS_DB['salsa de soja x500cc'];
-  if (key.includes('harina integral') && PRECIOS_DB['harina integral x25kg']) return PRECIOS_DB['harina integral x25kg'];
-  let bestMatch = null;
-  let bestLen = 0;
-  for (const k in PRECIOS_DB) {
-    const item = PRECIOS_DB[k];
-    if (item.c === 0 && item.d === 0 && item.e === 0 && item.g === 0 && item.i === 0 && item.j === 0 && item.k === 0 && item.l === 0) continue;
-    if (key.includes(k) || k.includes(key)) {
-      if (k.length > bestLen) {
-        bestLen = k.length;
-        bestMatch = item;
-      }
+  const normKey = normalizeNameForDb(nombre);
+  if (!normKey) return null;
+
+  // 1. Direct exact key match in PRECIOS_DB
+  if (PRECIOS_DB[normKey]) return PRECIOS_DB[normKey];
+
+  // 2. Explicit inequivocal mapping table for HTML product variations to CSV database keys
+  const ALIAS_MAP = {
+    "granola con pasta de mani": "granola con pasta de mani",
+    "granola c pasta de mani": "granola con pasta de mani",
+    "granola crocante": "granola crocante con miel",
+    "granola crocante sin pasas": "granola crocante con miel sin pasas",
+    "harina de almendras c piel": "harina de almendras con piel",
+    "harina de almendras": "harina de almendras con piel",
+    "mix semillas": "mix de semilllas",
+    "mix de semillas": "mix de semilllas",
+    "quinoa blanca": "semilla de quinoa blanca",
+    "semillas de quinoa blanca": "semilla de quinoa blanca",
+    "nuez mariposa": "nuez mariposa extra ligth",
+    "pistacho con cascara": "pistachos con cascara salados",
+    "almohaditas de frutilla": "almohaditas limon o frutilla",
+    "almohaditas de limon": "almohaditas limon o frutilla",
+    "copos de maiz c azucar": "copos de maiz con azucar",
+    "copos de maiz naturales": "copos naturales",
+    "maiz pisingallo": "maiz pisinallo x25kg",
+    "maiz pisinallo": "maiz pisinallo x25kg",
+    "arroz yamani": "arroz yamani x25kg",
+    "garbanzo": "garbanzo x25kg",
+    "lenteja": "lenteja x25kg",
+    "poroto alubia": "poroto alubia x25kg",
+    "soja texturizada": "soja texturizada x25kg",
+    "miel premium agroecologica": "miel pura agroecologica 12kg",
+    "miel pura agroecologica": "miel pura agroecologica 12kg",
+    "harina integral organica": "harina integral x25kg",
+    "harina integral": "harina integral x25kg",
+    "pasta de mani": "pasta de mani x350gr",
+    "colageno en polvo": "colageno en polvo x90gr",
+    "maca negra": "maca negra x150gr",
+    "maca blanca": "maca blanca x500gr",
+    "aceite de coco": "aceite de coco x200cc",
+    "moringa": "moringa x90gr",
+    "salsa de soja": "salsa de soja x500cc",
+    "pasas de uva sin semillas": "pasas de uva",
+    "flor de hibiscus jamaica": "flor de hibiscus jamaica"
+  };
+
+  let baseKey = normKey
+    .replace(/\b(x\s*)?(pack|bulto|caja|bolsa)\s*(de\s*)?.*$/gi, '')
+    .replace(/\b(x\s*)?\d+([\.,]\d+)?\s*(kg|g|gr|l|ml|cc)\b/gi, '')
+    .replace(/\s+/g, ' ').trim();
+
+  if (baseKey && PRECIOS_DB[baseKey]) return PRECIOS_DB[baseKey];
+
+  if (ALIAS_MAP[normKey] && PRECIOS_DB[ALIAS_MAP[normKey]]) return PRECIOS_DB[ALIAS_MAP[normKey]];
+  if (baseKey && ALIAS_MAP[baseKey] && PRECIOS_DB[ALIAS_MAP[baseKey]]) return PRECIOS_DB[ALIAS_MAP[baseKey]];
+
+  if (normKey.includes('aceite de oliva')) {
+    if (normKey.includes('12l') || normKey.includes('12 l') || normKey.includes('12 botellas de 12l') || normKey.includes('1 2l') || normKey.includes('1 2 l')) {
+      if (PRECIOS_DB['aceite de oliva 12l']) return PRECIOS_DB['aceite de oliva 12l'];
+    }
+    if (normKey.includes('1l') || normKey.includes('1 l') || normKey.includes('12 botellas de 1l')) {
+      if (PRECIOS_DB['aceite de oliva 1l']) return PRECIOS_DB['aceite de oliva 1l'];
     }
   }
-  if (bestMatch) return bestMatch;
+
+  if (normKey.includes('miel')) {
+    if (normKey.includes('agroecologica') || normKey.includes('pura') || normKey.includes('premium')) {
+      if (PRECIOS_DB['miel pura agroecologica 12kg']) return PRECIOS_DB['miel pura agroecologica 12kg'];
+    }
+    if (normKey.includes('12kg') || normKey.includes('12 kg') || normKey.includes('1 2kg') || normKey.includes('1 2 kg')) {
+      if (PRECIOS_DB['miel comun 12kg']) return PRECIOS_DB['miel comun 12kg'];
+    }
+    if (normKey.includes('1kg') || normKey.includes('1 kg')) {
+      if (PRECIOS_DB['miel comun 1kg']) return PRECIOS_DB['miel comun 1kg'];
+    }
+  }
+
+  if (normKey.includes('tutucas')) {
+    if (normKey.includes('azucar') && PRECIOS_DB['tutucas con azucar']) return PRECIOS_DB['tutucas con azucar'];
+    if (normKey.includes('edulcorante') && PRECIOS_DB['tutucas con edulcorante']) return PRECIOS_DB['tutucas con edulcorante'];
+  }
+
+  if (normKey.includes('fruta escurrida')) {
+    if (normKey.includes('especial') && PRECIOS_DB['fruta escurrida especial']) return PRECIOS_DB['fruta escurrida especial'];
+    if (normKey.includes('comun') && PRECIOS_DB['fruta escurrida comun']) return PRECIOS_DB['fruta escurrida comun'];
+  }
+
+  if (normKey.includes('maca')) {
+    if (normKey.includes('negra') && PRECIOS_DB['maca negra x150gr']) return PRECIOS_DB['maca negra x150gr'];
+    if (normKey.includes('blanca') && PRECIOS_DB['maca blanca x500gr']) return PRECIOS_DB['maca blanca x500gr'];
+  }
+
   console.warn('Producto sin correspondencia de precio en Google Sheets:', nombre);
   return null;
 }
